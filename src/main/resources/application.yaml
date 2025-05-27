@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: aia
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVERNAME}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: MySQL8Dialect
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    context-path: /aia
+  host:
+    url: ${SERVER_HOST}
+
+jwt:
+  signerKey: ${SIGNER_KEY}
+
