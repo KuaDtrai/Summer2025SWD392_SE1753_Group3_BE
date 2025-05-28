@@ -1,0 +1,22 @@
+package com.project.ibtss.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Seats {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "bus_id")
+    Buses bus;
+
+    String seatCode;
+}
