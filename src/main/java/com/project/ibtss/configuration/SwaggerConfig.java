@@ -20,10 +20,10 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
-                        name = "AIA"
+                        name = "IBTSS"
                 ),
-                description = "Chat bot analysis.",
-                title = "AI Analysis"
+                description = "Interprovincial Bus Ticket Sales System",
+                title = " Interprovincial Bus Ticket Sales System"
         ),
         security = { //mở tính năng cho nhập token swagger
                 @SecurityRequirement(name = "BearerAuth")

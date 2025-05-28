@@ -13,7 +13,7 @@ spring:
 server:
   port: ${SERVER_PORT}
   servlet:
-    context-path: /aia
+    context-path: /ibtss
   host:
     url: ${SERVER_HOST}
 
