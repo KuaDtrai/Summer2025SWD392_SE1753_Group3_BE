@@ -2,21 +2,23 @@ package com.project.ibtss.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SubPay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "payment_id")
-    private Payment payment;
+    Payment payment;
 
-    private String type;
-    private Float amount;
-    private String description;
+    String type;
+    Float amount;
+    String description;
 }
