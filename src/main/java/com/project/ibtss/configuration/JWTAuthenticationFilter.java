@@ -1,9 +1,8 @@
 package com.project.ibtss.configuration;
 
 import com.project.ibtss.enums.TokenStatus;
-import com.project.ibtss.model.User;
+import com.project.ibtss.model.Account;
 import com.project.ibtss.repository.TokenRepository;
-import com.project.ibtss.repository.UserRepository;
 import com.project.ibtss.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -30,11 +29,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
-    private final UserDetailsService userDetailsService;
+//    private final UserDetailsService userDetailsService;
 
     private final JWTService jwtService;
-
-    private final UserRepository userRepository;
 
     private final TokenRepository tokenRepository;
 
@@ -64,12 +61,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         if (email!= null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            if(userDetails == null){
-                throw new BadCredentialsException("Invalid username");
-            }
+//            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+//            if(userDetails == null){
+//                throw new BadCredentialsException("Invalid username");
+//            }
 
-            User user = (User) userDetails;
+//            Account account = (Account) userDetails;
 
             //add later when user have status
 //            if (UserStatus.INACTIVE.getValue().equalsIgnoreCase(acc.getStatusAccount())) {
@@ -84,13 +81,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                     .isPresent();
 
             if (isTokenValid && isStoredTokenValid) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+//                        userDetails,
+//                        null,
+//                        userDetails.getAuthorities()
+//                );
+//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 

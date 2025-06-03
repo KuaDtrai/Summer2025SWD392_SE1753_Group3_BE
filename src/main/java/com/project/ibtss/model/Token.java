@@ -23,8 +23,8 @@ public class Token {
     String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "`user_id`")
-    User user;
+    @JoinColumn(name = "`account_id`")
+    Account account;
 
     String status;
 }

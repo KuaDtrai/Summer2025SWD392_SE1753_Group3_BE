@@ -1,10 +1,10 @@
 package com.project.ibtss.service_implement;
 
 import com.project.ibtss.enums.TokenStatus;
+import com.project.ibtss.model.Account;
 import com.project.ibtss.model.Token;
-import com.project.ibtss.model.User;
+//import com.project.ibtss.model.User;
 import com.project.ibtss.repository.TokenRepository;
-import com.project.ibtss.repository.UserRepository;
 import com.project.ibtss.service.JWTService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -37,7 +37,7 @@ public class JWTServiceImpl implements JWTService {
     private Long resetTokenExpiration;
 
     private final TokenRepository tokenRepository;
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
 
     @Override
     public String extractEmail(String token) {
@@ -111,9 +111,9 @@ public class JWTServiceImpl implements JWTService {
     }
 
     @Override
-    public Token checkTokenIsValid(String tokenType, User user) {
+    public Token checkTokenIsValid(String tokenType, Account account) {
 
-        Token token = tokenRepository.findByUser_IdAndStatusAndType(user.getId(), TokenStatus.ACTIVE.getValue(), tokenType).orElse(null);
+        Token token = tokenRepository.findByAccount_IdAndStatusAndType(account.getId(), TokenStatus.ACTIVE.getValue(), tokenType).orElse(null);
 
         if(token != null) {
             if(getClaim(token.getValue(), Claims::getExpiration).before(new Date())) {
