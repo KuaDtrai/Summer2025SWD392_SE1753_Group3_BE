@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class BaseServiceImpl<T, R extends JpaRepository<T, UUID>> implements BaseService<T> {
+public abstract class BaseServiceImpl<T, R extends JpaRepository<T, Integer>> implements BaseService<T> {
     protected final R repository;
 
     protected BaseServiceImpl(R repository) {
@@ -16,7 +16,7 @@ public abstract class BaseServiceImpl<T, R extends JpaRepository<T, UUID>> imple
     }
 
     @Override
-    public Optional<T> getById(UUID id) {
+    public Optional<T> getById(Integer id) {
         return repository.findById(id);
     }
 
@@ -36,7 +36,7 @@ public abstract class BaseServiceImpl<T, R extends JpaRepository<T, UUID>> imple
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(Integer id) {
         try {
             repository.deleteById(id);
             return true;
@@ -46,7 +46,7 @@ public abstract class BaseServiceImpl<T, R extends JpaRepository<T, UUID>> imple
     }
 
     @Override
-    public boolean existsById(UUID id) {
+    public boolean existsById(Integer id) {
         return repository.existsById(id);
     }
 }

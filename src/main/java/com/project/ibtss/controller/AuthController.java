@@ -5,6 +5,8 @@ import com.project.ibtss.dto.request.RegisterRequest;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.UserResponse;
+import com.project.ibtss.enums.Permission;
+import com.project.ibtss.enums.Role;
 import com.project.ibtss.repository.AccountRepository;
 import com.project.ibtss.repository.TokenRepository;
 import com.project.ibtss.service.JWTService;
@@ -12,6 +14,7 @@ import com.project.ibtss.service_implement.AccountServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +28,7 @@ public class AuthController {
     private final TokenRepository tokenRepository;
     private final AccountRepository accountRepository;
     @PostMapping("/login")
+    @PreAuthorize("Permission.ADMIN_CREATE")
     public ApiResponse<AccountResponse> login(@RequestBody LoginRequest loginRequest) {
         return ApiResponse.<AccountResponse>builder()
                                         .code(HttpStatus.OK.value())

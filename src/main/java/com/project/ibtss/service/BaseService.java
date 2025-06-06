@@ -5,10 +5,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BaseService<T> {
-    Optional<T> getById(UUID id);
+    Optional<T> getById(Integer id);
     List<T> getAll();
     T create(T entity);
     T update(T entity);
-    boolean delete(UUID id);
-    boolean existsById(UUID id);
+    boolean delete(Integer id);
+    boolean existsById(Integer id);
 }
