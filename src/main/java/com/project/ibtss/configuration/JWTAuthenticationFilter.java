@@ -41,56 +41,15 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-
+        System.out.println("Hehe");
         final String authHeader = request.getHeader("Authorization");
-
+        System.out.println(authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer ") || authHeader.length() < 8) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String jwt = authHeader.substring(7);
-        String email;
-        try {
-            email = jwtService.extractEmail(jwt);
-        } catch (JwtException e) {
-            log.warn("Invalid JWT: {}", e.getMessage());
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        if (email!= null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-//            if(userDetails == null){
-//                throw new BadCredentialsException("Invalid username");
-//            }
-
-//            Account account = (Account) userDetails;
-
-            //add later when user have status
-//            if (UserStatus.INACTIVE.getValue().equalsIgnoreCase(acc.getStatusAccount())) {
-//                filterChain.doFilter(request, response);
-//                return;
-//            }
-
-            boolean isTokenValid = jwtService.validateToken(jwt);
-            boolean isStoredTokenValid = tokenRepository
-                    .findByValue(jwt)
-                    .filter(t -> t.getStatus().equals(TokenStatus.ACTIVE.getValue()))
-                    .isPresent();
-
-            if (isTokenValid && isStoredTokenValid) {
-//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-//                        userDetails,
-//                        null,
-//                        userDetails.getAuthorities()
-//                );
-//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
-        }
-
+//        String jwt = authHeader.substring(7);
         filterChain.doFilter(request, response);
     }
 
