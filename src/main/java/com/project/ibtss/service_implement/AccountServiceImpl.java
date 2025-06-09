@@ -140,7 +140,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
 
     @Override
     public AccountResponse login(LoginRequest loginRequest) {
-        Account account = accountRepository.findByFullName(loginRequest.getUsername());
+        Account account = accountRepository.findByPhoneNumber(loginRequest.getPhone());
         if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
@@ -162,14 +162,16 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
             throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
-        if (accountRepository.findByFullName(registerRequest.getUsername()) != null) {
+        if (accountRepository.findByPhoneNumber(registerRequest.getPhone()) != null) {
             log.warn("Username already exists");
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
 
         Account user = Account.builder()
-                .fullName(registerRequest.getUsername())
+                .phone(registerRequest.getPhone())
+                .fullName(registerRequest.getFullName())
                 .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
+                .phone(registerRequest.getPhone())
                 .build();
 
         accountRepository.save(user);
