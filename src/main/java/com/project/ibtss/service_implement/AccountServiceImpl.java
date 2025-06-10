@@ -133,14 +133,14 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
         }
         account.setFullName(accountRequest.getFullName());
         account.setEmail(accountRequest.getEmail());
-        account.setPhone(accountRequest.getPhoneNumber());
+        account.setPhone(accountRequest.getPhone());
         account.setUpdatedDate(LocalDateTime.now());
         return mapper.toAccountResponse(accountRepository.save(account));
     }
 
     @Override
     public AccountResponse login(LoginRequest loginRequest) {
-        Account account = accountRepository.findByPhoneNumber(loginRequest.getPhone());
+        Account account = accountRepository.findByPhone(loginRequest.getPhone());
         if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
@@ -162,7 +162,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
             throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
-        if (accountRepository.findByPhoneNumber(registerRequest.getPhone()) != null) {
+        if (accountRepository.findByPhone(registerRequest.getPhone()) != null) {
             log.warn("Username already exists");
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
