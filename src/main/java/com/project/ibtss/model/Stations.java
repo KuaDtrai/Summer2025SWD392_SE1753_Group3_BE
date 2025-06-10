@@ -21,8 +21,9 @@ public class Stations {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-
     String name;
     String address;
     LocalDateTime createdDate;
+    LocalDateTime updatedDate;
+    boolean active;
 }
