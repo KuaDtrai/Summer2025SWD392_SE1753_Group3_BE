@@ -140,7 +140,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
 
     @Override
     public AccountResponse login(LoginRequest loginRequest) {
-        Account account = accountRepository.findByPhone(loginRequest.getPhone());
+        Account account = accountRepository.findByPhone(loginRequest.getPhone()); //test
         if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
@@ -150,7 +150,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
         }
 
         AccountResponse accountResponse = mapper.toAccountResponse(account);
-        accountResponse.setToken(generateToken(account));
+        accountResponse.setAccessToken(jwtService.generateAccessToken(account));
 
         return accountResponse;
     }

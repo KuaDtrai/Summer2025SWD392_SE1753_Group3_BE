@@ -12,5 +12,5 @@ public class AccountResponse {
     String email;
     String fullName;
     Role role;
-    String token;
+    String accessToken;
 }
