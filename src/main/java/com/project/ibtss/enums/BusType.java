@@ -6,6 +6,6 @@ import jakarta.persistence.Enumerated;
 
 public enum BusType {
     STANDARD,
-    VIP,
+    LIMOUSINE,
     LUXURY
 }

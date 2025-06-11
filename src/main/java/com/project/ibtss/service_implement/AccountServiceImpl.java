@@ -73,7 +73,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponse login(LoginRequest loginRequest) {
-        Account account = accountRepository.findByFullName(loginRequest.getUsername());
+        Account account = accountRepository.findByFullName(loginRequest.getPhone());
         if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
@@ -83,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
         }
 
         AccountResponse accountResponse = mapper.toAccountResponse(account);
-        accountResponse.setToken(generateToken(account));
+        accountResponse.setAccessToken(jwtService.generateAccessToken(account));
 
         return accountResponse;
     }

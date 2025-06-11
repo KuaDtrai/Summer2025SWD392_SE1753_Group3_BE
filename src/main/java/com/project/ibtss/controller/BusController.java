@@ -4,8 +4,10 @@ import com.project.ibtss.dto.request.BusRequest;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.BusResponse;
 import com.project.ibtss.service.BusService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -13,9 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/buses")
+@CrossOrigin
+@RequiredArgsConstructor
 public class BusController {
-    @Autowired
-    private BusService busService;
+    private final BusService busService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<BusResponse>> createBus(@Valid @RequestBody BusRequest busRequest) {
@@ -54,6 +57,7 @@ public class BusController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<ApiResponse<List<BusResponse>>> getAllBuses() {
         List<BusResponse> buses = busService.getAllBuses();
         return ResponseEntity.ok(ApiResponse.<List<BusResponse>>builder()
