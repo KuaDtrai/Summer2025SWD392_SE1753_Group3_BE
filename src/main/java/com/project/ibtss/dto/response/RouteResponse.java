@@ -4,11 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StationResponse {
+public class RouteResponse {
     Integer id;
     String name;
-    String address;
+    StationResponse departureStation;
+    StationResponse destinationStation;
+    Integer distance;
+    LocalTime estimatedTime;
 }
