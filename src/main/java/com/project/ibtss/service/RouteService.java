@@ -10,5 +10,5 @@ public interface RouteService {
     List<RouteResponse> getAllRoute();
     RouteResponse createRoute(RouteRequest routeRequest);
     RouteResponse updateRoute(Integer id, RouteRequest routeRequest);
-    RouteResponse delete(Integer id);
+    RouteResponse deleteRoute(Integer id);
 }

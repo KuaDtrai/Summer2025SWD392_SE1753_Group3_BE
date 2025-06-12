@@ -61,6 +61,6 @@ public class RouteController {
         return ApiResponse.<RouteResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("")
-                .data(routeService.delete(id)).build();
+                .data(routeService.deleteRoute(id)).build();
     }
 }

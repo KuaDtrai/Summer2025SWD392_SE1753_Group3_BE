@@ -78,9 +78,11 @@ public class RouteServiceImpl
     }
 
     @Override
-    public RouteResponse delete(Integer id) {
-        Optional<Routes> route = Optional.ofNullable(routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RUNTIME_EXCEPTION)));
-        return null;
+    public RouteResponse deleteRoute(Integer id) {
+        Routes route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RUNTIME_EXCEPTION));
+        // chưa có Active cho route
+//        route.setActive(false);
+        return routeMapper.toRouteResponse(routeRepository.save(route));
     }
 
 }
