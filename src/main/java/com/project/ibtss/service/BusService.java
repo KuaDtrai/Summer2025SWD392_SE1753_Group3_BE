@@ -6,9 +6,10 @@ import com.project.ibtss.dto.response.BusResponse;
 import java.util.List;
 
 public interface BusService {
-    BusResponse createBus(BusRequest busRequest);
-    BusResponse getBusById(Integer id);
+    BusResponse createBus(BusRequest request);
     List<BusResponse> getAllBuses();
-    BusResponse updateBus(Integer id, BusRequest busRequest);
+    BusResponse getBusById(Integer id);
+    BusResponse updateBus(Integer id, BusRequest request);
     void deleteBus(Integer id);
+    List<BusResponse> searchByLicensePlate(String keyword);
 }
