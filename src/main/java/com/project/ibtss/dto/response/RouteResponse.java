@@ -14,6 +14,6 @@ public class RouteResponse {
     String name;
     StationResponse departureStation;
     StationResponse destinationStation;
-    Integer distance;
+    Integer distanceKm;
     LocalTime estimatedTime;
 }
