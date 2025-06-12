@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class AccountServiceImpl extends BaseServiceImpl<Account, AccountRepository> implements AccountService {
+public class AccountServiceImpl implements AccountService {
     private static final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
@@ -47,7 +47,6 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
 
     @Autowired
     public AccountServiceImpl(AccountRepository accountRepository, AccountRepository repository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, JWTService jwtService, AccountMapper mapper) {
-        super(repository);
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
@@ -187,5 +186,14 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
         }
 
         return mapper.toAccountResponse(account);
+    }
+
+    @Override
+    public AccountResponse deleteAccount(int id) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        account.setIsActive(false);
+
+        return mapper.toAccountResponse(accountRepository.save(account));
     }
 }

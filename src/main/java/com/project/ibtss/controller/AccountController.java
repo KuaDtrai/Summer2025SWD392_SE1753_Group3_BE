@@ -2,6 +2,7 @@ package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.AccountRequest;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
+import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.enums.Permission;
 import com.project.ibtss.enums.Role;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/Account")
@@ -22,14 +25,20 @@ public class AccountController {
     private final AccountRepository accountRepository;
 
     @GetMapping("/{id}")
-    public ApiResponse GetAccountById(@PathVariable int id) {
-        return ApiResponse.builder().code(HttpStatus.OK.value()).message("").data(accountService.getAccount(id)).build();
+    public ApiResponse<AccountResponse> GetAccountById(@PathVariable int id) {
+        return ApiResponse.<AccountResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.getAccount(id)).build();
     }
 
     @GetMapping("")
     @PreAuthorize("Permission.ADMIN_READ")
-    public ApiResponse GetAllAccounts() {
-        return ApiResponse.builder().code(HttpStatus.OK.value()).message("").data(accountService.getAllAccounts()).build();
+    public ApiResponse<List<AccountResponse>> GetAllAccounts() {
+        return ApiResponse.<List<AccountResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.getAllAccounts()).build();
     }
 
 //    public ApiResponse CreateAccount(Account account) {
@@ -37,22 +46,33 @@ public class AccountController {
 //    }
 
     @PutMapping("/password/{id}")
-    public ApiResponse UpdatePassword(@PathVariable int id,@RequestBody UpdatePasswordRequest updatePasswordRequest) {
-        return ApiResponse.builder().code(HttpStatus.OK.value()).message("").data(accountService.updatePassword(id, updatePasswordRequest)).build();
+    public ApiResponse<AccountResponse> UpdatePassword(@PathVariable int id,@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+        return ApiResponse.<AccountResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.updatePassword(id, updatePasswordRequest)).build();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse UpdateAccount(@PathVariable int id, @RequestBody AccountRequest accountRequest) {
-        return ApiResponse.builder().code(HttpStatus.OK.value()).message("").data(accountService.updateAccount(id, accountRequest)).build();
+    public ApiResponse<AccountResponse> UpdateAccount(@PathVariable int id, @RequestBody AccountRequest accountRequest) {
+        return ApiResponse.<AccountResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.updateAccount(id, accountRequest)).build();
     }
 
     @PutMapping("/role/{id}")
-    public ApiResponse UpdateRole(@PathVariable int id, @RequestBody Role role) {
-        return ApiResponse.builder().code(HttpStatus.OK.value()).message("").data(accountService.updateRole(id, role)).build();
+    public ApiResponse<AccountResponse> UpdateRole(@PathVariable int id, @RequestBody Role role) {
+        return ApiResponse.<AccountResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.updateRole(id, role)).build();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse DeleteAccount(@PathVariable int id) {
-        return ApiResponse.builder().code(HttpStatus.OK.value()).message("").data(accountService.delete(id)).build();
+    public ApiResponse<AccountResponse> DeleteAccount(@PathVariable int id) {
+        return ApiResponse.<AccountResponse>builder()
+                .code(HttpStatus.OK.value()).message("")
+                .data(accountService.deleteAccount(id)).build();
     }
 }

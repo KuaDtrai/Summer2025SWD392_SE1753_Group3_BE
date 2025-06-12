@@ -1,19 +1,9 @@
 package com.project.ibtss.dto.request;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.Getter;
 
-import jakarta.validation.constraints.NotBlank;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
 public class StationRequest {
-    @NotBlank(message = "Station name is required")
     String name;
-
-    @NotBlank(message = "Address is required")
     String address;
 }
