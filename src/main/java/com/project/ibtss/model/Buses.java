@@ -24,6 +24,7 @@ public class Buses {
     String status;
 
     @CreationTimestamp
+    @Column(updatable = false)
     LocalDateTime createdAt;
 
     @UpdateTimestamp

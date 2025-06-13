@@ -8,6 +8,7 @@ import com.project.ibtss.mapper.BusMapper;
 import com.project.ibtss.model.Buses;
 import com.project.ibtss.repository.BusRepository;
 import com.project.ibtss.service.BusService;
+import com.project.ibtss.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +21,21 @@ public class BusServiceImpl implements BusService {
 
     private final BusRepository busRepository;
     private final BusMapper busMapper;
+    private final SeatService seatService;
 
     @Override
     public BusResponse createBus(BusRequest request) {
         if (busRepository.existsByLicensePlateIgnoreCase(request.getLicensePlate())) {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
+
         Buses bus = busMapper.toEntity(request);
         bus.setStatus("ACTIVE");
-        return busMapper.toResponse(busRepository.save(bus));
+        bus = busRepository.save(bus); // Save trước để lấy ID
+
+        seatService.autoGenerateSeats(bus.getId()); // Tự động sinh ghế
+
+        return busMapper.toResponse(bus);
     }
 
     @Override
@@ -51,10 +58,12 @@ public class BusServiceImpl implements BusService {
     public BusResponse updateBus(Integer id, BusRequest request) {
         Buses bus = busRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
         if (!bus.getLicensePlate().equalsIgnoreCase(request.getLicensePlate())
                 && busRepository.existsByLicensePlateIgnoreCase(request.getLicensePlate())) {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
+
         busMapper.updateFromRequest(request, bus);
         return busMapper.toResponse(busRepository.save(bus));
     }
@@ -63,7 +72,7 @@ public class BusServiceImpl implements BusService {
     public void deleteBus(Integer id) {
         Buses bus = busRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        bus.setStatus("INACTIVE");
+        bus.setStatus("INACTIVE"); // Xoá mềm
         busRepository.save(bus);
     }
 

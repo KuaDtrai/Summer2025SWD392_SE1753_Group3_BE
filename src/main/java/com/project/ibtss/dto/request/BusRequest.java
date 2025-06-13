@@ -21,6 +21,4 @@ public class BusRequest {
 
     @NotBlank(message = "Bus type is required")
     String busType;
-
-    String status;
 }
