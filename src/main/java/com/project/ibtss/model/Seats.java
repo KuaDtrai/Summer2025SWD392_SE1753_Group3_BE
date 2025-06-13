@@ -25,6 +25,7 @@ public class Seats {
     String seatCode;
 
     @CreationTimestamp
+    @Column(updatable = false)
     LocalDateTime createdAt;
 
     @UpdateTimestamp
