@@ -23,16 +23,18 @@ public class BusServiceImpl implements BusService {
 
     @Override
     public BusResponse createBus(BusRequest request) {
-        if (busRepository.existsByLicensePlate(request.getLicensePlate())) {
+        if (busRepository.existsByLicensePlateIgnoreCase(request.getLicensePlate())) {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
         Buses bus = busMapper.toEntity(request);
+        bus.setStatus("ACTIVE");
         return busMapper.toResponse(busRepository.save(bus));
     }
 
     @Override
     public List<BusResponse> getAllBuses() {
         return busRepository.findAll().stream()
+                .filter(bus -> "ACTIVE".equals(bus.getStatus()))
                 .map(busMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -40,6 +42,7 @@ public class BusServiceImpl implements BusService {
     @Override
     public BusResponse getBusById(Integer id) {
         return busRepository.findById(id)
+                .filter(bus -> "ACTIVE".equals(bus.getStatus()))
                 .map(busMapper::toResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
@@ -48,13 +51,11 @@ public class BusServiceImpl implements BusService {
     public BusResponse updateBus(Integer id, BusRequest request) {
         Buses bus = busRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        if (!bus.getLicensePlate().equals(request.getLicensePlate())
-                && busRepository.existsByLicensePlate(request.getLicensePlate())) {
+        if (!bus.getLicensePlate().equalsIgnoreCase(request.getLicensePlate())
+                && busRepository.existsByLicensePlateIgnoreCase(request.getLicensePlate())) {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
-
-        busMapper.updateBusFromRequest(request, bus);
+        busMapper.updateFromRequest(request, bus);
         return busMapper.toResponse(busRepository.save(bus));
     }
 
@@ -62,14 +63,14 @@ public class BusServiceImpl implements BusService {
     public void deleteBus(Integer id) {
         Buses bus = busRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        bus.setStatus("DELETED");
+        bus.setStatus("INACTIVE");
         busRepository.save(bus);
     }
 
     @Override
     public List<BusResponse> searchByLicensePlate(String keyword) {
-        return busRepository.findByLicensePlateContainingIgnoreCase(keyword)
-                .stream()
+        return busRepository.findByLicensePlateContainingIgnoreCase(keyword).stream()
+                .filter(bus -> "ACTIVE".equals(bus.getStatus()))
                 .map(busMapper::toResponse)
                 .collect(Collectors.toList());
     }
