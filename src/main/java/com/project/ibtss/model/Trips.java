@@ -38,6 +38,7 @@ public class Trips {
     String status;
 
     @CreationTimestamp
+    @Column(updatable = false)
     LocalDateTime createdAt;
 
     @UpdateTimestamp
