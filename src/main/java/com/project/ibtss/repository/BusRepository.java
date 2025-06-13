@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BusRepository extends JpaRepository<Buses, Integer> {
-    boolean existsByLicensePlate(String licensePlate);
-    List<Buses> findByLicensePlateContainingIgnoreCase(String keyword);
+    boolean existsByLicensePlateIgnoreCase(String licensePlate);
+    List<Buses> findByLicensePlateContainingIgnoreCase(String licensePlate);
 }

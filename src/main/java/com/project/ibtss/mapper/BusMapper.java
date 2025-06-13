@@ -10,5 +10,5 @@ import org.mapstruct.MappingTarget;
 public interface BusMapper {
     BusResponse toResponse(Buses bus);
     Buses toEntity(BusRequest request);
-    void updateBusFromRequest(BusRequest request, @MappingTarget Buses bus);
+    void updateFromRequest(BusRequest request, @MappingTarget Buses bus);
 }
