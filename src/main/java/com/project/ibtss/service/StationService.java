@@ -6,9 +6,8 @@ import com.project.ibtss.model.Stations;
 
 import java.util.List;
 
-public interface StationService
-//        extends BaseService<Stations>
-{
+public interface StationService {
+    List<StationResponse> getActiveStation();
     StationResponse getStationById(Integer id);
     List<StationResponse> getAllStation();
     StationResponse createStation(StationRequest stationRequest);

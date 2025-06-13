@@ -5,10 +5,13 @@ import com.project.ibtss.dto.response.StationResponse;
 import com.project.ibtss.enums.ErrorCode;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.StationMapper;
+import com.project.ibtss.model.Account;
 import com.project.ibtss.model.Stations;
+import com.project.ibtss.repository.AccountRepository;
 import com.project.ibtss.repository.StationRepository;
 import com.project.ibtss.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,14 +21,31 @@ import java.util.List;
 public class StationServiceImpl
 //        extends BaseServiceImpl<Stations, StationRepository>
         implements StationService {
+    private final AccountRepository accountRepository;
     private final StationRepository stationRepository;
     private final StationMapper mapper;
     
     @Autowired
-    public StationServiceImpl(StationRepository stationRepository, StationMapper stationMapper) {
+    public StationServiceImpl(AccountRepository accountRepository, StationRepository stationRepository, StationMapper stationMapper) {
+        this.accountRepository = accountRepository;
 //        super(stationRepository);
         this.stationRepository = stationRepository;
         this.mapper = stationMapper;
+    }
+
+    private Account getAccount() {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return accountRepository.findByPhone(account.getPhone());
+    }
+
+    @Override
+    public List<StationResponse> getActiveStation() {
+        List<StationResponse> stationResponseList = new ArrayList<>();
+        List<Stations> stations = stationRepository.getStationsByActiveIsTrue();
+        for (Stations station : stations) {
+            stationResponseList.add(mapper.toStationResponse(station));
+        }
+        return stationResponseList;
     }
 
     @Override
@@ -35,7 +55,11 @@ public class StationServiceImpl
 
     @Override
     public List<StationResponse> getAllStation() {
+//        if (getAccount().getRole() != Role.ADMIN) {
+//            throw new AppException(ErrorCode.RUNTIME_EXCEPTION);
+//        }
         List<StationResponse> stationResponseList = new ArrayList<>();
+        System.out.println();
         List<Stations> stations = stationRepository.findAll();
         for (Stations station : stations) {
             StationResponse stationResponse = mapper.toStationResponse(station);
@@ -46,14 +70,21 @@ public class StationServiceImpl
 
     @Override
     public StationResponse createStation(StationRequest stationRequest) {
+//        if (getAccount().getRole() != Role.ADMIN) {
+//            throw new AppException(ErrorCode.RUNTIME_EXCEPTION);
+//        }
         Stations station = new Stations();
         station.setName(stationRequest.getName());
         station.setAddress(stationRequest.getAddress());
+        station.setActive(true);
         return mapper.toStationResponse(stationRepository.save(station));
     }
 
     @Override
     public StationResponse updateStation(Integer id, StationRequest stationRequest) {
+//        if (getAccount().getRole() != Role.ADMIN) {
+//            throw new AppException(ErrorCode.RUNTIME_EXCEPTION);
+//        }
         Stations station = stationRepository.getById(id);
         station.setName(stationRequest.getName());
         station.setAddress(stationRequest.getAddress());
@@ -62,6 +93,9 @@ public class StationServiceImpl
 
     @Override
     public StationResponse deleteStationById(Integer id) {
+//        if (getAccount().getRole() != Role.ADMIN) {
+//            throw new AppException(ErrorCode.RUNTIME_EXCEPTION);
+//        }
         Stations station = stationRepository.getById(id);
         if(station == null){
             throw new AppException(ErrorCode.RUNTIME_EXCEPTION);

@@ -12,6 +12,7 @@ import com.project.ibtss.service.RouteService;
 import com.project.ibtss.service.StationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class RouteController {
     private final RouteMapper routeMapper;
 
     @GetMapping("")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ApiResponse<List<RouteResponse>> getRoutes() {
         return ApiResponse.<List<RouteResponse>>builder()
                 .code(HttpStatus.OK.value()).message("")
@@ -33,6 +35,7 @@ public class RouteController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ApiResponse<RouteResponse> getRouteById(@PathVariable Integer id) {
         return ApiResponse.<RouteResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -41,6 +44,7 @@ public class RouteController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAuthority('admin:create')")
     public ApiResponse<RouteResponse> createRoute(@RequestBody RouteRequest routeRequest) {
         return ApiResponse.<RouteResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -49,6 +53,7 @@ public class RouteController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin:update')")
     public ApiResponse<RouteResponse> updateRoute(@PathVariable Integer id, @RequestBody RouteRequest routeRequest) {
         return ApiResponse.<RouteResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -57,6 +62,7 @@ public class RouteController {
     }
 
     @PutMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ApiResponse<RouteResponse> deleteRoute(@PathVariable Integer id) {
         return ApiResponse.<RouteResponse>builder()
                 .code(HttpStatus.OK.value())
