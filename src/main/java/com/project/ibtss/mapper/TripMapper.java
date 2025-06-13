@@ -13,8 +13,6 @@ public interface TripMapper {
     @Mapping(source = "bus.licensePlate", target = "busPlate")
     @Mapping(source = "driver.fullName", target = "driverName")
     TripResponse toResponse(Trips trip);
-
     Trips toEntity(TripRequest request);
-
-    void updateTripFromRequest(TripRequest request, @MappingTarget Trips trip);
+    void updateFromRequest(TripRequest request, @MappingTarget Trips trip);
 }

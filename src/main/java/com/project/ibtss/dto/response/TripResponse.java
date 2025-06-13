@@ -19,4 +19,6 @@ public class TripResponse {
     LocalDateTime arrivalTime;
     Float price;
     String status;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

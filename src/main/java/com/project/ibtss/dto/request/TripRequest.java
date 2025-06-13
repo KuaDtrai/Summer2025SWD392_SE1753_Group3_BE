@@ -1,6 +1,7 @@
 package com.project.ibtss.dto.request;
 
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -31,6 +32,7 @@ public class TripRequest {
     LocalDateTime arrivalTime;
 
     @NotNull(message = "Price is required")
+    @Min(value = 0, message = "Price must be greater than or equal to 0")
     Float price;
 
     String status;
