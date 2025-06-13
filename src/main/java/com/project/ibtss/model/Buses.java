@@ -20,4 +20,5 @@ public class Buses {
     String licensePlate;
     Integer seatCount;
     String busType;
+    String status; // available, in service, under maintenance, retired
 }

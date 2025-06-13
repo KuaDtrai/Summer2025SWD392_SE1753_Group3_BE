@@ -60,10 +60,10 @@ public class BusServiceImpl implements BusService {
 
     @Override
     public void deleteBus(Integer id) {
-        if (!busRepository.existsById(id)) {
-            throw new AppException(ErrorCode.USER_NOT_FOUND);
-        }
-        busRepository.deleteById(id);
+        Buses bus = busRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        bus.setStatus("DELETED");
+        busRepository.save(bus);
     }
 
     @Override

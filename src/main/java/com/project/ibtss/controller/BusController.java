@@ -40,7 +40,7 @@ public class BusController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('admin:create')")
     public ApiResponse<BusResponse> createBus(@Valid @RequestBody BusRequest request) {
         return ApiResponse.<BusResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -50,7 +50,7 @@ public class BusController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('admin:update')")
     public ApiResponse<BusResponse> updateBus(@PathVariable Integer id, @Valid @RequestBody BusRequest request) {
         return ApiResponse.<BusResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -60,7 +60,7 @@ public class BusController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ApiResponse<Void> deleteBus(@PathVariable Integer id) {
         busService.deleteBus(id);
         return ApiResponse.<Void>builder()

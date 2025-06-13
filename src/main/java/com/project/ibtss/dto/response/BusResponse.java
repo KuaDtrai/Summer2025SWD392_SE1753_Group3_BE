@@ -13,4 +13,5 @@ public class BusResponse {
     String licensePlate;
     Integer seatCount;
     String busType;
+    String status;
 }
