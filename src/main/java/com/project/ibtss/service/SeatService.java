@@ -6,7 +6,8 @@ import com.project.ibtss.dto.response.SeatResponse;
 import java.util.List;
 
 public interface SeatService {
-    SeatResponse createSeat(SeatRequest request);
+    List<SeatResponse> createSeats(List<SeatRequest> requests);
+    List<SeatResponse> autoGenerateSeats(Integer busId);
     SeatResponse updateSeat(Integer id, SeatRequest request);
     void deleteSeat(Integer id);
     SeatResponse getSeatById(Integer id);

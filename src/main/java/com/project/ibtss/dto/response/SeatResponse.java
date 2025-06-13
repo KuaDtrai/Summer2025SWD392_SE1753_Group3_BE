@@ -3,6 +3,8 @@ package com.project.ibtss.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,4 +15,6 @@ public class SeatResponse {
     String seatCode;
     Integer busId;
     String busPlate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

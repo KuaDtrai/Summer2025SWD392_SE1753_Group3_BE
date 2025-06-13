@@ -8,12 +8,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/seats")
+@Validated
+@RequestMapping("/seats")
 @RequiredArgsConstructor
 public class SeatController {
 
@@ -21,11 +23,21 @@ public class SeatController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('admin:create')")
-    public ApiResponse<SeatResponse> create(@Valid @RequestBody SeatRequest request) {
-        return ApiResponse.<SeatResponse>builder()
+    public ApiResponse<List<SeatResponse>> create(@Valid @RequestBody List<@Valid SeatRequest> requests) {
+        return ApiResponse.<List<SeatResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .message("Seat created")
-                .data(seatService.createSeat(request))
+                .message("Seats created")
+                .data(seatService.createSeats(requests))
+                .build();
+    }
+
+    @PostMapping("/auto/{busId}")
+    @PreAuthorize("hasAuthority('admin:create')")
+    public ApiResponse<List<SeatResponse>> autoGenerate(@PathVariable Integer busId) {
+        return ApiResponse.<List<SeatResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Seats auto-generated")
+                .data(seatService.autoGenerateSeats(busId))
                 .build();
     }
 
