@@ -20,7 +20,12 @@ public enum ErrorCode {
     INCORRECT_PASSWORD(202, "Incorrect password", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_MATCH(203, "Password and Confirm Password do not match", HttpStatus.BAD_REQUEST),
     USERNAME_EXISTED(204, "Username already exists", HttpStatus.BAD_REQUEST),
-
+    CONFLICTING_TRIP(301, "Bus or driver is already assigned to another trip during this time", HttpStatus.CONFLICT),
+    INVALID_TIME_RANGE(304, "Departure time must be before arrival time", HttpStatus.BAD_REQUEST),
+    BUS_INACTIVE(302, "Bus is inactive", HttpStatus.BAD_REQUEST),
+    INVALID_DRIVER(303, "Invalid driver", HttpStatus.BAD_REQUEST),
+    CANNOT_MODIFY_PAST_TRIP(305, "Cannot modify a trip that has already started or ended", HttpStatus.BAD_REQUEST),
+    CANNOT_DELETE_TRIP_WITH_TICKETS(306, "Cannot delete a trip that has tickets sold", HttpStatus.BAD_REQUEST),
     ;
     int code;
     String message;
