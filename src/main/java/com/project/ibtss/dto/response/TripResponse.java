@@ -10,11 +10,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BusResponse {
+public class TripResponse {
     Integer id;
-    String licensePlate;
-    Integer seatCount;
-    String busType;
+    String routeName;
+    String busPlate;
+    String driverName;
+    LocalDateTime departureTime;
+    LocalDateTime arrivalTime;
+    Float price;
     String status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;

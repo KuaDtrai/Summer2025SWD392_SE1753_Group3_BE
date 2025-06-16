@@ -1,9 +1,7 @@
 package com.project.ibtss.dto.request;
 
-import com.project.ibtss.enums.BusType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,4 +21,6 @@ public class BusRequest {
 
     @NotBlank(message = "Bus type is required")
     String busType;
+
+    String status;
 }
