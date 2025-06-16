@@ -5,7 +5,6 @@ import com.project.ibtss.dto.request.LoginRequest;
 import com.project.ibtss.dto.request.RegisterRequest;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
 import com.project.ibtss.dto.response.AccountResponse;
-import com.project.ibtss.dto.response.UserResponse;
 import com.project.ibtss.enums.Role;
 import com.project.ibtss.model.Account;
 
