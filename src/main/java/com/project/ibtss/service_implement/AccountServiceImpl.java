@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class AccountServiceImpl extends BaseServiceImpl<Account, AccountRepository> implements AccountService {
+public class AccountServiceImpl implements AccountService {
     private static final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
@@ -43,11 +43,12 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
     private final JWTService jwtService;
     private final AccountMapper mapper;
 
-
+    private Account getAccount(){
+        return (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
     @Autowired
     public AccountServiceImpl(AccountRepository accountRepository, AccountRepository repository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, JWTService jwtService, AccountMapper mapper) {
-        super(repository);
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
@@ -91,7 +92,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
     }
 
     @Override
-    public AccountResponse getAccount(int id) {
+    public AccountResponse getAccount(Integer id) {
         Account account = accountRepository.findById(id).orElse(null);
         return mapper.toAccountResponse(account);
     }
@@ -107,7 +108,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
     }
 
     @Override
-    public AccountResponse updateRole(int id, Role role) {
+    public AccountResponse updateRole(Integer id, Role role) {
         Account account = accountRepository.findById(id).orElse(null);
         if (account == null) {
             return mapper.toAccountResponse(null);
@@ -117,8 +118,8 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
     }
 
     @Override
-    public AccountResponse updatePassword(int id, UpdatePasswordRequest updatePasswordRequest) {
-        Account account = accountRepository.findById(id).orElse(null);
+    public AccountResponse updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+        Account account = accountRepository.findById(getAccount().getId()).orElse(null);
         if (account == null) {return mapper.toAccountResponse(null);}
         if (!account.getPasswordHash().equals(passwordEncoder.encode(updatePasswordRequest.getOldPassword()))) {return mapper.toAccountResponse(null);}
         account.setPasswordHash(passwordEncoder.encode(updatePasswordRequest.getNewPassword()));
@@ -126,11 +127,8 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
     }
 
     @Override
-    public AccountResponse updateAccount(int id, AccountRequest accountRequest) {
-        Account account = accountRepository.findById(id).orElse(null);
-        if (account == null) {
-            return mapper.toAccountResponse(null);
-        }
+    public AccountResponse updateAccount(AccountRequest accountRequest) {
+        Account account = accountRepository.findById(getAccount().getId()).orElseThrow(() -> new  AppException(ErrorCode.USER_NOT_FOUND));
         account.setFullName(accountRequest.getFullName());
         account.setEmail(accountRequest.getEmail());
         account.setPhone(accountRequest.getPhone());
@@ -187,5 +185,12 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, AccountReposito
         }
 
         return mapper.toAccountResponse(account);
+    }
+
+    @Override
+    public AccountResponse setAccountActive(Integer id) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        account.setIsActive(!account.getIsActive());
+        return mapper.toAccountResponse(accountRepository.save(account));
     }
 }

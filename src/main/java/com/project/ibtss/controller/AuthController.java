@@ -28,7 +28,6 @@ public class AuthController {
     private final TokenRepository tokenRepository;
     private final AccountRepository accountRepository;
     @PostMapping("/login")
-    @PreAuthorize("Permission.ADMIN_CREATE")
     public ApiResponse<AccountResponse> login(@RequestBody LoginRequest loginRequest) {
         return ApiResponse.<AccountResponse>builder()
                                         .code(HttpStatus.OK.value())

@@ -12,20 +12,22 @@ import com.project.ibtss.model.Account;
 import java.util.List;
 
 //@Service
-public interface AccountService extends BaseService<Account> {
-    AccountResponse getAccount(int id);
+public interface AccountService {
+    AccountResponse getAccount(Integer id);
 
     List<AccountResponse> getAllAccounts();
 
-    AccountResponse updateRole(int id, Role role);
+    AccountResponse updateRole(Integer id, Role role);
 
-    AccountResponse updatePassword(int id, UpdatePasswordRequest updatePasswordRequest);
+    AccountResponse updatePassword(UpdatePasswordRequest updatePasswordRequest);
 
-    AccountResponse updateAccount(int id, AccountRequest accountRequest);
+    AccountResponse updateAccount(AccountRequest accountRequest);
 
     AccountResponse login(LoginRequest loginRequest);
 
     String register(RegisterRequest registerRequest);
 
     AccountResponse accountDetail();
+
+    AccountResponse setAccountActive(Integer id);
 }
