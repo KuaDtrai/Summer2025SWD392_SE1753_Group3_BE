@@ -21,7 +21,7 @@ public class Buses {
     String licensePlate;
     Integer seatCount;
     String busType;
-    String status;
+    Boolean status;
 
     @CreationTimestamp
     LocalDateTime createdAt;

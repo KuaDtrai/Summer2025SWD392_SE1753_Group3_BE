@@ -28,4 +28,5 @@ public class Routes {
 
     Integer distanceKm;
     LocalTime estimatedTime;
+    Boolean isActive;
 }

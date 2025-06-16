@@ -25,5 +25,5 @@ public class Stations {
     String address;
     LocalDateTime createdDate;
     LocalDateTime updatedDate;
-    boolean active;
+    Boolean active;
 }

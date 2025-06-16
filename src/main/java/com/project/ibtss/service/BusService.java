@@ -10,6 +10,6 @@ public interface BusService {
     List<BusResponse> getAllBuses();
     BusResponse getBusById(Integer id);
     BusResponse updateBus(Integer id, BusRequest request);
-    void deleteBus(Integer id);
+    BusResponse setBusActive(Integer id);
     List<BusResponse> searchByLicensePlate(String keyword);
 }

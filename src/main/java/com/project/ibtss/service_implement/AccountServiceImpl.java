@@ -170,6 +170,9 @@ public class AccountServiceImpl implements AccountService {
                 .fullName(registerRequest.getFullName())
                 .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
                 .phone(registerRequest.getPhone())
+                .isActive(true)
+                .role(Role.USER)
+                .createdDate(LocalDateTime.now())
                 .build();
 
         accountRepository.save(user);

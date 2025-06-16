@@ -27,14 +27,14 @@ public class BusServiceImpl implements BusService {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
         Buses bus = busMapper.toEntity(request);
-        bus.setStatus("ACTIVE");
+        bus.setStatus(true);
         return busMapper.toResponse(busRepository.save(bus));
     }
 
     @Override
     public List<BusResponse> getAllBuses() {
         return busRepository.findAll().stream()
-                .filter(bus -> "ACTIVE".equals(bus.getStatus()))
+                .filter(bus -> bus.getStatus() == true)
                 .map(busMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -42,7 +42,7 @@ public class BusServiceImpl implements BusService {
     @Override
     public BusResponse getBusById(Integer id) {
         return busRepository.findById(id)
-                .filter(bus -> "ACTIVE".equals(bus.getStatus()))
+                .filter(bus -> bus.getStatus() == true)
                 .map(busMapper::toResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
@@ -60,17 +60,17 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public void deleteBus(Integer id) {
+    public BusResponse setBusActive(Integer id) {
         Buses bus = busRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        bus.setStatus("INACTIVE");
-        busRepository.save(bus);
+        bus.setStatus(!bus.getStatus());
+        return  busMapper.toResponse(busRepository.save(bus));
     }
 
     @Override
     public List<BusResponse> searchByLicensePlate(String keyword) {
         return busRepository.findByLicensePlateContainingIgnoreCase(keyword).stream()
-                .filter(bus -> "ACTIVE".equals(bus.getStatus()))
+                .filter(bus -> bus.getStatus() == true)
                 .map(busMapper::toResponse)
                 .collect(Collectors.toList());
     }
