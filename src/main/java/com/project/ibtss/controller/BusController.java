@@ -61,11 +61,12 @@ public class BusController {
 
     @PutMapping("/active/{id}")
     @PreAuthorize("hasAuthority('admin:delete')")
-    public ApiResponse<Void> deleteBus(@PathVariable Integer id) {
-        busService.deleteBus(id);
-        return ApiResponse.<Void>builder()
+    public ApiResponse<BusResponse> deleteBus(@PathVariable Integer id) {
+
+        return ApiResponse.<BusResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Deleted successfully")
+                .data(busService.setBusActive(id))
                 .build();
     }
 }
