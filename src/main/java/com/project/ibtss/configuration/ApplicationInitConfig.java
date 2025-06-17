@@ -34,7 +34,7 @@ public class ApplicationInitConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return email -> accountRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(ErrorCode.USER_NOT_FOUND.getMessage()));
+        return accountRepository::findByPhone;
     }
 
 
@@ -44,6 +44,7 @@ public class ApplicationInitConfig {
             if (accountRepository.findByFullName("admin") == null) {
                 Account account = Account.builder()
                         .fullName("admin")
+                        .phone("0912345678")
                         .passwordHash(passwordEncoder.encode("12345"))
                         .fullName("Admin")
                         .role(Role.ADMIN)

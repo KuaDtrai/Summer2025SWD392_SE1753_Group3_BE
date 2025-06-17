@@ -6,10 +6,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface JWTService {
     String extractEmail(String token);
-    String generateAccessToken(UserDetails userDetails);
-    String generateRefreshToken(UserDetails userDetails);
+    String extractPhone(String token);
+    String generateAccessToken(Account account);
+    String generateRefreshToken(Account userDetails);
 //    Token checkTokenIsValid(String tokenType, User user);
-    String generateResetToken(UserDetails userDetails);
+    String generateResetToken(Account userDetails);
     boolean validateToken(String token);
 
     Token checkTokenIsValid(String tokenType, Account account);

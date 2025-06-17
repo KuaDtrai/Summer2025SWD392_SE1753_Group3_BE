@@ -18,7 +18,9 @@ public enum Role {
     )),
     USER("user", Set.of(
 
-    ))
+    )),
+
+    STAFF("staff", Set.of())
 
     ;
 

@@ -53,26 +53,25 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String jwt = authHeader.substring(7);
-        String email = jwtService.extractEmail(jwt);
+        String phone = jwtService.extractPhone(jwt);
 
-        if (email == null) {
+        if (phone == null) {
             throw new BadCredentialsException("Invalid JWT");
         }
 
         if ( SecurityContextHolder.getContext().getAuthentication() == null) {
+            Account account = accountRepository.findByPhone(phone);
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(account.getUsername());
             if(userDetails == null){
                 throw new BadCredentialsException("Invalid username or password");
             }
 
-            log.info(userDetails.getUsername());
-
-            Account acc = accountRepository.findByEmail(userDetails.getUsername()).orElse(null);
-
-            if (acc == null) {
-                throw new BadCredentialsException("Account not found!");
-            }
+//            Account acc = accountRepository.findByEmail(userDetails.getUsername()).orElse(null);
+//
+//            if (acc == null) {
+//                throw new BadCredentialsException("Account not found!");
+//            }
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails,

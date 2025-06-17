@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.BusType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +21,7 @@ public class Buses {
 
     String licensePlate;
     Integer seatCount;
-    String busType;
+    BusType busType;
     Boolean status;
 
     @CreationTimestamp

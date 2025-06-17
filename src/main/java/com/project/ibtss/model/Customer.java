@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +21,7 @@ public class Customer {
     @JoinColumn(name = "account_id", unique = true)
     Account account;
 
-    String gender;
+    Gender gender;
     LocalDate dob;
     String address;
 }

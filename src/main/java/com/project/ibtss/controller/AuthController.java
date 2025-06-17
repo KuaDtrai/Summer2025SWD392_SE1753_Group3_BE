@@ -6,6 +6,7 @@ import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.repository.AccountRepository;
 import com.project.ibtss.repository.TokenRepository;
+import com.project.ibtss.service.AccountService;
 import com.project.ibtss.service.JWTService;
 import com.project.ibtss.service_implement.AccountServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 //@RequestMapping("/authen/")
 public class AuthController {
 
-    private final AccountServiceImpl accountService;
+    private final AccountService accountService;
     private final JWTService jwtService;
 //    private final UserRepository userRepository;
     private final TokenRepository tokenRepository;

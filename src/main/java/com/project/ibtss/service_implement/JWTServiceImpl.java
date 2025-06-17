@@ -61,6 +61,11 @@ public class JWTServiceImpl implements JWTService {
         return getClaim(token, Claims::getSubject);
     }
 
+    @Override
+    public String extractPhone(String token) {
+        return getClaim(token, Claims::getSubject);
+    }
+
 
     private <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
         return claimsResolver.apply(getAllClaimsFromToken(token));
@@ -80,10 +85,10 @@ public class JWTServiceImpl implements JWTService {
     }
 
 
-    private String generateToken(Map<String, Object> claims, UserDetails userDetails, Long expiredTime) {
+    private String generateToken(Map<String, Object> claims, Account account, Long expiredTime) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(account.getPhone())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis(   ) + expiredTime))
                 .signWith(getSigningKey())
@@ -113,17 +118,17 @@ public class JWTServiceImpl implements JWTService {
 
 
     @Override
-    public String generateAccessToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails, accessTokenExpiration);
+    public String generateAccessToken(Account account) {
+        return generateToken(new HashMap<>(), account, accessTokenExpiration);
     }
 
     @Override
-    public String generateRefreshToken(UserDetails userDetails) {
+    public String generateRefreshToken(Account userDetails) {
         return generateToken(new HashMap<>(), userDetails, refreshTokenExpiration);
     }
 
     @Override
-    public String generateResetToken(UserDetails userDetails) {
+    public String generateResetToken(Account userDetails) {
         return generateToken(new HashMap<>(), userDetails, resetTokenExpiration);
     }
 

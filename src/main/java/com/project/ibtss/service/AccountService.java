@@ -16,6 +16,8 @@ public interface AccountService {
 
     List<AccountResponse> getAllAccounts();
 
+//    String generateToken(Account account);
+
     AccountResponse updateRole(Integer id, Role role);
 
     AccountResponse updatePassword(UpdatePasswordRequest updatePasswordRequest);

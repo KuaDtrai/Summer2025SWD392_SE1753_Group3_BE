@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.Position;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +21,7 @@ public class Staff {
     @JoinColumn(name = "account_id", unique = true)
     Account account;
 
-    String position;
+    Position position;
     LocalDate hiredDate;
 }
 

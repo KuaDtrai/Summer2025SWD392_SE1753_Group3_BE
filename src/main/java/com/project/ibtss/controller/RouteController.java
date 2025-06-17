@@ -22,9 +22,7 @@ import java.util.List;
 @RequestMapping("/route")
 @RequiredArgsConstructor
 public class RouteController {
-    private final RouteRepository routeRepository;
     private final RouteService routeService;
-    private final RouteMapper routeMapper;
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('admin:read')")

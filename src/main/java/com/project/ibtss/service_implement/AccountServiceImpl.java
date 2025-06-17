@@ -59,32 +59,31 @@ public class AccountServiceImpl implements AccountService {
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
 
-    private String generateToken(Account account) {
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
-
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(account.getFullName())
-                .issuer("aia.com")
-                .issueTime(new Date())
-                .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
-                ))
-                .claim("scope", buildScope(account))
-                .build();
-
-        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
-
-        JWSObject jwsObject = new JWSObject(header, payload);
-
-        try {
-            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
-            System.out.println(jwsObject.serialize());
-            return jwsObject.serialize();
-        } catch (JOSEException e) {
-            log.warn("Can't create JWT token!", e);
-            throw new RuntimeException(e);
-        }
-    }
+//    private String generateToken(Account account) {
+//        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+//
+//        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+//                .subject(account.getPhone())
+//                .issuer("aia.com")
+//                .issueTime(new Date())
+//                .expirationTime(new Date(
+//                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+//                ))
+//                .claim("scope", buildScope(account))
+//                .build();
+//        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+//
+//        JWSObject jwsObject = new JWSObject(header, payload);
+//
+//        try {
+//            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+//            System.out.println(jwsObject.serialize());
+//            return jwsObject.serialize();
+//        } catch (JOSEException e) {
+//            log.warn("Can't create JWT token!", e);
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     private String buildScope(Account account) {
         Role role = account.getRole();

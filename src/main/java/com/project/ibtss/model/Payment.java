@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.PaymentMethod;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +23,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    String paymentMethod;
+    PaymentMethod paymentMethod;
     Float totalAmount;
     LocalDateTime createdDate;
 }

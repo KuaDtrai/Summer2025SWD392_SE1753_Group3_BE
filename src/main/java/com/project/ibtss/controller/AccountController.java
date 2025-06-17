@@ -19,10 +19,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/Account")
+@RequestMapping("/account")
 public class AccountController {
     private final AccountService accountService;
-    private final AccountRepository accountRepository;
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:read')")
