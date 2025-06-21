@@ -2,10 +2,12 @@ package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.SeatRequest;
 import com.project.ibtss.dto.response.ApiResponse;
+import com.project.ibtss.dto.response.SeatForSelectResponse;
 import com.project.ibtss.dto.response.SeatResponse;
 import com.project.ibtss.service.SeatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -76,6 +78,15 @@ public class SeatController {
                 .code(HttpStatus.OK.value())
                 .message("Success")
                 .data(seatService.getSeatsByBusId(busId))
+                .build();
+    }
+
+    @GetMapping("")
+    public ApiResponse<List<SeatForSelectResponse>> getListSeat(@RequestParam(value = "licensePlate", required = true) String licensePlate){
+        return ApiResponse.<List<SeatForSelectResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(seatService.getAllSeatsForSelect(licensePlate))
                 .build();
     }
 }

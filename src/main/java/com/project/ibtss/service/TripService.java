@@ -1,5 +1,6 @@
 package com.project.ibtss.service;
 
+import com.project.ibtss.dto.request.SearchTripRequest;
 import com.project.ibtss.dto.request.TripRequest;
 import com.project.ibtss.dto.response.TripResponse;
 
@@ -11,4 +12,5 @@ public interface TripService {
     TripResponse getTripById(Integer id);
     void deleteTrip(Integer id);
     List<TripResponse> getAllTrips();
+    List<TripResponse> searchTrip(SearchTripRequest request);
 }

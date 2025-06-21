@@ -1,0 +1,37 @@
+package com.project.ibtss.service_implement;
+
+import com.project.ibtss.dto.request.PaymentConfirmRequest;
+import com.project.ibtss.dto.request.PaymentSeatRequest;
+import com.project.ibtss.enums.ErrorCode;
+import com.project.ibtss.exception.AppException;
+import com.project.ibtss.model.RouteStations;
+import com.project.ibtss.model.Seats;
+import com.project.ibtss.model.TicketSegment;
+import com.project.ibtss.model.Tickets;
+import com.project.ibtss.repository.RouteStationRepository;
+import com.project.ibtss.repository.TicketSegmentRepository;
+import com.project.ibtss.service.TicketSegmentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class TicketSegmentServiceImpl implements TicketSegmentService {
+
+    private final RouteStationRepository routeStationRepository;
+    private final TicketSegmentRepository ticketSegmentRepository;
+
+    @Override
+    public TicketSegment createTicketSegment(PaymentSeatRequest request, Tickets ticket, Seats seat) {
+        RouteStations fromStation = routeStationRepository.findByStationId(request.getPickupLocationId()).orElseThrow(() -> new AppException(ErrorCode.ROUTE_STATION_NOT_EXISTED));
+        RouteStations toStation = routeStationRepository.findByStationId(request.getDropoffLocationId()).orElseThrow(() -> new AppException(ErrorCode.ROUTE_STATION_NOT_EXISTED));
+        TicketSegment ticketSegment =  TicketSegment.builder()
+                .price(request.getTotalPrice())
+                .fromStation(fromStation)
+                .toStation(toStation)
+                .seat(seat)
+                .ticket(ticket)
+                .build();
+        return ticketSegmentRepository.save(ticketSegment);
+    }
+}

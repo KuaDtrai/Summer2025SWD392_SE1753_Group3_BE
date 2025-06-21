@@ -1,8 +1,5 @@
 package com.project.ibtss.service_implement;
 
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.project.ibtss.dto.request.AccountRequest;
 import com.project.ibtss.dto.request.LoginRequest;
 import com.project.ibtss.dto.request.RegisterRequest;
@@ -25,13 +22,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -180,8 +172,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponse accountDetail() {
-        String acc = SecurityContextHolder.getContext().getAuthentication().getName();
-        Account account = accountRepository.findByFullName(acc);
+        String phone = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountRepository.findByPhone(phone);
         if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }

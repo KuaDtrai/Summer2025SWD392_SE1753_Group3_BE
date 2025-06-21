@@ -14,4 +14,6 @@ public interface TripRepository extends JpaRepository<Trips, Integer> {
         AND (:start < t.arrivalTime AND :end > t.departureTime))
     """)
     List<Trips> findConflictingTrips(LocalDateTime start, LocalDateTime end, Integer busId, Integer driverId);
+
+    List<Trips> findByRoute_DepartureStation_NameAndRoute_DestinationStation_Name(String from, String to);
 }

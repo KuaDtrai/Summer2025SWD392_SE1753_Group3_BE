@@ -9,4 +9,5 @@ public interface SeatRepository extends JpaRepository<Seats, Integer> {
     List<Seats> findByBusId(Integer busId);
     boolean existsByBusIdAndSeatCodeIgnoreCase(Integer busId, String seatCode);
     long countByBusId(Integer busId);
+    List<Seats> findAllSeatByBusId(Integer busId);
 }

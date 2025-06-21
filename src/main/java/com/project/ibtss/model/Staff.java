@@ -17,7 +17,7 @@ public class Staff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", unique = true)
     Account account;
 

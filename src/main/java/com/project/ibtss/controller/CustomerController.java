@@ -27,7 +27,7 @@ public class CustomerController {
 
     @PostMapping
     public ApiResponse<CustomerResponse> postCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
-        AccountResponse account = new AccountResponse(1, "kien@gmail.com", "Kien Ho", Role.USER, "");
+        AccountResponse account = new AccountResponse(1, "kien@gmail.com", "Kien Ho", "0123456789", Role.USER, "");
         return ApiResponse.<CustomerResponse>builder().code(HttpStatus.OK.value()).message("").data(getCustomerResponse()).build();
     }
 
@@ -35,7 +35,7 @@ public class CustomerController {
     public ApiResponse<CustomerResponse> updateCustomer(
             @Valid @RequestBody CustomerRequest customerRequest
     ) {
-        AccountResponse account = new AccountResponse(1, "kien@gmail.com", "Kien Ho", Role.USER, "");
+        AccountResponse account = new AccountResponse(1, "kien@gmail.com", "Kien Ho", "0123456789", Role.USER, "");
         return ApiResponse.<CustomerResponse>builder().code(HttpStatus.OK.value()).message("").data(getCustomerResponse()).build();
     }
 }

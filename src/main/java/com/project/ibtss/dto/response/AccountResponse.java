@@ -11,6 +11,7 @@ public class AccountResponse {
 //    String username;
     String email;
     String fullName;
+    String phone;
     Role role;
     String accessToken;
 }

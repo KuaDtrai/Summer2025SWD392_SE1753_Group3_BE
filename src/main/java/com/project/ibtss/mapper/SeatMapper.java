@@ -1,6 +1,7 @@
 package com.project.ibtss.mapper;
 
 import com.project.ibtss.dto.request.SeatRequest;
+import com.project.ibtss.dto.response.SeatForSelectResponse;
 import com.project.ibtss.dto.response.SeatResponse;
 import com.project.ibtss.model.Seats;
 import org.mapstruct.Mapper;
@@ -14,4 +15,5 @@ public interface SeatMapper {
     SeatResponse toResponse(Seats seat);
     Seats toEntity(SeatRequest request);
     void updateFromRequest(SeatRequest request, @MappingTarget Seats seat);
+    SeatForSelectResponse toForSelectResponse(Seats seat);
 }

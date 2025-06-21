@@ -18,11 +18,11 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     Customer customer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staff_id")
     Staff staff;
 

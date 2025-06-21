@@ -1,9 +1,7 @@
 package com.project.ibtss.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +22,8 @@ public class Stations {
     String name;
     String address;
     LocalDateTime createdDate;
+
+    @Column(nullable = true)
     LocalDateTime updatedDate;
     Boolean active;
 }

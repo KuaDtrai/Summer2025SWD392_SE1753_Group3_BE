@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.SeatStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,11 +19,13 @@ public class Seats {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bus_id")
     Buses bus;
 
     String seatCode;
+
+    SeatStatus seatStatus;
 
     @CreationTimestamp
     LocalDateTime createdAt;

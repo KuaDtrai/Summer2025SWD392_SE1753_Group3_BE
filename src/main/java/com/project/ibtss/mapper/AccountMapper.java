@@ -7,6 +7,5 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
-//    @Mapping(target = "token", ignore = true)
     AccountResponse toAccountResponse(Account account);
 }

@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.TicketStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class Tickets {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +21,14 @@ public class Tickets {
     @Column(unique = true)
     String journeyCode;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = true)
     Customer customer;
 
     String ticketOwnerName;
     String ticketOwnerPhone;
     LocalDateTime bookingTime;
-    String status;
 
-    @ManyToOne
-    @JoinColumn(name = "sold_by")
-    Staff soldBy;
+    @Enumerated(EnumType.STRING)
+    TicketStatus status;
 }

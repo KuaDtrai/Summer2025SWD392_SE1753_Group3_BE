@@ -26,6 +26,20 @@ public enum ErrorCode {
     INVALID_DRIVER(303, "Invalid driver", HttpStatus.BAD_REQUEST),
     CANNOT_MODIFY_PAST_TRIP(305, "Cannot modify a trip that has already started or ended", HttpStatus.BAD_REQUEST),
     CANNOT_DELETE_TRIP_WITH_TICKETS(306, "Cannot delete a trip that has tickets sold", HttpStatus.BAD_REQUEST),
+
+
+    BUS_EXISTED(400, "Bus already exists", HttpStatus.BAD_REQUEST),
+    BUS_NOT_EXISTED(401, "Bus does not exist", HttpStatus.BAD_REQUEST),
+
+    TRIP_NOT_EXISTED(500, "Trip does not exist", HttpStatus.BAD_REQUEST),
+
+    SEAT_NOT_EXISTED(600, "Seat does not exist", HttpStatus.BAD_REQUEST),
+
+    CUSTOMER_NOT_EXISTED(700, "Customer does not exist", HttpStatus.BAD_REQUEST),
+
+    ROUTE_STATION_NOT_EXISTED(800, "Route station does not exist", HttpStatus.BAD_REQUEST),
+
+    PAYMENT_NOT_EXISTED(900, "Payment does not exist", HttpStatus.BAD_REQUEST),
     ;
     int code;
     String message;

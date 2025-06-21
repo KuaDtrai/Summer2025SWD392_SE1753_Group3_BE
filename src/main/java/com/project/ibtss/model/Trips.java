@@ -18,7 +18,7 @@ public class Trips {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "route_id")
     Routes route;
 
@@ -27,11 +27,11 @@ public class Trips {
 
     Float price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bus_id")
     Buses bus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")
     Account driver;
 

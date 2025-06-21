@@ -1,5 +1,6 @@
 package com.project.ibtss.service_implement;
 
+import com.project.ibtss.dto.request.SearchTripRequest;
 import com.project.ibtss.dto.request.TripRequest;
 import com.project.ibtss.dto.response.TripResponse;
 import com.project.ibtss.enums.ErrorCode;
@@ -61,6 +62,17 @@ public class TripServiceImpl implements TripService {
     public List<TripResponse> getAllTrips() {
         return tripRepository.findAll().stream()
                 .filter(t -> "ACTIVE".equals(t.getStatus()))
+                .map(tripMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TripResponse> searchTrip(SearchTripRequest request) {
+        List<Trips> trips = tripRepository
+                .findByRoute_DepartureStation_NameAndRoute_DestinationStation_Name(request.getFrom(), request.getTo());
+
+        return trips.stream()
+                .filter(trip -> trip.getDepartureTime().toLocalDate().equals(request.getDepartureTime()))
                 .map(tripMapper::toResponse)
                 .collect(Collectors.toList());
     }

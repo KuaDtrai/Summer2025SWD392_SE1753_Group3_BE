@@ -14,7 +14,7 @@ public class SubPay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     Payment payment;
 

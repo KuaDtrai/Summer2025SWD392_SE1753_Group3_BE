@@ -78,6 +78,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>1.6.3</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>${com.nimbus.version}</version>
@@ -138,6 +145,11 @@
 			<version>${springdoc.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>vn.payos</groupId>
+			<artifactId>payos-java</artifactId>
+			<version>1.0.1</version>
+		</dependency>
 
 	</dependencies>
 

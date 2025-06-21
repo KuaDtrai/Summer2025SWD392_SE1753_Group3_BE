@@ -1,8 +1,10 @@
 package com.project.ibtss.service_implement;
 
 import com.project.ibtss.dto.request.SeatRequest;
+import com.project.ibtss.dto.response.SeatForSelectResponse;
 import com.project.ibtss.dto.response.SeatResponse;
 import com.project.ibtss.enums.ErrorCode;
+import com.project.ibtss.enums.SeatStatus;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.SeatMapper;
 import com.project.ibtss.model.Buses;
@@ -54,16 +56,23 @@ public class SeatServiceImpl implements SeatService {
         int seatCount = bus.getSeatCount();
         List<SeatResponse> result = new ArrayList<>();
 
-        for (int i = 1; i <= seatCount; i++) {
-            String seatCode = "S" + i;
-            if (seatRepository.existsByBusIdAndSeatCodeIgnoreCase(busId, seatCode)) continue;
+        for(int i = 0; i < 2; i++){
+            for (int j = 1; j <= (seatCount/2); j++) {
+                String seatCode = "";
+                if(i == 0){
+                    seatCode = "A" + j;
+                } else {
+                    seatCode = "B" + j;
+                }
+                if (seatRepository.existsByBusIdAndSeatCodeIgnoreCase(busId, seatCode)) continue;
 
-            Seats seat = new Seats();
-            seat.setSeatCode(seatCode);
-            seat.setBus(bus);
-            seat.setCreatedAt(LocalDateTime.now());
-            seat.setUpdatedAt(LocalDateTime.now());
-            result.add(seatMapper.toResponse(seatRepository.save(seat)));
+                Seats seat = new Seats();
+                seat.setSeatCode(seatCode);
+                seat.setBus(bus);
+                seat.setCreatedAt(LocalDateTime.now());
+                seat.setUpdatedAt(LocalDateTime.now());
+                result.add(seatMapper.toResponse(seatRepository.save(seat)));
+            }
         }
         return result;
     }
@@ -109,5 +118,38 @@ public class SeatServiceImpl implements SeatService {
         return seatRepository.findByBusId(busId).stream()
                 .map(seatMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SeatForSelectResponse> getAllSeatsForSelect(String licensePlate) {
+        Buses bus = busRepository.findByLicensePlateIgnoreCase(licensePlate).orElseThrow(() -> new AppException(ErrorCode.BUS_NOT_EXISTED));
+        List<Seats> seats = seatRepository.findAllSeatByBusId(bus.getId());
+        return seats.stream()
+                .map(this::toForSelectResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Seats> setStatusListSeat(List<Integer> seatIds) {
+        List<Seats> result = new ArrayList<>();
+        for (Integer seatId : seatIds) {
+            result.add(setStatusSeat(seatId));
+        }
+        return result;
+    }
+
+    private Seats setStatusSeat(int seatId){
+        Seats seat = seatRepository.findById(seatId).orElseThrow(() -> new AppException(ErrorCode.SEAT_NOT_EXISTED));
+        seat.setSeatStatus(SeatStatus.PENDING);
+        return seatRepository.save(seat);
+    }
+
+    private SeatForSelectResponse toForSelectResponse(Seats seat) {
+        return SeatForSelectResponse.builder()
+                .seatId(seat.getId())
+                .busId(seat.getBus().getId())
+                .seatCode(seat.getSeatCode())
+                .seatStatus(SeatStatus.AVAILABLE)
+                .build();
     }
 }

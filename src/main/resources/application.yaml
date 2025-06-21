@@ -2,7 +2,7 @@ spring:
   application:
     name: ibtss
   datasource:
-    url: ${DB_URL}
+    url: ${DB_URL}?zeroDateTimeBehavior=CONVERT_TO_NULL
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVERNAME}
@@ -19,4 +19,10 @@ server:
 
 jwt:
   signerKey: ${SIGNER_KEY}
+payos:
+  client-id: ${CLIENT_ID}
+  api-key: ${API_KEY}
+  check-sum-key: ${CHECK_SUM_KEY}
+
+
 

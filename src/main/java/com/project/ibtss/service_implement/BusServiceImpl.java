@@ -8,6 +8,7 @@ import com.project.ibtss.mapper.BusMapper;
 import com.project.ibtss.model.Buses;
 import com.project.ibtss.repository.BusRepository;
 import com.project.ibtss.service.BusService;
+import com.project.ibtss.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +22,28 @@ public class BusServiceImpl implements BusService {
     private final BusRepository busRepository;
     private final BusMapper busMapper;
 
+    private final SeatService seatService;
+
     @Override
     public BusResponse createBus(BusRequest request) {
-        if (busRepository.existsByLicensePlateIgnoreCase(request.getLicensePlate())) {
-            throw new AppException(ErrorCode.USERNAME_EXISTED);
-        }
+
+        checkValidCreateBus(request.getLicensePlate());
+
         Buses bus = busMapper.toEntity(request);
         bus.setStatus(true);
-        return busMapper.toResponse(busRepository.save(bus));
+        busRepository.save(bus);
+
+        bus = busRepository.findByLicensePlateIgnoreCase(bus.getLicensePlate()).orElseThrow(() -> new AppException(ErrorCode.BUS_NOT_EXISTED));
+
+        seatService.autoGenerateSeats(bus.getId());
+
+        return busMapper.toResponse(bus);
+    }
+
+    private void checkValidCreateBus(String licensePlate) {
+        if (busRepository.existsByLicensePlateIgnoreCase(licensePlate)) {
+            throw new AppException(ErrorCode.BUS_EXISTED);
+        }
     }
 
     @Override

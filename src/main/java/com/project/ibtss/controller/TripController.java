@@ -1,5 +1,6 @@
 package com.project.ibtss.controller;
 
+import com.project.ibtss.dto.request.SearchTripRequest;
 import com.project.ibtss.dto.request.TripRequest;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.TripResponse;
@@ -64,6 +65,15 @@ public class TripController {
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Trip deleted successfully")
+                .build();
+    }
+
+    @PostMapping("/search")
+    public ApiResponse<List<TripResponse>> searchTrips(@RequestBody SearchTripRequest request) {
+        return  ApiResponse.<List<TripResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(tripService.searchTrip(request))
                 .build();
     }
 }

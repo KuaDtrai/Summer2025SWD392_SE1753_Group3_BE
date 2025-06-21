@@ -18,11 +18,11 @@ public class Routes {
 
     String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "departure_station_id")
     Stations departureStation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "destination_station_id")
     Stations destinationStation;
 

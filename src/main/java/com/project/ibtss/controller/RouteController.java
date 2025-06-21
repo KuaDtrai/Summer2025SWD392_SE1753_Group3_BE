@@ -1,21 +1,14 @@
 package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.RouteRequest;
-import com.project.ibtss.dto.request.StationRequest;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.RouteResponse;
-import com.project.ibtss.dto.response.StationResponse;
-import com.project.ibtss.mapper.RouteMapper;
-import com.project.ibtss.model.Routes;
-import com.project.ibtss.repository.RouteRepository;
 import com.project.ibtss.service.RouteService;
-import com.project.ibtss.service.StationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
