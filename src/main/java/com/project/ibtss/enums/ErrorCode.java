@@ -26,7 +26,8 @@ public enum ErrorCode {
     INVALID_DRIVER(303, "Invalid driver", HttpStatus.BAD_REQUEST),
     CANNOT_MODIFY_PAST_TRIP(305, "Cannot modify a trip that has already started or ended", HttpStatus.BAD_REQUEST),
     CANNOT_DELETE_TRIP_WITH_TICKETS(306, "Cannot delete a trip that has tickets sold", HttpStatus.BAD_REQUEST),
-    ;
+    FEEDBACK_NOT_FOUND(307, "Feedback not found", HttpStatus.NOT_FOUND),
+    CUSTOMER_NOT_FOUND(308, "Customer not found", HttpStatus.NOT_FOUND ),;
     int code;
     String message;
     HttpStatusCode statusCode;
