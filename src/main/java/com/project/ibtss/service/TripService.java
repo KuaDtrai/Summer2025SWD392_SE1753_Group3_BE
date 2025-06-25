@@ -10,7 +10,7 @@ public interface TripService {
     TripResponse createTrip(TripRequest request);
     TripResponse updateTrip(Integer id, TripRequest request);
     TripResponse getTripById(Integer id);
-    void deleteTrip(Integer id);
+//    void deleteTrip(Integer id);
     List<TripResponse> getAllTrips();
     List<TripResponse> searchTrip(SearchTripRequest request);
 }

@@ -40,6 +40,17 @@ public enum ErrorCode {
     ROUTE_STATION_NOT_EXISTED(800, "Route station does not exist", HttpStatus.BAD_REQUEST),
 
     PAYMENT_NOT_EXISTED(900, "Payment does not exist", HttpStatus.BAD_REQUEST),
+
+    TICKET_PAY_NOT_EXISTED(1000, "Ticket payment does not exist", HttpStatus.BAD_REQUEST),
+
+    TICKET_NOT_EXISTED(1100, "Ticket does not exist", HttpStatus.BAD_REQUEST),
+    TICKET_CAN_NOT_CANCEL(1101, "Can not cancel ticket", HttpStatus.BAD_REQUEST),
+
+    STATION_NOT_EXISTED(1200, "Station does not exist", HttpStatus.BAD_REQUEST),
+
+    TICKET_SEGMENT_NOT_EXISTED(1300, "Ticket segment does not exist", HttpStatus.BAD_REQUEST),
+
+    ROUTE_NOT_EXISTED(1400, "Route does not exist", HttpStatus.BAD_REQUEST),
     ;
     int code;
     String message;

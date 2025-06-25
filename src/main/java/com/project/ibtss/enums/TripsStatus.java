@@ -5,14 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum TicketStatus {
-    PAID("PAID"),
-    PENDING("PENDING"),
-    CANCEL("CANCELLED"),
-    USED("USED")
+public enum TripsStatus {
+    WAITING("WAITING"),
+    IN_PROGRESS("IN_PROGRESS"),
+    COMPLETED("COMPLETED"),
+    CANCELED("CANCELED"),
+    DELAYED("DELAYED"),
     ;
     String name;
 }

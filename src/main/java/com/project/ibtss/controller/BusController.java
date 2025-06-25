@@ -19,6 +19,7 @@ public class BusController {
     private final BusService busService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('admin:read')")
     public ApiResponse<List<BusResponse>> getAllBuses(@RequestParam(value = "licensePlate", required = false) String licensePlate) {
         List<BusResponse> buses = (licensePlate != null && !licensePlate.isEmpty()) // Check if license plate is provided
                 ? busService.searchByLicensePlate(licensePlate) // Search by license plate if provided
@@ -31,6 +32,7 @@ public class BusController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ApiResponse<BusResponse> getBusById(@PathVariable Integer id) {
         return ApiResponse.<BusResponse>builder()
                 .code(HttpStatus.OK.value())

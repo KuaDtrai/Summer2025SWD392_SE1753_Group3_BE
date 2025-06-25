@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.TripsStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -32,10 +33,11 @@ public class Trips {
     Buses bus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "driver_id")
+    @JoinColumn(name = "driver_id", nullable = true)
     Account driver;
 
-    String status;
+    @Enumerated(EnumType.STRING)
+    TripsStatus status;
 
     @CreationTimestamp
     @Column(updatable = false)

@@ -13,26 +13,21 @@ import vn.payos.type.PaymentData;
 @RequiredArgsConstructor
 public class PayOSServiceImpl implements PayOSService {
     private final PayOS payOS;
-    public CheckoutResponseData createPaymentLink(PaymentSeatRequest request, long orderCode, int paymentId) {
+    public CheckoutResponseData createPaymentLink(PaymentSeatRequest request, long orderCode, Integer paymentId) throws Exception {
         ItemData item = ItemData.builder()
                 .name("Payment: " + paymentId)
-                .price(request.getTotalPrice().intValue()) // PayOS dùng int
+                .price(request.getTotalPrice().intValue())
                 .quantity(request.getSeatIds().size())
                 .build();
 
         PaymentData paymentData = PaymentData.builder()
-                .orderCode(orderCode)
+                .orderCode(paymentId.longValue())
                 .amount(request.getTotalPrice().intValue())
-                .description("Thanh toán vé xe")
-                .returnUrl("http://localhost:5173/")
-                .cancelUrl("http://localhost:5173/")
+                .description("Pay bus tiket")
+                .returnUrl("http://localhost:5173/payment-callback")
+                .cancelUrl("http://localhost:5173/payment-callback")
                 .item(item)
                 .build();
-
-        try {
             return payOS.createPaymentLink(paymentData);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

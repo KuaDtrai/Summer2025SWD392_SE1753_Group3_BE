@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.RouteStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -28,5 +29,6 @@ public class Routes {
 
     Integer distanceKm;
     LocalTime estimatedTime;
-    Boolean isActive;
+    @Enumerated(EnumType.STRING)
+    RouteStatus status;
 }

@@ -16,8 +16,8 @@ public class TicketSegment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "journey_ticket_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ticket_id")
     Tickets ticket;
 
     Integer legOrder;

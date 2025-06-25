@@ -16,4 +16,8 @@ public interface TripRepository extends JpaRepository<Trips, Integer> {
     List<Trips> findConflictingTrips(LocalDateTime start, LocalDateTime end, Integer busId, Integer driverId);
 
     List<Trips> findByRoute_DepartureStation_NameAndRoute_DestinationStation_Name(String from, String to);
+
+    List<Trips> findAllByRouteId(Integer routeId);
+
+            //    Trips findByTicketSegmentId(Integer ticketSegmentId);
 }

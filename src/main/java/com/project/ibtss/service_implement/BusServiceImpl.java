@@ -2,6 +2,7 @@ package com.project.ibtss.service_implement;
 
 import com.project.ibtss.dto.request.BusRequest;
 import com.project.ibtss.dto.response.BusResponse;
+import com.project.ibtss.enums.BusStatus;
 import com.project.ibtss.enums.ErrorCode;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.BusMapper;
@@ -30,7 +31,7 @@ public class BusServiceImpl implements BusService {
         checkValidCreateBus(request.getLicensePlate());
 
         Buses bus = busMapper.toEntity(request);
-        bus.setStatus(true);
+        bus.setStatus(BusStatus.ACTIVE);
         busRepository.save(bus);
 
         bus = busRepository.findByLicensePlateIgnoreCase(bus.getLicensePlate()).orElseThrow(() -> new AppException(ErrorCode.BUS_NOT_EXISTED));
@@ -49,7 +50,6 @@ public class BusServiceImpl implements BusService {
     @Override
     public List<BusResponse> getAllBuses() {
         return busRepository.findAll().stream()
-                .filter(bus -> bus.getStatus() == true)
                 .map(busMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -57,7 +57,6 @@ public class BusServiceImpl implements BusService {
     @Override
     public BusResponse getBusById(Integer id) {
         return busRepository.findById(id)
-                .filter(bus -> bus.getStatus() == true)
                 .map(busMapper::toResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
@@ -78,14 +77,13 @@ public class BusServiceImpl implements BusService {
     public BusResponse setBusActive(Integer id) {
         Buses bus = busRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        bus.setStatus(!bus.getStatus());
+        bus.setStatus(BusStatus.ACTIVE);
         return  busMapper.toResponse(busRepository.save(bus));
     }
 
     @Override
     public List<BusResponse> searchByLicensePlate(String keyword) {
         return busRepository.findByLicensePlateContainingIgnoreCase(keyword).stream()
-                .filter(bus -> bus.getStatus() == true)
                 .map(busMapper::toResponse)
                 .collect(Collectors.toList());
     }

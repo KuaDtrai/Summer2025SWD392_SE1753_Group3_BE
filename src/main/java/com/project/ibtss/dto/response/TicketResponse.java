@@ -1,20 +1,20 @@
 package com.project.ibtss.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TicketResponse {
     private Integer ticketId;
     private String journeyCode;
-    private String customerName;
     private String ticketOwnerName;
     private String ticketOwnerPhone;
     private LocalDateTime bookingTime;
     private String status;
-    private String staffName;
+    TicketSegmentResponse ticketSegmentResponse;
 }

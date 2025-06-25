@@ -22,8 +22,8 @@ public class Tickets {
     String journeyCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = true)
-    Customer customer;
+    @JoinColumn(name = "account_id", nullable = true)
+    Account account;
 
     String ticketOwnerName;
     String ticketOwnerPhone;

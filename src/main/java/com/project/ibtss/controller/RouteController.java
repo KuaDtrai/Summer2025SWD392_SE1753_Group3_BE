@@ -1,6 +1,7 @@
 package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.RouteRequest;
+import com.project.ibtss.dto.request.RouteUpdateRequest;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.RouteResponse;
 import com.project.ibtss.service.RouteService;
@@ -45,7 +46,7 @@ public class RouteController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:update')")
-    public ApiResponse<RouteResponse> updateRoute(@PathVariable Integer id, @RequestBody RouteRequest routeRequest) {
+    public ApiResponse<RouteResponse> updateRoute(@PathVariable Integer id, @RequestBody RouteUpdateRequest routeRequest) {
         return ApiResponse.<RouteResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("")

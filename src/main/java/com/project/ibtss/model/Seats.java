@@ -25,6 +25,7 @@ public class Seats {
 
     String seatCode;
 
+//    @Enumerated(EnumType.STRING)
     SeatStatus seatStatus;
 
     @CreationTimestamp
