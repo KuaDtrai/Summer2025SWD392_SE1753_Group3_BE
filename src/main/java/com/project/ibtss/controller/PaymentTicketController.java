@@ -29,8 +29,8 @@ public class PaymentTicketController {
     }
 
     @PostMapping("/confirm")
-    ApiResponse<CreatePaymentResponse> confirmPaymentTicket(@RequestBody PaymentConfirmRequest request){
-        return ApiResponse.<CreatePaymentResponse>builder()
+    ApiResponse<String> confirmPaymentTicket(@RequestBody PaymentConfirmRequest request){
+        return ApiResponse.<String>builder()
                 .code(HttpStatus.OK.value())
                 .message(HttpStatus.OK.getReasonPhrase())
                 .data(paymentTicketService.confirmPaymentTicket(request))
