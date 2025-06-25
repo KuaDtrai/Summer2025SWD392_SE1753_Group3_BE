@@ -10,7 +10,11 @@ import com.project.ibtss.enums.Role;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.AccountMapper;
 import com.project.ibtss.model.Account;
+import com.project.ibtss.model.Customer;
+import com.project.ibtss.model.Staff;
 import com.project.ibtss.repository.AccountRepository;
+import com.project.ibtss.repository.CustomerRepository;
+import com.project.ibtss.repository.StaffRepository;
 import com.project.ibtss.repository.TokenRepository;
 import com.project.ibtss.service.AccountService;
 import com.project.ibtss.service.JWTService;
@@ -32,6 +36,8 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
+    private final CustomerRepository customerRepository;
+    private final StaffRepository staffRepository;
     private final JWTService jwtService;
     private final AccountMapper mapper;
 
@@ -40,10 +46,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, AccountRepository repository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, JWTService jwtService, AccountMapper mapper) {
+    public AccountServiceImpl(AccountRepository accountRepository, AccountRepository repository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, CustomerRepository customerRepository, StaffRepository staffRepository, JWTService jwtService, AccountMapper mapper) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
+        this.customerRepository = customerRepository;
+        this.staffRepository = staffRepository;
         this.jwtService = jwtService;
         this.mapper = mapper;
     }
@@ -100,9 +108,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponse updateRole(Integer id, Role role) {
-        Account account = accountRepository.findById(id).orElse(null);
-        if (account == null) {
-            return mapper.toAccountResponse(null);
+        Account account = accountRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+        if (account.getRole().equals(role)) {
+            throw new AppException(ErrorCode.DUPLICATE_ROLE);
+        }else if (role == Role.STAFF) {
+            Staff staff = new Staff();
+            staff.setAccount(account);
+            staffRepository.save(staff);
         }
         account.setRole(role);
         return mapper.toAccountResponse(accountRepository.save(account));
@@ -165,8 +177,12 @@ public class AccountServiceImpl implements AccountService {
                 .role(Role.USER)
                 .createdDate(LocalDateTime.now())
                 .build();
+        user = accountRepository.save(user);
 
-        accountRepository.save(user);
+        Customer customer = new Customer();
+        customer.setAccount(user);
+        customerRepository.save(customer);
+
         return "Success";
     }
 

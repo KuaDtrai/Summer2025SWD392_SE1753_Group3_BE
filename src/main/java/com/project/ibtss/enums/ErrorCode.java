@@ -27,7 +27,7 @@ public enum ErrorCode {
     CANNOT_MODIFY_PAST_TRIP(305, "Cannot modify a trip that has already started or ended", HttpStatus.BAD_REQUEST),
     CANNOT_DELETE_TRIP_WITH_TICKETS(306, "Cannot delete a trip that has tickets sold", HttpStatus.BAD_REQUEST),
 
-
+    DUPLICATE_ROLE(307, "Duplicate role", HttpStatus.BAD_REQUEST),
     BUS_EXISTED(400, "Bus already exists", HttpStatus.BAD_REQUEST),
     BUS_NOT_EXISTED(401, "Bus does not exist", HttpStatus.BAD_REQUEST),
 

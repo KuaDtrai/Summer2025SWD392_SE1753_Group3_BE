@@ -1,15 +1,15 @@
 package com.project.ibtss.mapper;
 
-import com.project.ibtss.dto.response.StaffResponse;
-import com.project.ibtss.model.Staff;
+import com.project.ibtss.dto.response.CustomerResponse;
+import com.project.ibtss.model.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
-public interface StaffMapper {
+public interface CustomerMapper {
     @Mapping(target = "fullName", source = "account.fullName")
     @Mapping(target = "email", source = "account.email")
     @Mapping(target = "phone", source = "account.phone")
-    @Mapping(target = "hireDate", source = "hiredDate")
-    StaffResponse toStaffResponse(Staff staff);
+    CustomerResponse toCustomer(Customer customer);
 }

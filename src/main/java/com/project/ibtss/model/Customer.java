@@ -21,7 +21,6 @@ public class Customer {
     @JoinColumn(name = "account_id", unique = true)
     Account account;
 
-    @Enumerated(EnumType.STRING)
     Gender gender;
     LocalDate dob;
     String address;
