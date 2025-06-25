@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.StationStatus;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -25,5 +26,7 @@ public class Stations {
 
     @Column(nullable = true)
     LocalDateTime updatedDate;
-    Boolean active;
+
+    @Enumerated(EnumType.STRING)
+    StationStatus status;
 }

@@ -20,7 +20,7 @@ public class PaymentTicketController {
     private PaymentTicketService paymentTicketService;
 
     @PostMapping
-    ApiResponse<CreatePaymentResponse> createPaymentTicket(@RequestBody PaymentSeatRequest request){
+    ApiResponse<CreatePaymentResponse> createPaymentTicket(@RequestBody PaymentSeatRequest request) throws Exception {
         return ApiResponse.<CreatePaymentResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(HttpStatus.OK.getReasonPhrase())

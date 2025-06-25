@@ -1,38 +1,35 @@
 package com.project.ibtss.service_implement;
 
 import com.project.ibtss.dto.request.RouteRequest;
+import com.project.ibtss.dto.request.RouteUpdateRequest;
 import com.project.ibtss.dto.response.RouteResponse;
 import com.project.ibtss.enums.ErrorCode;
+import com.project.ibtss.enums.RouteStatus;
+import com.project.ibtss.enums.TripsStatus;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.RouteMapper;
 import com.project.ibtss.model.Account;
 import com.project.ibtss.model.Routes;
 import com.project.ibtss.model.Stations;
+import com.project.ibtss.model.Trips;
 import com.project.ibtss.repository.RouteRepository;
 import com.project.ibtss.repository.StationRepository;
+import com.project.ibtss.repository.TripRepository;
 import com.project.ibtss.service.RouteService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@RequiredArgsConstructor
 @Service
-public class RouteServiceImpl
-//        extends BaseServiceImpl<Routes, RouteRepository>
-        implements RouteService {
+public class RouteServiceImpl implements RouteService {
     private final RouteRepository routeRepository;
     private final StationRepository stationRepository;
     private final RouteMapper routeMapper;
-
-    @Autowired
-    protected RouteServiceImpl(RouteRepository routeRepository, StationRepository stationRepository, RouteMapper routeMapper) {
-//        super(repository);
-        this.routeRepository = routeRepository;
-        this.stationRepository = stationRepository;
-        this.routeMapper = routeMapper;
-    }
+    private final TripRepository tripRepository;
 
     @Override
     public RouteResponse getRouteById(Integer id) {
@@ -61,11 +58,12 @@ public class RouteServiceImpl
         route.setDestinationStation(destinationStation);
         route.setDistanceKm(routeRequest.getDistanceKm());
         route.setEstimatedTime(routeRequest.getEstimatedTime());
+        route.setStatus(RouteStatus.ACTIVE);
         return routeMapper.toRouteResponse(routeRepository.save(route));
     }
 
     @Override
-    public RouteResponse updateRoute(Integer id, RouteRequest routeRequest) {
+    public RouteResponse updateRoute(Integer id, RouteUpdateRequest routeRequest) {
         Stations departureStation = stationRepository.getById(routeRequest.getDepartureStationId());
         Stations destinationStation = stationRepository.getById(routeRequest.getDestinationStationId());
         Routes route = routeRepository.getById(id);
@@ -74,14 +72,14 @@ public class RouteServiceImpl
         route.setDistanceKm(routeRequest.getDistanceKm());
         route.setDepartureStation(departureStation);
         route.setDestinationStation(destinationStation);
+        route.setStatus(RouteStatus.valueOf(routeRequest.getStatus().toUpperCase()));
         return routeMapper.toRouteResponse(routeRepository.save(route));
     }
 
     @Override
     public RouteResponse deleteRoute(Integer id) {
         Routes route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RUNTIME_EXCEPTION));
-        // chưa có Active cho route
-//        route.setActive(false);
+        route.setStatus(RouteStatus.INACTIVE);
         return routeMapper.toRouteResponse(routeRepository.save(route));
     }
 

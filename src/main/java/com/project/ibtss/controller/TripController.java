@@ -58,15 +58,15 @@ public class TripController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('admin:delete')")
-    public ApiResponse<Void> deleteTrip(@PathVariable Integer id) {
-        tripService.deleteTrip(id);
-        return ApiResponse.<Void>builder()
-                .code(HttpStatus.OK.value())
-                .message("Trip deleted successfully")
-                .build();
-    }
+//    @DeleteMapping("/{id}")
+//    @PreAuthorize("hasAuthority('admin:delete')")
+//    public ApiResponse<Void> deleteTrip(@PathVariable Integer id) {
+//        tripService.deleteTrip(id);
+//        return ApiResponse.<Void>builder()
+//                .code(HttpStatus.OK.value())
+//                .message("Trip deleted successfully")
+//                .build();
+//    }
 
     @PostMapping("/search")
     public ApiResponse<List<TripResponse>> searchTrips(@RequestBody SearchTripRequest request) {

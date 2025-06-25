@@ -1,6 +1,7 @@
 package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.StationRequest;
+import com.project.ibtss.dto.request.UpdateStationRequest;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.StationResponse;
 import com.project.ibtss.model.Stations;
@@ -49,7 +50,7 @@ public class StationController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:update')")
-    public ApiResponse<StationResponse> updateStation(@PathVariable Integer id, @RequestBody StationRequest stationRequest) {
+    public ApiResponse<StationResponse> updateStation(@PathVariable Integer id, @RequestBody UpdateStationRequest stationRequest) {
         return ApiResponse.<StationResponse>builder().code(HttpStatus.OK.value()).message("").data(stationService.updateStation(id, stationRequest)).build();
     }
 

@@ -3,7 +3,9 @@ package com.project.ibtss.service_implement;
 import com.project.ibtss.dto.request.SearchTripRequest;
 import com.project.ibtss.dto.request.TripRequest;
 import com.project.ibtss.dto.response.TripResponse;
+import com.project.ibtss.enums.BusStatus;
 import com.project.ibtss.enums.ErrorCode;
+import com.project.ibtss.enums.TripsStatus;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.TripMapper;
 import com.project.ibtss.model.*;
@@ -42,7 +44,7 @@ public class TripServiceImpl implements TripService {
         }
 
         Buses bus = busRepository.findById(request.getBusId())
-                .filter(b -> "ACTIVE".equals(b.getStatus()))
+                .filter(b -> BusStatus.ACTIVE.equals(b.getStatus()))
                 .orElseThrow(() -> new AppException(ErrorCode.BUS_INACTIVE));
 
         Account driver = accountRepository.findById(request.getDriverId())
@@ -53,7 +55,7 @@ public class TripServiceImpl implements TripService {
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY)));
         trip.setBus(bus);
         trip.setDriver(driver);
-        trip.setStatus("ACTIVE");
+        trip.setStatus(TripsStatus.WAITING);
 
         return tripMapper.toResponse(tripRepository.save(trip));
     }
@@ -61,7 +63,6 @@ public class TripServiceImpl implements TripService {
     @Override
     public List<TripResponse> getAllTrips() {
         return tripRepository.findAll().stream()
-                .filter(t -> "ACTIVE".equals(t.getStatus()))
                 .map(tripMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -73,6 +74,7 @@ public class TripServiceImpl implements TripService {
 
         return trips.stream()
                 .filter(trip -> trip.getDepartureTime().toLocalDate().equals(request.getDepartureTime()))
+                .filter(trip -> trip.getStatus() == TripsStatus.WAITING)
                 .map(tripMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -80,7 +82,6 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripResponse getTripById(Integer id) {
         return tripRepository.findById(id)
-                .filter(t -> "ACTIVE".equals(t.getStatus()))
                 .map(tripMapper::toResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
     }
@@ -113,16 +114,15 @@ public class TripServiceImpl implements TripService {
         return tripMapper.toResponse(tripRepository.save(trip));
     }
 
-    @Override
-    public void deleteTrip(Integer id) {
-        Trips trip = tripRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
-
-//        if (ticketRepository.existsByTripId(id)) {
-//            throw new AppException(ErrorCode.CANNOT_DELETE_TRIP_WITH_TICKETS);
-//        }
-
-        trip.setStatus("INACTIVE");
-        tripRepository.save(trip);
-    }
+//    @Override
+//    public void deleteTrip(Integer id) {
+//        Trips trip = tripRepository.findById(id)
+//                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+//
+////        if (ticketRepository.existsByTripId(id)) {
+////            throw new AppException(ErrorCode.CANNOT_DELETE_TRIP_WITH_TICKETS);
+////        }
+//
+//        tripRepository.save(trip);
+//    }
 }

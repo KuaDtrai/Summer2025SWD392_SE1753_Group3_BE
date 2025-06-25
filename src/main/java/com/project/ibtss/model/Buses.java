@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.BusStatus;
 import com.project.ibtss.enums.BusType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,7 +23,7 @@ public class Buses {
     String licensePlate;
     Integer seatCount;
     BusType busType;
-    Boolean status;
+    BusStatus status;
 
     @CreationTimestamp
     LocalDateTime createdAt;

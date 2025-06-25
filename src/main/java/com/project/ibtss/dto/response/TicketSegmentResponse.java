@@ -1,18 +1,18 @@
 package com.project.ibtss.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TicketSegmentResponse {
-    private Integer id;
-    private String journeyCode;
-    private Integer legOrder;
-    private TripResponse trip;
-    private String seatCode;
-    private RouteStationResponse fromRouteStation;
-    private RouteStationResponse toRouteStation;
-    private Float price;
+    String seatCode;
+    float price;
+    LocalDateTime departureTime;
+    String fromStationName;
+    String toStationName;
 }

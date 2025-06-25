@@ -133,7 +133,7 @@ public class SeatServiceImpl implements SeatService {
     public List<Seats> setStatusListSeat(List<Integer> seatIds) {
         List<Seats> result = new ArrayList<>();
         for (Integer seatId : seatIds) {
-            result.add(setStatusSeat(seatId));
+            result.add(seatRepository.save(setStatusSeat(seatId)));
         }
         return result;
     }
@@ -149,7 +149,7 @@ public class SeatServiceImpl implements SeatService {
                 .seatId(seat.getId())
                 .busId(seat.getBus().getId())
                 .seatCode(seat.getSeatCode())
-                .seatStatus(SeatStatus.AVAILABLE)
+                .seatStatus(seat.getSeatStatus())
                 .build();
     }
 }

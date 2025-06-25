@@ -16,4 +16,5 @@ public class RouteResponse {
     StationResponse destinationStation;
     Integer distanceKm;
     LocalTime estimatedTime;
+    String status;
 }
