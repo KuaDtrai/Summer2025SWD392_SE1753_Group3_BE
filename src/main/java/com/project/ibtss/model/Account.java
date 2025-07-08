@@ -1,10 +1,11 @@
 package com.project.ibtss.model;
 
 import com.project.ibtss.enums.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,10 +30,13 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    @Column(unique = true, length = 100)
     String email;
     String passwordHash;
     Role role; // customer, staff
+    @Column(length = 50)
     String fullName;
+    @Column(length = 20)
     String phone;
     Boolean isActive;
     LocalDateTime createdDate;

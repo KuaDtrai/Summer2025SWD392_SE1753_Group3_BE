@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8Deputy Prime Minister of Vietnam and Deputy Prime Minister of Thailand">
     <title>Ticket Details</title>
     <style>
         body {
@@ -43,13 +43,11 @@
 <div class="container">
     <h2>Ticket Details</h2>
     <div th:each="ticket : ${tickets}" class="ticket">
-        <div><strong>Ticket ID:</strong> <span th:text="${ticket.ticketId}"></span></div>
         <div><strong>Journey Code:</strong> <span th:text="${ticket.journeyCode}"></span></div>
         <div><strong>Customer Name:</strong> <span th:text="${ticket.customerName}"></span></div>
         <div><strong>Ticket Owner:</strong> <span th:text="${ticket.ticketOwnerName}"></span></div>
         <div><strong>Phone:</strong> <span th:text="${ticket.ticketOwnerPhone}"></span></div>
-        <div><strong>Booking Time:</strong> <span th:text="${ticket.bookingTime}"></span></div>
-        <div><strong>Status:</strong> <span th:text="${ticket.status}"></span></div>
+        <div><strong>Booking Time:</strong> <span th:text="${#temporals.format(ticket.bookingTime, 'HH:mm - dd/MM/yyyy')}"></span></div>
         <div><strong>Staff Name:</strong> <span th:text="${ticket.staffName}"></span></div>
     </div>
 </div>

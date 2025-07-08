@@ -1,9 +1,8 @@
 package com.project.ibtss.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +20,10 @@ public class Stations {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+    @Column(length = 50)
     String name;
+
+    @Column(length = 50)
     String address;
     LocalDateTime createdDate;
     LocalDateTime updatedDate;

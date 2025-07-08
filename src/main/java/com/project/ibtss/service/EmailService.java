@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface EmailService {
     ApiResponse<String> sendEmail(List<Tickets> tickets, String subject, String body) throws MessagingException;
+    ApiResponse<String> sendVerificationEmail(String email, String verificationCode) throws MessagingException;
 }

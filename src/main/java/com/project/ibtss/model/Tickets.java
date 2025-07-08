@@ -23,7 +23,9 @@ public class Tickets {
     @JoinColumn(name = "customer_id", nullable = true)
     Customer customer;
 
+    @Column(length = 50)
     String ticketOwnerName;
+    @Column(length = 50)
     String ticketOwnerPhone;
     LocalDateTime bookingTime;
     String status;

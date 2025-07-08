@@ -51,7 +51,7 @@ public class EmailServiceImpl implements EmailService {
         // Set email properties
         helper.setTo(account.getEmail());
         helper.setSubject(subject);
-        helper.setFrom("your-email@domain.com"); // Replace with your sender email
+//        helper.setFrom("your-email@domain.com"); // Replace with your sender email
 
         // Prepare Thymeleaf context
         Context context = new Context();
@@ -66,5 +66,34 @@ public class EmailServiceImpl implements EmailService {
         // Send the email
         mailSender.send(mimeMessage);
         return null;
+    }
+
+    @Override
+    public ApiResponse<String> sendVerificationEmail(String email, String verificationCode) throws MessagingException {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        helper.setTo(email);
+        helper.setSubject("Xác thực email của bạn");
+//        helper.setFrom("your-email@domain.com"); // Thay bằng email của bạn
+
+        // Tạo liên kết xác thực
+        String verificationLink = "http://localhost:8080/api/auth/verify?code=" + verificationCode;
+
+        // Chuẩn bị context cho Thymeleaf
+        Context context = new Context();
+        context.setVariable("verificationLink", verificationLink);
+        context.setVariable("code", verificationCode);
+
+        // Render template HTML
+        String htmlContent = templateEngine.process("verification-email", context);
+        helper.setText(htmlContent, true);
+
+        // Gửi email
+        mailSender.send(mimeMessage);
+        return ApiResponse.<String>builder()
+                .code(200)
+                .message("Verification email sent successfully")
+                .build();
     }
 }

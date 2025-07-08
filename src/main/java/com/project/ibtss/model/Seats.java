@@ -22,6 +22,7 @@ public class Seats {
     @JoinColumn(name = "bus_id")
     Buses bus;
 
+    @Column(length = 10)
     String seatCode;
 
     @CreationTimestamp
