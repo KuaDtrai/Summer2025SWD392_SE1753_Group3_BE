@@ -15,10 +15,7 @@ public class FeedbackResponse {
     private Integer feedbackId;
     private String customerName;
     private String staffName;
-    @NotBlank
     private String content;
-    @Min(value = 1, message = "Rating must be at least 1")
-    @Max(value = 5, message = "Rating cannot exceed 5")
     private Integer rating;
     private LocalDate createdDate;
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8Deputy Prime Minister of Vietnam and Deputy Prime Minister of Thailand">
+    <title>Ticket Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            align-items: flex-start;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+        }
+        .ticket {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .ticket div {
+            margin: 8px 0;
+        }
+        .ticket strong {
+            display: inline-block;
+            width: 150px;
+        }
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Ticket Details</h2>
+    <div th:each="ticket : ${tickets}" class="ticket">
+        <div><strong>Journey Code:</strong> <span th:text="${ticket.journeyCode}"></span></div>
+        <div><strong>Customer Name:</strong> <span th:text="${ticket.customerName}"></span></div>
+        <div><strong>Ticket Owner:</strong> <span th:text="${ticket.ticketOwnerName}"></span></div>
+        <div><strong>Phone:</strong> <span th:text="${ticket.ticketOwnerPhone}"></span></div>
+        <div><strong>Booking Time:</strong> <span th:text="${#temporals.format(ticket.bookingTime, 'HH:mm - dd/MM/yyyy')}"></span></div>
+        <div><strong>Staff Name:</strong> <span th:text="${ticket.staffName}"></span></div>
+    </div>
+</div>
+</body>
+</html>

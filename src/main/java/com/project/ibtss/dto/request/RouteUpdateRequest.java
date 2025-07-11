@@ -1,8 +1,7 @@
 package com.project.ibtss.dto.request;
 
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
@@ -13,6 +12,7 @@ import java.time.LocalTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RouteUpdateRequest {
     @Valid
+    @Size(max = 50)
     String name;
     @Valid
     Integer departureStationId;

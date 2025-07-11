@@ -19,6 +19,7 @@ public class Routes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    @Column(length = 50)
     String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

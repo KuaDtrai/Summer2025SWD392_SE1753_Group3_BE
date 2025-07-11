@@ -1,8 +1,8 @@
 package com.project.ibtss.model;
 
-import com.project.ibtss.enums.StationStatus;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,10 @@ public class Stations {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+    @Column(length = 50)
     String name;
+
+    @Column(length = 50)
     String address;
     LocalDateTime createdDate;
 

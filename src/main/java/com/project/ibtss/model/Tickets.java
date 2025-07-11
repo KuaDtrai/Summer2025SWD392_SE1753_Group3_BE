@@ -26,7 +26,9 @@ public class Tickets {
     @JoinColumn(name = "account_id", nullable = true)
     Account account;
 
+    @Column(length = 50)
     String ticketOwnerName;
+    @Column(length = 50)
     String ticketOwnerPhone;
     LocalDateTime bookingTime;
 

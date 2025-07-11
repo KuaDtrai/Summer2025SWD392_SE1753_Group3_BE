@@ -67,6 +67,8 @@ public enum ErrorCode {
     NOT_DRIVER_POSITON(1601, "Staff not driver position!", HttpStatus.BAD_REQUEST),
     DRIVER_ALREADY_ASSIGNED_TO_TRIP(1602, "Driver already assigned to a trip", HttpStatus.BAD_REQUEST),
     ;
+    FEEDBACK_NOT_FOUND(307, "Feedback not found", HttpStatus.NOT_FOUND),
+    CUSTOMER_NOT_FOUND(308, "Customer not found", HttpStatus.NOT_FOUND ),;
     int code;
     String message;
     HttpStatusCode statusCode;
