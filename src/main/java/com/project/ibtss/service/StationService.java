@@ -6,6 +6,7 @@ import com.project.ibtss.dto.response.StationResponse;
 import com.project.ibtss.model.Stations;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StationService {
     List<StationResponse> getActiveStation();
@@ -14,4 +15,5 @@ public interface StationService {
     StationResponse createStation(StationRequest stationRequest);
     StationResponse updateStation(Integer id, UpdateStationRequest stationRequest);
     StationResponse deleteStationById(Integer id);
+    List<Stations> searchStations(String search, int page, int size);
 }

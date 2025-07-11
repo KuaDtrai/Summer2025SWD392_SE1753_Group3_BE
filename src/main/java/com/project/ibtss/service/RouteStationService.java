@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface RouteStationService {
     List<RouteStationSelectResponse> getAllRouteStationSelectByTrip(int tripId);
+    List<RouteStationSelectResponse> getAllRouteStationSelectByRoute(int routeId);
 }

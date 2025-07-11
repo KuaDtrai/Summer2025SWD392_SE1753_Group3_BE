@@ -5,4 +5,5 @@ import com.project.ibtss.model.Payment;
 
 public interface PaymentService {
     Payment createPayment(PaymentSeatRequest request);
+    Payment createPaymentForSubPay(Float totalAmount);
 }

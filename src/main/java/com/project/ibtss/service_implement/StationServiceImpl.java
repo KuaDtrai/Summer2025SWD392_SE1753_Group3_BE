@@ -14,12 +14,17 @@ import com.project.ibtss.repository.StationRepository;
 import com.project.ibtss.service.StationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -99,5 +104,12 @@ public class StationServiceImpl implements StationService {
         }catch (Exception e){
             throw new AppException(ErrorCode.RUNTIME_EXCEPTION);
         }
+    }
+
+    @Override
+    public List<Stations> searchStations(String search, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Stations> resultPage = stationRepository.searchByName(search, pageable);
+        return resultPage.getContent();
     }
 }

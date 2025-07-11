@@ -15,6 +15,6 @@ public interface SeatService {
     SeatResponse getSeatById(Integer id);
     List<SeatResponse> getSeatsByBusId(Integer busId);
     List<SeatForSelectResponse> getAllSeatsForSelect(String licensePlate);
-
+    List<SeatForSelectResponse> getListSeatByTrip(Integer tripId);
     List<Seats> setStatusListSeat(List<Integer> seatIds);
 }

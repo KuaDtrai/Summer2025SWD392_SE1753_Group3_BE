@@ -1,23 +1,30 @@
 package com.project.ibtss.service_implement;
 
+import com.project.ibtss.controller.DriverResponse;
 import com.project.ibtss.dto.request.AccountRequest;
 import com.project.ibtss.dto.request.LoginRequest;
 import com.project.ibtss.dto.request.RegisterRequest;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.enums.ErrorCode;
+import com.project.ibtss.enums.Position;
 import com.project.ibtss.enums.Role;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.AccountMapper;
 import com.project.ibtss.model.Account;
 import com.project.ibtss.repository.AccountRepository;
 import com.project.ibtss.repository.TokenRepository;
+import com.project.ibtss.repository.TripRepository;
 import com.project.ibtss.service.AccountService;
 import com.project.ibtss.service.JWTService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,18 +41,23 @@ public class AccountServiceImpl implements AccountService {
     private final TokenRepository tokenRepository;
     private final JWTService jwtService;
     private final AccountMapper mapper;
+    private final TripRepository tripRepository;
+
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
 
     private Account getAccount(){
         return (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, AccountRepository repository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, JWTService jwtService, AccountMapper mapper) {
+    public AccountServiceImpl(AccountRepository accountRepository, AccountRepository repository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, JWTService jwtService, AccountMapper mapper, TripRepository tripRepository) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
         this.jwtService = jwtService;
         this.mapper = mapper;
+        this.tripRepository = tripRepository;
     }
 
     @Value("${jwt.signerKey}")
@@ -187,4 +199,27 @@ public class AccountServiceImpl implements AccountService {
         account.setIsActive(!account.getIsActive());
         return mapper.toAccountResponse(accountRepository.save(account));
     }
+
+    @Override
+    public Page<DriverResponse> getAvailableDrivers(LocalDateTime departureTime, LocalDateTime arrivalTime, Pageable pageable, String search) {
+
+        Pageable correctedPageable = PageRequest.of(Math.max(pageable.getPageNumber() - 1, 0), pageable.getPageSize());
+
+        List<DriverResponse> availableDrivers = accountRepository.findByRoleAndStaff_Position(Role.STAFF, Position.DRIVER).stream()
+                .filter(driver -> driver.getFullName().toLowerCase().contains(search.toLowerCase()))
+                .filter(driver -> !tripRepository.existsByDriver_IdAndDepartureTimeLessThanAndArrivalTimeGreaterThan(
+                        driver.getId(), arrivalTime, departureTime))
+                .map(mapper::toDriverResponse)
+                .toList();
+
+        return new PageImpl<>(
+                availableDrivers.stream()
+                        .skip(correctedPageable.getOffset())
+                        .limit(correctedPageable.getPageSize())
+                        .toList(),
+                correctedPageable,
+                availableDrivers.size()
+        );
+    }
+
 }

@@ -8,11 +8,14 @@ import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.BusMapper;
 import com.project.ibtss.model.Buses;
 import com.project.ibtss.repository.BusRepository;
+import com.project.ibtss.repository.TripRepository;
 import com.project.ibtss.service.BusService;
 import com.project.ibtss.service.SeatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,7 @@ public class BusServiceImpl implements BusService {
     private final BusMapper busMapper;
 
     private final SeatService seatService;
+    private final TripRepository tripRepository;
 
     @Override
     public BusResponse createBus(BusRequest request) {
@@ -86,5 +90,33 @@ public class BusServiceImpl implements BusService {
         return busRepository.findByLicensePlateContainingIgnoreCase(keyword).stream()
                 .map(busMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<BusResponse> searchBuses(int page, String search) {
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+        Page<Buses> busesPage = busRepository.findByLicensePlateContainingIgnoreCase(search, pageable);
+        return busesPage.map(busMapper::toResponse);
+    }
+
+    @Override
+    public Page<BusResponse> getAvailableBuses(LocalDateTime departureTime, LocalDateTime arrivalTime, Pageable pageable, String search) {
+        Pageable correctedPageable = PageRequest.of(Math.max(pageable.getPageNumber() - 1, 0), pageable.getPageSize());
+
+        List<BusResponse> availableBuses = busRepository.findByStatus(BusStatus.ACTIVE).stream()
+                .filter(bus -> bus.getLicensePlate().toLowerCase().contains(search.toLowerCase()) || bus.getBusType().name().toLowerCase().contains(search.toLowerCase()))
+                .filter(bus -> !tripRepository.existsByBus_IdAndDepartureTimeLessThanAndArrivalTimeGreaterThan(
+                        bus.getId(), arrivalTime, departureTime))
+                .map(busMapper::toResponse)
+                .toList();
+
+        return new PageImpl<>(
+                availableBuses.stream()
+                        .skip(correctedPageable.getOffset())
+                        .limit(correctedPageable.getPageSize())
+                        .toList(),
+                correctedPageable,
+                availableBuses.size()
+        );
     }
 }

@@ -1,12 +1,14 @@
 package com.project.ibtss.model;
 
 import com.project.ibtss.enums.PaymentMethod;
+import com.project.ibtss.enums.PaymentStatus;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,8 +25,18 @@ public class Payment {
     PaymentMethod paymentMethod;
 
     Float totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    PaymentStatus status;
+
     LocalDateTime createdDate;
 
     @Nullable
     LocalDateTime updatedDate;
+
+    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
+    List<SubPay> subPays;
+
+    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
+    List<TicketPay> ticketPays;
 }

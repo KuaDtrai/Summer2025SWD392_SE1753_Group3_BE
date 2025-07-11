@@ -8,11 +8,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum BusStatus {
-    ACTIVE("ACTIVE"),
-    INACTIVE("INACTIVE"),
-    MAINTENANCE("MAINTENANCE"),
-    DELETED("DELETED")
+public enum PaymentStatus {
+    PAID ("PAID"),
+    FAILED ("FAILED"),
+    CANCELLED ("CANCELLED"),
+    PENDING("PENDING")
 
     ;
     String name;

@@ -7,6 +7,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class RouteStations {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

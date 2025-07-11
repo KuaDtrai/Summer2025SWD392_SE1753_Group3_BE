@@ -5,12 +5,15 @@ import com.project.ibtss.dto.response.SeatForSelectResponse;
 import com.project.ibtss.dto.response.SeatResponse;
 import com.project.ibtss.enums.ErrorCode;
 import com.project.ibtss.enums.SeatStatus;
+import com.project.ibtss.enums.TripsStatus;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.SeatMapper;
 import com.project.ibtss.model.Buses;
 import com.project.ibtss.model.Seats;
+import com.project.ibtss.model.Trips;
 import com.project.ibtss.repository.BusRepository;
 import com.project.ibtss.repository.SeatRepository;
+import com.project.ibtss.repository.TripRepository;
 import com.project.ibtss.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ public class SeatServiceImpl implements SeatService {
     private final SeatRepository seatRepository;
     private final BusRepository busRepository;
     private final SeatMapper seatMapper;
+    private final TripRepository tripRepository;
 
     @Override
     public List<SeatResponse> createSeats(List<SeatRequest> requests) {
@@ -124,6 +128,15 @@ public class SeatServiceImpl implements SeatService {
     public List<SeatForSelectResponse> getAllSeatsForSelect(String licensePlate) {
         Buses bus = busRepository.findByLicensePlateIgnoreCase(licensePlate).orElseThrow(() -> new AppException(ErrorCode.BUS_NOT_EXISTED));
         List<Seats> seats = seatRepository.findAllSeatByBusId(bus.getId());
+        return seats.stream()
+                .map(this::toForSelectResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SeatForSelectResponse> getListSeatByTrip(Integer tripId) {
+        Trips trip = tripRepository.findById(tripId).orElseThrow(() -> new AppException(ErrorCode.TRIP_NOT_EXISTED));
+        List<Seats> seats = seatRepository.findByBusId(trip.getBus().getId());
         return seats.stream()
                 .map(this::toForSelectResponse)
                 .collect(Collectors.toList());

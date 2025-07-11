@@ -31,9 +31,17 @@ public class RouteStationServiceImpl implements RouteStationService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<RouteStationSelectResponse> getAllRouteStationSelectByRoute(int routeId) {
+        List<RouteStations> routeStations = routeRepository.findAllRouteStationByRouteId(routeId);
+        return routeStations.stream()
+                .map(this::toRouteStationSelectResponse)
+                .collect(Collectors.toList());
+    }
+
     private RouteStationSelectResponse toRouteStationSelectResponse(RouteStations routeStations) {
         return RouteStationSelectResponse.builder()
-                .routeStationId(routeStations.getId())
+                .stationId(routeStations.getId())
                 .stationName(routeStations.getStation().getName())
                 .address(routeStations.getStation().getAddress())
                 .stationOrder(routeStations.getStationOrder())

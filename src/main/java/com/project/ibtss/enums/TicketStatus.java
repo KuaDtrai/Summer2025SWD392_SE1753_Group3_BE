@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 public enum TicketStatus {
     PAID("PAID"),
     PENDING("PENDING"),
-    CANCEL("CANCELLED"),
+    CANCELLED("CANCELLED"),
     USED("USED")
     ;
     String name;

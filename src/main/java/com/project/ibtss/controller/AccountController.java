@@ -11,10 +11,15 @@ import com.project.ibtss.repository.AccountRepository;
 import com.project.ibtss.service.AccountService;
 import com.project.ibtss.service_implement.AccountServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -55,5 +60,19 @@ public class AccountController {
     @PreAuthorize("hasAuthority('admin:update')")
     public ApiResponse<AccountResponse> UpdateActiveAccount(@PathVariable Integer id) {
         return ApiResponse.<AccountResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.setAccountActive(id)).build();
+    }
+
+    @GetMapping("/drivers")
+    public ApiResponse<Page<DriverResponse>> getAvailableDrivers(  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime,
+                                                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrivalTime,
+                                                                   @RequestParam(defaultValue = "1") int page,
+                                                                   @RequestParam(defaultValue = "") String search){
+        final int DEFAULT_PAGE_SIZE = 10;
+        Pageable pageable = PageRequest.of(page, DEFAULT_PAGE_SIZE);
+        return ApiResponse.<Page<DriverResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(accountService.getAvailableDrivers(departureTime, arrivalTime, pageable, search))
+                .build();
     }
 }

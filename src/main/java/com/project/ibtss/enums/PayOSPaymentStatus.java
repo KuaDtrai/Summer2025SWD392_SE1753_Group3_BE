@@ -11,7 +11,8 @@ import lombok.experimental.FieldDefaults;
 public enum PayOSPaymentStatus {
     PAID ("PAID"),
     FAILED ("FAILED"),
-    CANCELED ("CANCELED")
+    CANCELED ("CANCELLED"),
+    PENDING("PENDING")
 
     ;
     String name;

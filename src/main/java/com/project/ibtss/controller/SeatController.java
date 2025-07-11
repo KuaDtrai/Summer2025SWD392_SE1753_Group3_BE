@@ -89,4 +89,13 @@ public class SeatController {
                 .data(seatService.getAllSeatsForSelect(licensePlate))
                 .build();
     }
+
+    @GetMapping("/trip/{tripId}")
+    public ApiResponse<List<SeatForSelectResponse>> getListSeatByTrip(@PathVariable Integer tripId){
+        return ApiResponse.<List<SeatForSelectResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(seatService.getListSeatByTrip(tripId))
+                .build();
+    }
 }

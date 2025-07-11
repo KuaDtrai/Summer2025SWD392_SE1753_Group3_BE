@@ -1,10 +1,7 @@
 package com.project.ibtss.model;
 
 import com.project.ibtss.enums.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,4 +49,19 @@ public class Account implements UserDetails {
     public String getUsername() {
         return phone;
     }
+
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+    Customer customer;
+
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+    Staff staff;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    List<Tickets> tickets;
+
+    @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY)
+    List<Trips> tripsAsDriver;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    List<Token> tokens;
 }

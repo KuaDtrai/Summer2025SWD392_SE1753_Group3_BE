@@ -1,20 +1,22 @@
-package com.project.ibtss.dto.response;
+package com.project.ibtss.controller;
 
+import com.project.ibtss.enums.Position;
 import com.project.ibtss.enums.Role;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
+@Builder
 @Data
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountResponse {
+public class DriverResponse {
     Integer id;
-//    String username;
     String email;
     String fullName;
     String phone;
-    Role role;
-    String accessToken;
 }

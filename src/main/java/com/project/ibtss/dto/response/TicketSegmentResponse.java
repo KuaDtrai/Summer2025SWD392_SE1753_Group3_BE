@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TicketSegmentResponse {
+    int tripId;
     String seatCode;
     float price;
     LocalDateTime departureTime;

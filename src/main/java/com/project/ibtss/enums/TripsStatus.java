@@ -9,11 +9,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum TripsStatus {
-    WAITING("WAITING"),
     IN_PROGRESS("IN_PROGRESS"),
     COMPLETED("COMPLETED"),
     CANCELED("CANCELED"),
     DELAYED("DELAYED"),
+    SCHEDULED("SCHEDULED")
     ;
     String name;
 }

@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SubPay {
     @Id
@@ -18,7 +20,14 @@ public class SubPay {
     @JoinColumn(name = "payment_id")
     Payment payment;
 
-    String type;
+    PaymentType type;
     Float amount;
     String description;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "old_seat_id")
+    Seats oldSeat;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "new_seat_id")
+    Seats newSeat;
 }

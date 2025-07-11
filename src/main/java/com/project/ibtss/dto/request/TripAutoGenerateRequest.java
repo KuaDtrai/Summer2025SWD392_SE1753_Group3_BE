@@ -1,18 +1,20 @@
 package com.project.ibtss.dto.request;
 
-import com.project.ibtss.model.Trips;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChangeTicketRequest {
-    Integer ticketId;
-    Integer seatId;
-    Integer from;
-    Integer to;
-    Float totalPrice;
+public class TripAutoGenerateRequest {
+    Integer routeId;
+    String startDate;
+    String endDate;
+    Integer startHour;
+    Integer endHour;
+    Float price;
 }

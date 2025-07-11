@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,10 +21,12 @@ public class Customer {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", unique = true)
     Account account;
-
-    @Enumerated(EnumType.STRING)
+    
     Gender gender;
     LocalDate dob;
     String address;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    List<Feedback> feedbackList;
 }
 

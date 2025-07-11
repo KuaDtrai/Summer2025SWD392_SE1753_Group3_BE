@@ -8,11 +8,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Trips {
     @Id
@@ -45,4 +47,7 @@ public class Trips {
 
     @UpdateTimestamp
     LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
+    List<TicketSegment> segments;
 }

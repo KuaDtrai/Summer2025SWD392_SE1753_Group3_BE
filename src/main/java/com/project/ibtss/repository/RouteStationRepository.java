@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface RouteStationRepository extends JpaRepository<RouteStations, Integer> {
     Optional<RouteStations> findByStationId(int stationId);
     List<RouteStations> findAllRouteStationByRouteId(int routeId);
+
+    Optional<RouteStations> findByStationIdAndRouteId(int stationId, int routeId);
 }

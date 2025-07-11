@@ -64,12 +64,21 @@ public class RouteStationController {
 //    }
 
     //trip id
-    @GetMapping("/{id}")
+    @GetMapping("/trip/{id}")
     public ApiResponse<List<RouteStationSelectResponse>> getAllRouteStationSelectByTrip(@PathVariable Integer id) {
         return ApiResponse.<List<RouteStationSelectResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message(HttpStatus.OK.getReasonPhrase())
                 .data(routeStationService.getAllRouteStationSelectByTrip(id))
+                .build();
+    }
+
+    @GetMapping("/route/{id}")
+    public ApiResponse<List<RouteStationSelectResponse>> getAllRouteStationSelectByRoute(@PathVariable Integer id) {
+        return ApiResponse.<List<RouteStationSelectResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(routeStationService.getAllRouteStationSelectByRoute(id))
                 .build();
     }
 }

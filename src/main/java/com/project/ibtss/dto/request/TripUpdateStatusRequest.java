@@ -1,18 +1,16 @@
 package com.project.ibtss.dto.request;
 
-import com.project.ibtss.model.Trips;
+import com.project.ibtss.enums.TripsStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChangeTicketRequest {
-    Integer ticketId;
-    Integer seatId;
-    Integer from;
-    Integer to;
-    Float totalPrice;
+public class TripUpdateStatusRequest {
+    TripsStatus status;
 }

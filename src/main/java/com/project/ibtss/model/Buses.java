@@ -23,6 +23,8 @@ public class Buses {
     String licensePlate;
     Integer seatCount;
     BusType busType;
+
+    @Enumerated(EnumType.STRING)
     BusStatus status;
 
     @CreationTimestamp

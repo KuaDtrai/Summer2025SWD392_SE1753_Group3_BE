@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,4 +32,10 @@ public class Tickets {
 
     @Enumerated(EnumType.STRING)
     TicketStatus status;
+
+    @OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
+    List<TicketSegment> segments;
+
+    @OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
+    List<TicketPay> ticketPays;
 }

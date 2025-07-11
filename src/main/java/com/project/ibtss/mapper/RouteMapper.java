@@ -8,6 +8,5 @@ import org.springframework.util.RouteMatcher;
 
 @Mapper(componentModel = "spring")
 public interface RouteMapper {
-    @Mapping(target = "distanceKm", source = "distanceKm")
     RouteResponse toRouteResponse(Routes route);
 }

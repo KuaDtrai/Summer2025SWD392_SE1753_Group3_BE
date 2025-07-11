@@ -8,7 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class RouteStationSelectResponse {
-    int routeStationId;
+    int stationId;
     String stationName;
     String address;
     int stationOrder;

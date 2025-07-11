@@ -59,4 +59,17 @@ public class StationController {
     public ApiResponse<StationResponse> deleteStation(@PathVariable Integer id) {
         return ApiResponse.<StationResponse>builder().code(HttpStatus.OK.value()).message("").data(stationService.deleteStationById(id)).build();
     }
+
+    @GetMapping("/search")
+    public ApiResponse<List<Stations>> searchStations(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "") String search
+    ) {
+        return ApiResponse.<List<Stations>>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data((stationService.searchStations(search, page, size)))
+                .build();
+    }
 }
