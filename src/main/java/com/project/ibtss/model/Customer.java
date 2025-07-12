@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
     @Id
@@ -24,7 +25,6 @@ public class Customer {
     @JoinColumn(name = "account_id", unique = true)
     Account account;
     
-    Gender gender;
     LocalDate dob;
 
     @Column(length = 50)

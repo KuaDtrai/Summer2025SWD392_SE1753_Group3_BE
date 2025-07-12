@@ -22,16 +22,15 @@ import java.util.List;
 public class TicketController {
     private final TicketService ticketService;
 
-    @GetMapping("/{accountId}")
-    public ApiResponse<Page<TicketResponse>> getAllTicketByAccountId(
-            @PathVariable Integer accountId,
+    @GetMapping("/")
+    public ApiResponse<Page<TicketResponse>> getAllTicket(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size
     ) {
         return ApiResponse.<Page<TicketResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message(HttpStatus.OK.getReasonPhrase())
-                .data(ticketService.getAllTicketByAccountId(accountId, page, size))
+                .data(ticketService.getAllTicketByAccountId(page, size))
                 .build();
     }
 

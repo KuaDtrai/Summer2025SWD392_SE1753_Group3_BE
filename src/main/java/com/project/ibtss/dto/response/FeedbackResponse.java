@@ -8,14 +8,17 @@ import lombok.Data;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 public class FeedbackResponse {
     private Integer feedbackId;
     private String customerName;
-    private String staffName;
+    private String driverName;
+    private String driverPhone;
     private String content;
+    private String status;
     private Integer rating;
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
 }

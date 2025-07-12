@@ -5,6 +5,7 @@ import com.project.ibtss.dto.request.AccountRequest;
 import com.project.ibtss.dto.request.LoginRequest;
 import com.project.ibtss.dto.request.RegisterRequest;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
+import com.project.ibtss.dto.response.AccountManageResponse;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.enums.Role;
 import com.project.ibtss.model.Account;
@@ -18,7 +19,9 @@ import java.util.List;
 public interface AccountService {
     AccountResponse getAccount(Integer id);
 
-    List<AccountResponse> getAllAccounts();
+    List<AccountManageResponse> getAllAccounts();
+
+    AccountManageResponse addAccount(AccountRequest accountRequest);
 
 //    String generateToken(Account account);
 
@@ -26,7 +29,7 @@ public interface AccountService {
 
     AccountResponse updatePassword(UpdatePasswordRequest updatePasswordRequest);
 
-    AccountResponse updateAccount(AccountRequest accountRequest);
+    AccountManageResponse updateAccount(Integer id, AccountRequest accountRequest);
 
     AccountResponse login(LoginRequest loginRequest);
 

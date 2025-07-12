@@ -41,14 +41,14 @@
 </head>
 <body>
 <div class="container">
-    <h2>Ticket Details</h2>
+    <h2>Chi tiết</h2>
     <div th:each="ticket : ${tickets}" class="ticket">
-        <div><strong>Journey Code:</strong> <span th:text="${ticket.journeyCode}"></span></div>
-        <div><strong>Customer Name:</strong> <span th:text="${ticket.customerName}"></span></div>
-        <div><strong>Ticket Owner:</strong> <span th:text="${ticket.ticketOwnerName}"></span></div>
-        <div><strong>Phone:</strong> <span th:text="${ticket.ticketOwnerPhone}"></span></div>
-        <div><strong>Booking Time:</strong> <span th:text="${#temporals.format(ticket.bookingTime, 'HH:mm - dd/MM/yyyy')}"></span></div>
-        <div><strong>Staff Name:</strong> <span th:text="${ticket.staffName}"></span></div>
+        <div><strong>Mã vé:</strong> <span th:text="${ticket.journeyCode}"></span></div>
+<!--        <div><strong>Customer Name:</strong> <span th:text="${ticket.customerName}"></span></div>-->
+        <div><strong>Tên người sở hữu:</strong> <span th:text="${ticket.ticketOwnerName}"></span></div>
+        <div><strong>Số điện thoại:</strong> <span th:text="${ticket.ticketOwnerPhone}"></span></div>
+        <div><strong>Thời gian mua vé:</strong> <span th:text="${#temporals.format(ticket.bookingTime, 'HH:mm - dd/MM/yyyy')}"></span></div>
+<!--        <div><strong>Staff Name:</strong> <span th:text="${ticket.staffName}"></span></div>-->
     </div>
 </div>
 </body>

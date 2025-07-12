@@ -2,6 +2,7 @@ package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.*;
 import com.project.ibtss.dto.response.ApiResponse;
+import com.project.ibtss.dto.response.TripInfoResponse;
 import com.project.ibtss.dto.response.TripResponse;
 import com.project.ibtss.service.TripService;
 import jakarta.validation.Valid;
@@ -91,6 +92,15 @@ public class TripController {
                 .code(HttpStatus.OK.value())
                 .message("Tạo chuyến thành công")
                 .data("Success")
+                .build();
+    }
+
+    @GetMapping("/info/{ticketId}")
+    public ApiResponse<TripInfoResponse> getTripInfo(@PathVariable Integer ticketId){
+        return ApiResponse.<TripInfoResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(tripService.getTripInfo(ticketId))
                 .build();
     }
 }

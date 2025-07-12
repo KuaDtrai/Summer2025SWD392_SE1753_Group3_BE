@@ -29,14 +29,15 @@ public class EmailController {
 
     @GetMapping()
     public ApiResponse<String> emailPage() throws MessagingException {
-        List<Tickets>  tickets = new ArrayList<>();
-        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Customer customer = new Customer(1, account, Gender.MALE, LocalDate.now(), "");
-        Staff  staff = new Staff(2, account, Position.SELLER, LocalDate.now());
-        Tickets ticket1 = new Tickets(1, "hehe123", customer, "kien", "0912345678", LocalDateTime.now(), "pending", staff);
-        Tickets ticket2 = new Tickets(2, "hehe123", customer, "khoa", "0912345678", LocalDateTime.now(), "pending", staff);
-        tickets.add(ticket1);
-        tickets.add(ticket2);
-        return emailService.sendEmail(tickets,"Tickets", "Tickets:");
+//        List<Tickets>  tickets = new ArrayList<>();
+//        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Customer customer = new Customer(1, account, Gender.MALE, LocalDate.now(), "");
+//        Staff  staff = new Staff(2, account, Position.SELLER, LocalDate.now());
+//        Tickets ticket1 = new Tickets(1, "hehe123", customer, "kien", "0912345678", LocalDateTime.now(), "pending", staff);
+//        Tickets ticket2 = new Tickets(2, "hehe123", customer, "khoa", "0912345678", LocalDateTime.now(), "pending", staff);
+//        tickets.add(ticket1);
+//        tickets.add(ticket2);
+//        return emailService.sendEmail(tickets,"Tickets", "Tickets:");
+        return null;
     }
 }

@@ -6,11 +6,13 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Staff {
     @Id
@@ -23,5 +25,10 @@ public class Staff {
 
     Position position;
     LocalDate hiredDate;
+    @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY)
+    List<Feedback> receivedFeedbacks;
+
+    @OneToMany(mappedBy = "staffReply", fetch = FetchType.LAZY)
+    List<Feedback> repliedFeedbacks;
 }
 

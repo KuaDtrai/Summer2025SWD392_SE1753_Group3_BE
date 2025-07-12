@@ -10,17 +10,17 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 public enum Role {
-    ADMIN("admin", Set.of(
+    ADMIN("ADMIN", Set.of(
             Permission.ADMIN_CREATE,
             Permission.ADMIN_UPDATE,
             Permission.ADMIN_READ,
             Permission.ADMIN_DELETE
     )),
-    USER("user", Set.of(
+    CUSTOMER("CUSTOMER", Set.of(
 
     )),
 
-    STAFF("staff", Set.of())
+    STAFF("STAFF", Set.of())
 
     ;
 

@@ -2,6 +2,7 @@ package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.AccountRequest;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
+import com.project.ibtss.dto.response.AccountManageResponse;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.enums.Permission;
@@ -36,8 +37,17 @@ public class AccountController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('admin:read')")
-    public ApiResponse<List<AccountResponse>> GetAllAccounts() {
-        return ApiResponse.<List<AccountResponse>>builder().code(HttpStatus.OK.value()).message("").data(accountService.getAllAccounts()).build();
+    public ApiResponse<List<AccountManageResponse>> GetAllAccounts() {
+        return ApiResponse.<List<AccountManageResponse>>builder().code(HttpStatus.OK.value()).message("").data(accountService.getAllAccounts()).build();
+    }
+
+    @PostMapping("/add")
+    public ApiResponse<AccountManageResponse> addAccount(@RequestBody AccountRequest accountRequest) {
+        return ApiResponse.<AccountManageResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(accountService.addAccount(accountRequest))
+                .build();
     }
 
     @PutMapping("/password")
@@ -45,9 +55,9 @@ public class AccountController {
         return ApiResponse.<AccountResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.updatePassword(updatePasswordRequest)).build();
     }
 
-    @PutMapping("")
-    public ApiResponse<AccountResponse> UpdateAccount(@RequestBody AccountRequest accountRequest) {
-        return ApiResponse.<AccountResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.updateAccount(accountRequest)).build();
+    @PutMapping("/{id}")
+    public ApiResponse<AccountManageResponse> UpdateAccount(@PathVariable Integer id, @RequestBody AccountRequest accountRequest) {
+        return ApiResponse.<AccountManageResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.updateAccount(id, accountRequest)).build();
     }
 
     @PutMapping("/role/{id}")

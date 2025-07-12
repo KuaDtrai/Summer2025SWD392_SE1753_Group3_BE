@@ -6,6 +6,7 @@ import com.project.ibtss.dto.request.PaymentSeatRequest;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.PaymentProcessResponse;
 import com.project.ibtss.service.PaymentTicketService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class PaymentTicketController {
     }
 
     @PostMapping("/confirm")
-    ApiResponse<String> confirmPaymentTicket(@RequestBody PaymentConfirmRequest request){
+    ApiResponse<String> confirmPaymentTicket(@RequestBody PaymentConfirmRequest request) throws MessagingException {
         return ApiResponse.<String>builder()
                 .code(HttpStatus.OK.value())
                 .message(HttpStatus.OK.getReasonPhrase())

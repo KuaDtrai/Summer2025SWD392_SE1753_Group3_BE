@@ -59,9 +59,12 @@ public class TicketsServiceImpl implements TicketService {
     }
 
     @Override
-    public Page<TicketResponse> getAllTicketByAccountId(int accountId, int page, int size) {
+    public Page<TicketResponse> getAllTicketByAccountId(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("bookingTime").descending());
-        Page<Tickets> ticketsPage = ticketsRepository.findAllByAccountId(accountId, pageable);
+
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Page<Tickets> ticketsPage = ticketsRepository.findAllByAccountId(account.getId(), pageable);
 
         List<TicketResponse> responses = ticketsPage.stream().map(ticket -> {
             // Lấy TicketSegment

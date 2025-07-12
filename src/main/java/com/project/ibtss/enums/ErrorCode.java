@@ -21,8 +21,9 @@ public enum ErrorCode {
     USER_NOT_FOUND(201, "User not found", HttpStatus.NOT_FOUND),
     INCORRECT_PASSWORD(202, "Incorrect password", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_MATCH(203, "Password and Confirm Password do not match", HttpStatus.BAD_REQUEST),
-    USERNAME_EXISTED(204, "Username already exists", HttpStatus.BAD_REQUEST),
+    PHONE_EXISTED(204, "Phone already exists", HttpStatus.BAD_REQUEST),
     STAFF_NOT_FOUND(205, "Staff not found", HttpStatus.NOT_FOUND),
+    ACCOUNT_INACTIVE(206, "Account is inactive", HttpStatus.BAD_REQUEST),
 
     CONFLICTING_TRIP(301, "Bus or driver is already assigned to another trip during this time", HttpStatus.CONFLICT),
     INVALID_TIME_RANGE(304, "Departure time must be before arrival time", HttpStatus.BAD_REQUEST),
@@ -66,7 +67,7 @@ public enum ErrorCode {
     NOT_STAFF_ROLE(1600, "You must select driver!", HttpStatus.BAD_REQUEST),
     NOT_DRIVER_POSITON(1601, "Staff not driver position!", HttpStatus.BAD_REQUEST),
     DRIVER_ALREADY_ASSIGNED_TO_TRIP(1602, "Driver already assigned to a trip", HttpStatus.BAD_REQUEST),
-    ;
+
     FEEDBACK_NOT_FOUND(307, "Feedback not found", HttpStatus.NOT_FOUND),
     CUSTOMER_NOT_FOUND(308, "Customer not found", HttpStatus.NOT_FOUND ),;
     int code;

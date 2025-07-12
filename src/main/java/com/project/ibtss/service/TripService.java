@@ -1,6 +1,7 @@
 package com.project.ibtss.service;
 
 import com.project.ibtss.dto.request.*;
+import com.project.ibtss.dto.response.TripInfoResponse;
 import com.project.ibtss.dto.response.TripResponse;
 import org.springframework.data.domain.Page;
 
@@ -16,4 +17,5 @@ public interface TripService {
 Page<TripResponse> getAllTrips(int page);
     List<TripResponse> searchTrip(SearchTripRequest request);
     void autoGenerateTrips(TripAutoGenerateRequest request);
+    TripInfoResponse getTripInfo(Integer ticketId);
 }

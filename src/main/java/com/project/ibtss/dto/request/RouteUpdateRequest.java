@@ -2,6 +2,8 @@ package com.project.ibtss.dto.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 

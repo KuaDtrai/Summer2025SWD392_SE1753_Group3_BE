@@ -11,6 +11,7 @@ import com.project.ibtss.exception.AppException;
 import com.project.ibtss.model.*;
 import com.project.ibtss.repository.*;
 import com.project.ibtss.service.*;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import vn.payos.type.CheckoutResponseData;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,6 +44,7 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
     private final SubPayRepository subPayRepository;
     private final SeatRepository seatRepository;
     private final RouteStationRepository routeStationRepository;
+    private final EmailService emailService;
 
     @Transactional
     @Override
@@ -89,7 +92,7 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
     }
 
     @Override
-    public String confirmPaymentTicket(PaymentConfirmRequest request) {
+    public String confirmPaymentTicket(PaymentConfirmRequest request) throws MessagingException {
         Payment payment = paymentRepository.findById(request.getPaymentId())
                 .orElseThrow(() -> new AppException(ErrorCode.PAYMENT_NOT_EXISTED));
 
@@ -114,6 +117,8 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
             payment.setStatus(PaymentStatus.PAID);
             paymentRepository.save(payment);
 
+            emailService.sendEmail(tickets, "Đặt vé thành công", "");
+
             return "Success!";
         } else {
             updateTicketsAndSeats(tickets, TicketStatus.CANCELLED, SeatStatus.AVAILABLE);
@@ -125,7 +130,7 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
         }
     }
 
-    private String processForAdjusmentPayment(SubPay subPay, String statusPayment){
+    private String processForAdjusmentPayment(SubPay subPay, String statusPayment) throws MessagingException {
 
         TicketSegment ticketSegment = ticketSegmentRepository.findBySeatId(subPay.getNewSeat().getId()).orElseThrow(() -> new AppException(ErrorCode.TICKET_SEGMENT_NOT_EXISTED));
 
@@ -140,6 +145,14 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
             payment.setStatus(PaymentStatus.PAID);
 
             paymentRepository.save(payment);
+
+            //for send email
+            Tickets ticket = ticketSegment.getTicket();
+            List<Tickets> tickets = new ArrayList<>();
+            tickets.add(ticket);
+
+            emailService.sendTicketChangeSuccessEmail(ticket.getAccount().getEmail(), tickets);
+
 
             return "Success!";
         } else {
@@ -214,8 +227,14 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
         ticketsRepository.save(ticket);
 
         if(priceDifference < 0){
+            emailService.sendRefundNotificationEmail(ticket.getAccount().getEmail(), Math.abs(priceDifference));
             return null;
-        } else if(priceDifference == 0) {
+        } else if(priceDifference == 0){
+            Tickets ticketChange = ticketSegment.getTicket();
+            List<Tickets> tickets = new ArrayList<>();
+            tickets.add(ticketChange);
+
+            emailService.sendTicketChangeSuccessEmail( ticket.getAccount().getEmail(),tickets);
             return null;
         } else {
             Payment payment = paymentService.createPaymentForSubPay(priceDifference);

@@ -1,5 +1,7 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.FeedbackStatus;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -26,8 +28,13 @@ public class Feedback {
     Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "staff_id")
-    Staff staff;
+    @JoinColumn(name = "driver_id")
+    Staff driver;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff_reply_id")
+    @Nullable
+    Staff staffReply;
 
     @Column(length = 200)
     String content;
@@ -35,5 +42,10 @@ public class Feedback {
     @Min(value = 1, message = "Rating must be at least 1")
     @Max(value = 5, message = "Rating cannot exceed 5")
     Integer rating;
+
+    @Enumerated(EnumType.STRING)
+    FeedbackStatus status;
+
     LocalDateTime createdDate;
+    LocalDateTime replyDate;
 }

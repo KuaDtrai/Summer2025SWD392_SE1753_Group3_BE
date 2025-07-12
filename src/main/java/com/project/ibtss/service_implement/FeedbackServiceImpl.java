@@ -1,8 +1,10 @@
 package com.project.ibtss.service_implement;
 
 import com.project.ibtss.dto.request.FeedbackRequest;
+import com.project.ibtss.dto.request.ReplyFeedbackRequest;
 import com.project.ibtss.dto.response.FeedbackResponse;
 import com.project.ibtss.enums.ErrorCode;
+import com.project.ibtss.enums.FeedbackStatus;
 import com.project.ibtss.enums.Role;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.FeedbackMapper;
@@ -14,7 +16,9 @@ import com.project.ibtss.repository.AccountRepository;
 import com.project.ibtss.repository.CustomerRepository;
 import com.project.ibtss.repository.FeedbackRepository;
 import com.project.ibtss.repository.StaffRepository;
+import com.project.ibtss.service.EmailService;
 import com.project.ibtss.service.FeedbackService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final FeedbackMapper feedbackMapper;
     private final CustomerRepository customerRepository;
     private final StaffRepository staffRepository;
+    private final EmailService emailService;
 
     private Optional<Account> getAccount(){
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -47,19 +52,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public List<FeedbackResponse> getAllFeedback() {
         List<FeedbackResponse> feedbackResponseList = new ArrayList<>();
-        Account account = getAccount().orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        if (account.getRole() == Role.ADMIN){
-            List<Feedback> feedbackList = feedbackRepository.findAll();
-            for (Feedback feedback : feedbackList) {
-                feedbackResponseList.add(feedbackMapper.toFeedbackResponse(feedback));
-            }
-        }else if (account.getRole() == Role.USER){
-            Customer customer = customerRepository.findByAccount(account);
-            List<Feedback> feedbackList = feedbackRepository.getAllByCustomer(customer);
-            for (Feedback feedback : feedbackList) {
-                feedbackResponseList.add(feedbackMapper.toFeedbackResponse(feedback));
-            }
+        List<Feedback> feedbackList = feedbackRepository.findAll();
+        for (Feedback feedback : feedbackList) {
+            feedbackResponseList.add(feedbackMapper.toFeedbackResponse(feedback));
         }
         return feedbackResponseList;
     }
@@ -69,13 +64,33 @@ public class FeedbackServiceImpl implements FeedbackService {
         Account account = getAccount().orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
         Customer customer = customerRepository.findByAccount(account);
         if (customer == null) throw new AppException(ErrorCode.CUSTOMER_NOT_FOUND);
-        Staff staff = staffRepository.findById(feedbackRequest.getStaffId()).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+        Staff staff = staffRepository.findById(feedbackRequest.getStaffId()).orElseThrow(()-> new AppException(ErrorCode.STAFF_NOT_FOUND));
         Feedback feedback = new Feedback();
         feedback.setCustomer(customer);
-        feedback.setStaff(staff);
+        feedback.setDriver(staff);
+        feedback.setStatus(FeedbackStatus.PENDING);
         feedback.setRating(feedbackRequest.getRating());
         feedback.setContent(feedbackRequest.getContent());
         feedback.setCreatedDate(LocalDateTime.now());
         return feedbackMapper.toFeedbackResponse(feedbackRepository.save(feedback));
+    }
+
+    @Override
+    public void replyFeedback(ReplyFeedbackRequest request) throws MessagingException {
+        Feedback feedback = feedbackRepository.findById(request.getFeedbackId()).orElseThrow(() -> new AppException(ErrorCode.FEEDBACK_NOT_FOUND));
+
+        Account account = getAccount().orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Staff staffReply = staffRepository.findByAccountId(account.getId()).orElseThrow(()-> new AppException(ErrorCode.STAFF_NOT_FOUND));
+
+        feedback.setStatus(FeedbackStatus.RESOLVED);
+        feedback.setReplyDate(LocalDateTime.now());
+        feedback.setStaffReply(staffReply);
+        feedbackRepository.save(feedback);
+
+        Customer customer = feedback.getCustomer();
+        String toEmail = customer.getAccount().getEmail();
+
+        emailService.sendFeedbackReplyEmail(toEmail, request.getContent());
     }
 }

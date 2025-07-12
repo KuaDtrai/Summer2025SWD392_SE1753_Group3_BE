@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface TicketService {
     Tickets createTicket(PaymentSeatRequest request);
-    Page<TicketResponse> getAllTicketByAccountId(int accountId, int page, int size);
+    Page<TicketResponse> getAllTicketByAccountId(int page, int size);
     TicketResponse searchTicketByCode(String code);
     TicketResponse searchTicketById(Integer ticketId);
 //    PaymentProcessResponse changeTicket(ChangeTicketRequest request) throws Exception;

@@ -1,6 +1,7 @@
 package com.project.ibtss.service_implement;
 
 import com.project.ibtss.dto.request.*;
+import com.project.ibtss.dto.response.TripInfoResponse;
 import com.project.ibtss.dto.response.TripResponse;
 import com.project.ibtss.enums.*;
 import com.project.ibtss.exception.AppException;
@@ -40,6 +41,7 @@ public class TripServiceImpl implements TripService {
     private final int DRIVER_BREAK_TIME = 120;
     private final int MINUTE_BETWEEN_TRIP = 60;
     private final int HOUR_BETWEEN_TRIP = 1;
+    private final TicketSegmentRepository ticketSegmentRepository;
 
     @Override
     public TripResponse createTrip(TripCreateRequest request) {
@@ -168,6 +170,21 @@ public class TripServiceImpl implements TripService {
         }
 
         tripRepository.saveAll(createdTrips);
+    }
+
+    @Override
+    public TripInfoResponse getTripInfo(Integer ticketId) {
+        TicketSegment ticketSegment = ticketSegmentRepository.findByTicketId(ticketId).orElseThrow(() -> new AppException(ErrorCode.TICKET_SEGMENT_NOT_EXISTED));
+
+        Trips trips = ticketSegment.getTrip();
+
+        Staff staff = staffRepository.findByAccountId(trips.getDriver().getId()).orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
+
+        return TripInfoResponse.builder()
+                .driverId(staff.getId())
+                .driverName(trips.getDriver().getFullName())
+                .licensePlate(trips.getBus().getLicensePlate())
+                .build();
     }
 
     private Buses findAvailableBus(List<Buses> buses, List<Trips> existingTrips, LocalDateTime departureTime) {

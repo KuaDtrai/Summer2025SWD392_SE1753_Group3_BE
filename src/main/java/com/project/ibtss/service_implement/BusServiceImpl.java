@@ -71,7 +71,7 @@ public class BusServiceImpl implements BusService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         if (!bus.getLicensePlate().equalsIgnoreCase(request.getLicensePlate())
                 && busRepository.existsByLicensePlateIgnoreCase(request.getLicensePlate())) {
-            throw new AppException(ErrorCode.USERNAME_EXISTED);
+            throw new AppException(ErrorCode.PHONE_EXISTED);
         }
         busMapper.updateFromRequest(request, bus);
         return busMapper.toResponse(busRepository.save(bus));

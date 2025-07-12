@@ -1,10 +1,12 @@
 package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.FeedbackRequest;
+import com.project.ibtss.dto.request.ReplyFeedbackRequest;
 import com.project.ibtss.dto.response.*;
 import com.project.ibtss.enums.Position;
 import com.project.ibtss.enums.Role;
 import com.project.ibtss.service.FeedbackService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,6 +49,18 @@ public class FeedbackController {
                 .code(HttpStatus.OK.value())
                 .message("")
                 .data(feedbackService.getAllFeedback())
+                .build();
+    }
+
+    @PutMapping
+    public ApiResponse<String> repFeedback(@RequestBody ReplyFeedbackRequest request) throws MessagingException {
+
+        feedbackService.replyFeedback(request);
+
+        return ApiResponse.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data("Gửi email thành công!")
                 .build();
     }
 }

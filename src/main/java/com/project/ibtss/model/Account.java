@@ -1,5 +1,6 @@
 package com.project.ibtss.model;
 
+import com.project.ibtss.enums.Gender;
 import com.project.ibtss.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -33,11 +34,13 @@ public class Account implements UserDetails {
     @Column(unique = true, length = 100)
     String email;
     String passwordHash;
+    @Enumerated(EnumType.STRING)
     Role role; // customer, staff
     @Column(length = 50)
     String fullName;
     @Column(length = 20)
     String phone;
+    Gender gender;
     Boolean isActive;
     LocalDateTime createdDate;
     LocalDateTime updatedDate;
