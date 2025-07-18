@@ -54,14 +54,9 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public List<StationResponse> getAllStation() {
-        List<StationResponse> stationResponseList = new ArrayList<>();
-        List<Stations> stations = stationRepository.findAll();
-        for (Stations station : stations) {
-            StationResponse stationResponse = mapper.toStationResponse(station);
-            stationResponseList.add(stationResponse);
-        }
-        return stationResponseList;
+    public Page<StationResponse> getAllStation(Pageable pageable) {
+        Page<Stations> stationPage = stationRepository.findAll(pageable);
+        return stationPage.map(mapper::toStationResponse);
     }
 
     @Override

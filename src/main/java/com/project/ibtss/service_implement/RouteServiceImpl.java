@@ -43,13 +43,9 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<RouteResponse> getAllRoute() {
-        List<Routes> routes = routeRepository.findAll();
-        List<RouteResponse> routeResponseList = new ArrayList<>();
-        for (Routes route : routes) {
-            routeResponseList.add(routeMapper.toRouteResponse(route));
-        }
-        return routeResponseList;
+    public Page<RouteResponse> getAllRoute(Pageable pageable) {
+        Page<Routes> routes = routeRepository.findAll(pageable);
+        return routes.map(routeMapper::toRouteResponse);
     }
 
     @Override

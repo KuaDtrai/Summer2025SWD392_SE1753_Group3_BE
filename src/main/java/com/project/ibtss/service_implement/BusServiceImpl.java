@@ -36,9 +36,7 @@ public class BusServiceImpl implements BusService {
 
         Buses bus = busMapper.toEntity(request);
         bus.setStatus(BusStatus.ACTIVE);
-        busRepository.save(bus);
-
-        bus = busRepository.findByLicensePlateIgnoreCase(bus.getLicensePlate()).orElseThrow(() -> new AppException(ErrorCode.BUS_NOT_EXISTED));
+        bus = busRepository.save(bus);
 
         seatService.autoGenerateSeats(bus.getId());
 
@@ -52,10 +50,9 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public List<BusResponse> getAllBuses() {
-        return busRepository.findAll().stream()
-                .map(busMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<BusResponse> getAllBuses(Pageable pageable) {
+        return busRepository.findAll(pageable)
+                .map(busMapper::toResponse);
     }
 
     @Override

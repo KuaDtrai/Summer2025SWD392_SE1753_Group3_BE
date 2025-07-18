@@ -17,12 +17,17 @@ public enum Role {
             Permission.ADMIN_DELETE
     )),
     CUSTOMER("CUSTOMER", Set.of(
-
+            Permission.CUSTOMER_CREATE,
+            Permission.CUSTOMER_UPDATE,
+            Permission.CUSTOMER_READ
     )),
 
-    STAFF("STAFF", Set.of())
-
-    ;
+    STAFF("STAFF", Set.of(
+            Permission.STAFF_READ,
+            Permission.STAFF_CREATE,
+            Permission.STAFF_UPDATE,
+            Permission.STAFF_DELETE
+    ));
 
     String roleName;
     Set<Permission> permissions;

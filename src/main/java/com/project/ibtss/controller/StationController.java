@@ -7,6 +7,9 @@ import com.project.ibtss.dto.response.StationResponse;
 import com.project.ibtss.model.Stations;
 import com.project.ibtss.service.StationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,34 +31,34 @@ public class StationController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('admin:read')")
-    public ApiResponse<List<StationResponse>> getStations() {
-        return ApiResponse.<List<StationResponse>>builder()
+    @PreAuthorize("hasAuthority('staff:read')")
+    public ApiResponse<Page<StationResponse>> getStations(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+        return ApiResponse.<Page<StationResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("")
-                .data(stationService.getAllStation()).build();
+                .data(stationService.getAllStation(pageable)).build();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('admin:read')")
+    @PreAuthorize("hasAuthority('staff:read')")
     public ApiResponse<StationResponse> getStationById(@PathVariable Integer id) {
         return ApiResponse.<StationResponse>builder().code(HttpStatus.OK.value()).message("").data(stationService.getStationById(id)).build();
     }
 
     @PostMapping("")
-    @PreAuthorize("hasAuthority('admin:create')")
+    @PreAuthorize("hasAuthority('staff:create')")
     public ApiResponse<StationResponse> createStation(@RequestBody StationRequest stationRequest) {
         return ApiResponse.<StationResponse>builder().code(HttpStatus.OK.value()).message("").data(stationService.createStation(stationRequest)).build();
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('admin:update')")
+    @PreAuthorize("hasAuthority('staff:update')")
     public ApiResponse<StationResponse> updateStation(@PathVariable Integer id, @RequestBody UpdateStationRequest stationRequest) {
         return ApiResponse.<StationResponse>builder().code(HttpStatus.OK.value()).message("").data(stationService.updateStation(id, stationRequest)).build();
     }
 
     @PutMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('admin:delete')")
+    @PreAuthorize("hasAuthority('staff:delete')")
     public ApiResponse<StationResponse> deleteStation(@PathVariable Integer id) {
         return ApiResponse.<StationResponse>builder().code(HttpStatus.OK.value()).message("").data(stationService.deleteStationById(id)).build();
     }

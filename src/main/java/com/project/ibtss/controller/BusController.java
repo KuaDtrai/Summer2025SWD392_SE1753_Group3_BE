@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,12 +25,12 @@ public class BusController {
     private final BusService busService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('admin:read')")
-    public ApiResponse<List<BusResponse>> getAllBuses(@RequestParam(value = "licensePlate", required = false) String licensePlate) {
-        List<BusResponse> buses = (licensePlate != null && !licensePlate.isEmpty()) // Check if license plate is provided
-                ? busService.searchByLicensePlate(licensePlate) // Search by license plate if provided
-                : busService.getAllBuses(); // Otherwise, get all buses
-        return ApiResponse.<List<BusResponse>>builder()
+    @PreAuthorize("hasAuthority('staff:read')")
+    public ApiResponse<Page<BusResponse>> getAllBuses(
+            @PageableDefault(size = 10, page = 0) Pageable pageable) {
+
+        Page<BusResponse> buses = busService.getAllBuses(pageable);
+        return ApiResponse.<Page<BusResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Success")
                 .data(buses)
@@ -37,7 +38,7 @@ public class BusController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('admin:read')")
+    @PreAuthorize("hasAuthority('staff:read')")
     public ApiResponse<BusResponse> getBusById(@PathVariable Integer id) {
         return ApiResponse.<BusResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -47,7 +48,7 @@ public class BusController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('admin:create')")
+    @PreAuthorize("hasAuthority('staff:create')")
     public ApiResponse<BusResponse> createBus(@Valid @RequestBody BusRequest request) {
         return ApiResponse.<BusResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -57,7 +58,7 @@ public class BusController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('admin:update')")
+    @PreAuthorize("hasAuthority('staff:update')")
     public ApiResponse<BusResponse> updateBus(@PathVariable Integer id, @Valid @RequestBody BusRequest request) {
         return ApiResponse.<BusResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -67,7 +68,7 @@ public class BusController {
     }
 
     @PutMapping("/active/{id}")
-    @PreAuthorize("hasAuthority('admin:delete')")
+    @PreAuthorize("hasAuthority('staff:delete')")
     public ApiResponse<BusResponse> deleteBus(@PathVariable Integer id) {
 
         return ApiResponse.<BusResponse>builder()
@@ -78,6 +79,7 @@ public class BusController {
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasAuthority('staff:read')")
     public ApiResponse<Page<BusResponse>> searchBuses(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "") String search

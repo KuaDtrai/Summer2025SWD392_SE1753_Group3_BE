@@ -10,7 +10,8 @@ import java.util.List;
 
 public interface BusService {
     BusResponse createBus(BusRequest request);
-    List<BusResponse> getAllBuses();
+    Page<BusResponse> getAllBuses(Pageable pageable);
+
     BusResponse getBusById(Integer id);
     BusResponse updateBus(Integer id, BusRequest request);
     BusResponse setBusActive(Integer id);

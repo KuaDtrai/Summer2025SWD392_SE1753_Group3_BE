@@ -12,8 +12,6 @@ public enum BusStatus {
     ACTIVE("ACTIVE"),
     INACTIVE("INACTIVE"),
     MAINTENANCE("MAINTENANCE"),
-    DELETED("DELETED")
-
     ;
     String name;
 }
