@@ -4,14 +4,19 @@ import com.project.ibtss.dto.request.BusRequest;
 import com.project.ibtss.dto.response.BusResponse;
 import com.project.ibtss.enums.BusStatus;
 import com.project.ibtss.enums.ErrorCode;
+import com.project.ibtss.enums.TicketStatus;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.BusMapper;
 import com.project.ibtss.model.Buses;
 import com.project.ibtss.repository.BusRepository;
+import com.project.ibtss.repository.TicketSegmentRepository;
 import com.project.ibtss.repository.TripRepository;
 import com.project.ibtss.service.BusService;
 import com.project.ibtss.service.SeatService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -23,22 +28,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BusServiceImpl implements BusService {
 
+    private static final Logger log = LoggerFactory.getLogger(BusServiceImpl.class);
     private final BusRepository busRepository;
     private final BusMapper busMapper;
 
     private final SeatService seatService;
     private final TripRepository tripRepository;
+    private final TicketSegmentRepository ticketSegmentRepository;
 
     @Override
+    @Transactional
     public BusResponse createBus(BusRequest request) {
 
         checkValidCreateBus(request.getLicensePlate());
+
+        log.info(request.getSeatCount().toString());
 
         Buses bus = busMapper.toEntity(request);
         bus.setStatus(BusStatus.ACTIVE);
         bus = busRepository.save(bus);
 
-        seatService.autoGenerateSeats(bus.getId());
+        seatService.updateSeatsBySeatCount(bus.getId(), bus.getSeatCount());
 
         return busMapper.toResponse(bus);
     }
@@ -59,27 +69,49 @@ public class BusServiceImpl implements BusService {
     public BusResponse getBusById(Integer id) {
         return busRepository.findById(id)
                 .map(busMapper::toResponse)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.BUS_NOT_EXISTED));
     }
 
     @Override
+    @Transactional
     public BusResponse updateBus(Integer id, BusRequest request) {
         Buses bus = busRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.BUS_NOT_EXISTED));
+
+        if(checkTickets(id)){
+            throw new AppException(ErrorCode.CANT_EDIT_BUS);
+        }
+
         if (!bus.getLicensePlate().equalsIgnoreCase(request.getLicensePlate())
                 && busRepository.existsByLicensePlateIgnoreCase(request.getLicensePlate())) {
             throw new AppException(ErrorCode.PHONE_EXISTED);
         }
-        busMapper.updateFromRequest(request, bus);
+
+        if(bus.getSeatCount() > 0){
+            seatService.updateSeatsBySeatCount(bus.getId(), bus.getSeatCount());
+        }
+
+        bus = busMapper.updateFromRequest(request, bus);
+        bus = busRepository.save(bus);
         return busMapper.toResponse(busRepository.save(bus));
     }
 
+    private boolean checkTickets(Integer busId) {
+        List<String> usedStatuses = List.of(TicketStatus.USED.getName(), TicketStatus.PAID.getName(), TicketStatus.PENDING.getName(), TicketStatus.CANCELLED.getName());
+        long count = ticketSegmentRepository.countBySeat_Bus_IdAndTicket_StatusIn(busId, usedStatuses);
+        return count > 0;
+    }
+
     @Override
-    public BusResponse setBusActive(Integer id) {
+    public BusResponse setBusStatus(Integer id, String status) {
         Buses bus = busRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        bus.setStatus(BusStatus.ACTIVE);
-        return  busMapper.toResponse(busRepository.save(bus));
+        if(checkTickets(id)){
+            throw new AppException(ErrorCode.CANT_EDIT_BUS);
+        }
+        bus.setStatus(BusStatus.valueOf(status.toUpperCase()));
+        bus = busRepository.save(bus);
+        return  busMapper.toResponse(bus);
     }
 
     @Override

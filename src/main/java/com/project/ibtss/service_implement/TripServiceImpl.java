@@ -42,6 +42,7 @@ public class TripServiceImpl implements TripService {
     private final int MINUTE_BETWEEN_TRIP = 60;
     private final int HOUR_BETWEEN_TRIP = 1;
     private final TicketSegmentRepository ticketSegmentRepository;
+    private final TicketsRepository ticketsRepository;
 
     @Override
     public TripResponse createTrip(TripCreateRequest request) {
@@ -278,7 +279,24 @@ public class TripServiceImpl implements TripService {
         Trips trip = tripRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.TRIP_NOT_EXISTED));
 
-        trip.setStatus(request.getStatus());
+        switch (request.getStatus()) {
+            case SCHEDULED, COMPLETED, DELAYED, IN_PROGRESS, CANCELED -> {
+                if (ticketSegmentRepository.existsByTripIdAndTicket_Status(trip.getId(), TicketStatus.USED.getName())) {
+                    throw new AppException(ErrorCode.HAVE_USED_TICKET);
+                }
+            }
+        }
+
+        if(request.getStatus() == TripsStatus.COMPLETED){
+            List<TicketSegment> paidTickets = ticketSegmentRepository.findAllByTripIdAndTicket_Status(trip.getId(), TicketStatus.PAID.getName());
+
+            for (TicketSegment ts : paidTickets) {
+                Tickets ticket = ts.getTicket();
+                ticket.setStatus(TicketStatus.USED);
+                ticketsRepository.save(ticket);
+            }
+        }
+
         tripRepository.save(trip);
 
         return tripMapper.toResponse(trip);

@@ -1,7 +1,9 @@
 package com.project.ibtss.controller;
 
+import com.project.ibtss.dto.request.CheckPasswordRequest;
 import com.project.ibtss.dto.request.LoginRequest;
 import com.project.ibtss.dto.request.RegisterRequest;
+import com.project.ibtss.dto.response.AccountDetailResponse;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.repository.AccountRepository;
@@ -42,13 +44,24 @@ public class AuthController {
                 .build();
     }
 
-    //check jwt
     @GetMapping()
-    public ApiResponse<AccountResponse> userDetail() {
-        return ApiResponse.<AccountResponse>builder()
+    public ApiResponse<AccountDetailResponse> userDetail() {
+        return ApiResponse.<AccountDetailResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(HttpStatus.OK.getReasonPhrase())
                 .data(accountService.accountDetail())
+                .build();
+    }
+
+    @PostMapping("/check-password")
+    public ApiResponse<Boolean> checkPassword(@RequestBody CheckPasswordRequest request) {
+
+        boolean isValid = accountService.isCorrectPassword(request.getPassword());
+
+        return ApiResponse.<Boolean>builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(isValid)
                 .build();
     }
 

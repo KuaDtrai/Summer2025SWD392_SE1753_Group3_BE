@@ -1,10 +1,8 @@
 package com.project.ibtss.service_implement;
 
 import com.project.ibtss.controller.DriverResponse;
-import com.project.ibtss.dto.request.AccountRequest;
-import com.project.ibtss.dto.request.LoginRequest;
-import com.project.ibtss.dto.request.RegisterRequest;
-import com.project.ibtss.dto.request.UpdatePasswordRequest;
+import com.project.ibtss.dto.request.*;
+import com.project.ibtss.dto.response.AccountDetailResponse;
 import com.project.ibtss.dto.response.AccountManageResponse;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.enums.ErrorCode;
@@ -188,19 +186,31 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponse updatePassword(UpdatePasswordRequest updatePasswordRequest) {
-        Account account = accountRepository.findById(getAccount().getId()).orElse(null);
-        if (account == null) {return mapper.toAccountResponse(null);}
-        if (!account.getPasswordHash().equals(passwordEncoder.encode(updatePasswordRequest.getOldPassword()))) {return mapper.toAccountResponse(null);}
+        Account account = accountRepository.findById(getAccount().getId()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+
         account.setPasswordHash(passwordEncoder.encode(updatePasswordRequest.getNewPassword()));
+
+        account = accountRepository.save(account);
+
         return mapper.toAccountResponse(accountRepository.save(account));
     }
 
     @Override
     public AccountManageResponse updateAccount(Integer id,AccountRequest accountRequest) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new  AppException(ErrorCode.ACCOUNT_NOT_FOUND));
-        if (accountRepository.findByPhone(accountRequest.getPhone()) != null) {
+
+        Account accountForValid = accountRepository.findByPhone(accountRequest.getPhone());
+
+        if (accountForValid != null && !accountForValid.getPhone().equals(account.getPhone())) {
             throw new AppException(ErrorCode.PHONE_EXISTED);
         }
+
+        accountForValid = accountRepository.findByEmail(accountRequest.getEmail()).orElse(null);
+
+        if(accountForValid != null && !accountForValid.getPhone().equals(account.getEmail())){
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+
         account = Account.builder()
                 .phone(accountRequest.getPhone())
                 .fullName(accountRequest.getFullName())
@@ -250,6 +260,52 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public AccountDetailResponse updateAccountInfo(UpdateAccountInfoRequest request) {
+        Account account = getAccount();
+
+        Account accountForValid = accountRepository.findByPhone(request.getPhone());
+
+        if (accountForValid != null && !accountForValid.getPhone().equals(account.getPhone())) {
+            throw new AppException(ErrorCode.PHONE_EXISTED);
+        }
+
+        accountForValid = accountRepository.findByEmail(request.getEmail()).orElse(null);
+
+        if(accountForValid != null && !accountForValid.getEmail().equals(account.getEmail())){
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate dob = LocalDate.parse(request.getDob(), formatter);
+
+        account.setEmail(request.getEmail());
+        account.setFullName(request.getFullName());
+        account.setGender(Gender.valueOf(request.getGender().toUpperCase()));
+        account.setUpdatedDate(LocalDateTime.now());
+
+        accountRepository.save(account);
+
+        Customer customer = customerRepository.findByAccount(account);
+        customer.setDob(dob);
+        customer.setAddress(request.getAddress());
+
+        customer = customerRepository.save(customer);
+
+        return AccountDetailResponse.builder()
+                .email(account.getEmail())
+                .phone(account.getPhone())
+                .address(customer.getAddress())
+                .role(account.getRole().getRoleName())
+                .dob(dob.toString())
+                .address(customer.getAddress())
+                .createdDate(account.getCreatedDate().toString())
+                .fullName(account.getFullName())
+                .gender(account.getGender().getName())
+                .build();
+    }
+
+    @Override
     public AccountResponse login(LoginRequest loginRequest) {
         Account account = accountRepository.findByPhone(loginRequest.getPhone()); //test
         if (account == null) {
@@ -296,14 +352,32 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountResponse accountDetail() {
+    public AccountDetailResponse accountDetail() {
         String phone = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountRepository.findByPhone(phone);
         if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
 
-        return mapper.toAccountResponse(account);
+        Customer customer = customerRepository.findByAccount(account);
+
+        String dob = null;
+
+        if(customer.getDob() != null){
+            dob = customer.getDob().toString();
+        }
+
+        return AccountDetailResponse.builder()
+                .email(account.getEmail())
+                .phone(account.getPhone())
+                .address(customer.getAddress())
+                .role(account.getRole().getRoleName())
+                .dob(dob)
+                .address(customer.getAddress())
+                .createdDate(account.getCreatedDate().toString())
+                .fullName(account.getFullName())
+                .gender(account.getGender().getName())
+                .build();
     }
 
     @Override
@@ -311,6 +385,17 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         account.setIsActive(!account.getIsActive());
         return mapper.toAccountResponse(accountRepository.save(account));
+    }
+
+    @Override
+    public Boolean isCorrectPassword(String password) {
+        String phone = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountRepository.findByPhone(phone);
+        if(account == null){
+            throw new AppException(ErrorCode.CUSTOMER_NOT_FOUND);
+        }
+
+        return passwordEncoder.matches(password, account.getPasswordHash());
     }
 
     @Override

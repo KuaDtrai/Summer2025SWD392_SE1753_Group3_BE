@@ -1,10 +1,8 @@
 package com.project.ibtss.service;
 
 import com.project.ibtss.controller.DriverResponse;
-import com.project.ibtss.dto.request.AccountRequest;
-import com.project.ibtss.dto.request.LoginRequest;
-import com.project.ibtss.dto.request.RegisterRequest;
-import com.project.ibtss.dto.request.UpdatePasswordRequest;
+import com.project.ibtss.dto.request.*;
+import com.project.ibtss.dto.response.AccountDetailResponse;
 import com.project.ibtss.dto.response.AccountManageResponse;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.enums.Role;
@@ -30,14 +28,17 @@ public interface AccountService {
     AccountResponse updatePassword(UpdatePasswordRequest updatePasswordRequest);
 
     AccountManageResponse updateAccount(Integer id, AccountRequest accountRequest);
+    AccountDetailResponse updateAccountInfo(UpdateAccountInfoRequest request);
 
     AccountResponse login(LoginRequest loginRequest);
 
     String register(RegisterRequest registerRequest);
 
-    AccountResponse accountDetail();
+    AccountDetailResponse accountDetail();
 
     AccountResponse setAccountActive(Integer id);
+
+    Boolean isCorrectPassword(String password);
 
     Page<DriverResponse> getAvailableDrivers(LocalDateTime departureTime, LocalDateTime arrivalTime, Pageable pageable, String search);
 }

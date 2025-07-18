@@ -67,14 +67,14 @@ public class BusController {
                 .build();
     }
 
-    @PutMapping("/active/{id}")
+    @PutMapping("/status/{id}/{status}")
     @PreAuthorize("hasAuthority('staff:delete')")
-    public ApiResponse<BusResponse> deleteBus(@PathVariable Integer id) {
+    public ApiResponse<BusResponse> deleteBus(@PathVariable Integer id, @PathVariable String status) {
 
         return ApiResponse.<BusResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Deleted successfully")
-                .data(busService.setBusActive(id))
+                .data(busService.setBusStatus(id, status))
                 .build();
     }
 

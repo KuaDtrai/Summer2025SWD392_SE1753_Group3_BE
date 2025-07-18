@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SeatService {
     List<SeatResponse> createSeats(List<SeatRequest> requests);
-    List<SeatResponse> autoGenerateSeats(Integer busId);
+    List<SeatResponse> updateSeatsBySeatCount(Integer busId, int newSeatCount);
     SeatResponse updateSeat(Integer id, SeatRequest request);
     void deleteSeat(Integer id);
     SeatResponse getSeatById(Integer id);

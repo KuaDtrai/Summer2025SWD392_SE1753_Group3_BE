@@ -15,11 +15,15 @@ import com.project.ibtss.repository.BusRepository;
 import com.project.ibtss.repository.SeatRepository;
 import com.project.ibtss.repository.TripRepository;
 import com.project.ibtss.service.SeatService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SeatServiceImpl implements SeatService {
 
+    private static final Logger log = LoggerFactory.getLogger(SeatServiceImpl.class);
     private final SeatRepository seatRepository;
     private final BusRepository busRepository;
     private final SeatMapper seatMapper;
@@ -53,31 +58,72 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
-    public List<SeatResponse> autoGenerateSeats(Integer busId) {
+    @Transactional
+    public List<SeatResponse> updateSeatsBySeatCount(Integer busId, int newSeatCount) {
         Buses bus = busRepository.findById(busId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        int seatCount = bus.getSeatCount();
+        log.info("Updating seats for busId={}, newSeatCount={}", busId, newSeatCount);
+
+
+        List<Seats> existingSeats = seatRepository.findByBusId(busId);
+
+        int oldSeatCount = existingSeats.size();
+
         List<SeatResponse> result = new ArrayList<>();
 
-        for(int i = 0; i < 2; i++){
-            for (int j = 1; j <= (seatCount/2); j++) {
-                String seatCode = "";
-                if(i == 0){
-                    seatCode = "A" + j;
-                } else {
-                    seatCode = "B" + j;
-                }
-                if (seatRepository.existsByBusIdAndSeatCodeIgnoreCase(busId, seatCode)) continue;
+        // if seat reduce -> delete biggest seat code
+        if (newSeatCount < oldSeatCount) {
+            // cal seat need delete
+            int seatsToRemove = oldSeatCount - newSeatCount;
 
-                Seats seat = new Seats();
-                seat.setSeatCode(seatCode);
-                seat.setBus(bus);
-                seat.setCreatedAt(LocalDateTime.now());
-                seat.setUpdatedAt(LocalDateTime.now());
-                result.add(seatMapper.toResponse(seatRepository.save(seat)));
+            // sort by seat code
+            existingSeats.sort(Comparator.comparing(Seats::getSeatCode).reversed());
+
+            for (int i = 0; i < seatsToRemove; i++) {
+                Seats seatToDelete = existingSeats.get(i);
+                seatRepository.delete(seatToDelete);
+            }
+
+            // get back after delete
+            existingSeats = seatRepository.findByBusId(busId);
+        }
+
+        // if more -> create new
+        if (newSeatCount > oldSeatCount) {
+            int seatsToAdd = newSeatCount - oldSeatCount;
+
+            // create seat from old seat count + 1
+            int halfNewSeatCount = newSeatCount / 2;
+
+            // Create seat start with A and B
+            for (int i = 0; i < 2; i++) {
+                for (int j = 1; j <= halfNewSeatCount; j++) {
+                    String seatCode = (i == 0 ? "A" : "B") + j;
+
+                    // skip if existed
+                    boolean exists = existingSeats.stream()
+                            .anyMatch(s -> s.getSeatCode().equalsIgnoreCase(seatCode));
+                    if (exists) continue;
+
+                    Seats seat = new Seats();
+                    seat.setSeatCode(seatCode);
+                    seat.setBus(bus);
+                    seat.setCreatedAt(LocalDateTime.now());
+                    seat.setUpdatedAt(LocalDateTime.now());
+                    seat = seatRepository.save(seat);
+                    seatRepository.flush();
+                    existingSeats.add(seat);
+                    log.info("Test create seat: id = {}", seat.getId());
+                }
             }
         }
+
+        // to response
+        for (Seats seat : existingSeats) {
+            result.add(seatMapper.toResponse(seat));
+        }
+
         return result;
     }
 

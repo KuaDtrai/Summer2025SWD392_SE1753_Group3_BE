@@ -5,15 +5,13 @@ import com.project.ibtss.dto.request.RouteUpdateRequest;
 import com.project.ibtss.dto.response.RouteResponse;
 import com.project.ibtss.enums.ErrorCode;
 import com.project.ibtss.enums.RouteStatus;
+import com.project.ibtss.enums.TicketStatus;
 import com.project.ibtss.exception.AppException;
 import com.project.ibtss.mapper.RouteMapper;
 import com.project.ibtss.model.RouteStations;
 import com.project.ibtss.model.Routes;
 import com.project.ibtss.model.Stations;
-import com.project.ibtss.repository.RouteRepository;
-import com.project.ibtss.repository.RouteStationRepository;
-import com.project.ibtss.repository.StationRepository;
-import com.project.ibtss.repository.TripRepository;
+import com.project.ibtss.repository.*;
 import com.project.ibtss.service.RouteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +33,7 @@ public class RouteServiceImpl implements RouteService {
     private final RouteMapper routeMapper;
     private final TripRepository tripRepository;
     private final RouteStationRepository routeStationRepository;
+    private final TicketSegmentRepository ticketSegmentRepository;
 
     @Override
     public RouteResponse getRouteById(Integer id) {
@@ -98,6 +97,9 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public RouteResponse updateRoute(Integer id, RouteUpdateRequest routeRequest) {
+        if(hasTicketsOnRoute(id)){
+            throw new AppException(ErrorCode.CANT_EDIT_ROUTE);
+        }
         Stations departureStation = stationRepository.getById(routeRequest.getDepartureStationId());
         Stations destinationStation = stationRepository.getById(routeRequest.getDestinationStationId());
         Routes route = routeRepository.getById(id);
@@ -113,8 +115,16 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public RouteResponse deleteRoute(Integer id) {
         Routes route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RUNTIME_EXCEPTION));
+        if(hasTicketsOnRoute(route.getId())){
+            throw new AppException(ErrorCode.CANT_EDIT_ROUTE);
+        }
         route.setStatus(RouteStatus.INACTIVE);
         return routeMapper.toRouteResponse(routeRepository.save(route));
+    }
+
+    private boolean hasTicketsOnRoute(Integer routeId) {
+        List<String> statuses = List.of(TicketStatus.USED.getName(), TicketStatus.PAID.getName(), TicketStatus.PENDING.getName(), TicketStatus.CANCELLED.getName());
+        return ticketSegmentRepository.existsByTrip_Route_IdAndTicket_StatusIn(routeId, statuses);
     }
 
     @Override

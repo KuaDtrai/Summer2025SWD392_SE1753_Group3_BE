@@ -1,7 +1,9 @@
 package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.AccountRequest;
+import com.project.ibtss.dto.request.UpdateAccountInfoRequest;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
+import com.project.ibtss.dto.response.AccountDetailResponse;
 import com.project.ibtss.dto.response.AccountManageResponse;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.dto.response.ApiResponse;
@@ -52,12 +54,25 @@ public class AccountController {
 
     @PutMapping("/password")
     public ApiResponse<AccountResponse> UpdatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
-        return ApiResponse.<AccountResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.updatePassword(updatePasswordRequest)).build();
+        return ApiResponse.<AccountResponse>builder()
+                .code(HttpStatus.OK.value()).message("")
+                .data(accountService.updatePassword(updatePasswordRequest))
+                .build();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin:update')")
     public ApiResponse<AccountManageResponse> UpdateAccount(@PathVariable Integer id, @RequestBody AccountRequest accountRequest) {
         return ApiResponse.<AccountManageResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.updateAccount(id, accountRequest)).build();
+    }
+
+    @PutMapping("/updateInfo")
+    public ApiResponse<AccountDetailResponse> UpdateAccountInfo(@RequestBody UpdateAccountInfoRequest request) {
+        return ApiResponse.<AccountDetailResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.updateAccountInfo(request))
+                .build();
     }
 
     @PutMapping("/role/{id}")
@@ -85,4 +100,6 @@ public class AccountController {
                 .data(accountService.getAvailableDrivers(departureTime, arrivalTime, pageable, search))
                 .build();
     }
+
+
 }

@@ -10,4 +10,9 @@ public interface TicketSegmentRepository extends JpaRepository<TicketSegment, In
     Optional<TicketSegment> findByTicketId(Integer ticketId);
     Optional<TicketSegment> findBySeatId(Integer seatId);
     List<TicketSegment> findAllByTicketId(Integer ticketId);
+    int countBySeat_Bus_IdAndTicket_StatusIn(Integer busId, List<String> statuses);
+    boolean existsByTrip_Route_IdAndTicket_StatusIn(Integer routeId, List<String> statuses);
+    boolean existsByTripIdAndTicket_Status(Integer tripId, String status);
+    List<TicketSegment> findAllByTripIdAndTicket_Status(Integer tripId, String status);
+
 }

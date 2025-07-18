@@ -14,7 +14,7 @@ public interface BusService {
 
     BusResponse getBusById(Integer id);
     BusResponse updateBus(Integer id, BusRequest request);
-    BusResponse setBusActive(Integer id);
+    BusResponse setBusStatus(Integer id, String status);
     List<BusResponse> searchByLicensePlate(String keyword);
 
     Page<BusResponse> searchBuses(int page, String search);

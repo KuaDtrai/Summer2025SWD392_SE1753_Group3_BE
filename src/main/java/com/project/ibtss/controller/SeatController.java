@@ -33,15 +33,15 @@ public class SeatController {
                 .build();
     }
 
-    @PostMapping("/auto/{busId}")
-    @PreAuthorize("hasAuthority('admin:create')")
-    public ApiResponse<List<SeatResponse>> autoGenerate(@PathVariable Integer busId) {
-        return ApiResponse.<List<SeatResponse>>builder()
-                .code(HttpStatus.OK.value())
-                .message("Seats auto-generated")
-                .data(seatService.autoGenerateSeats(busId))
-                .build();
-    }
+//    @PostMapping("/auto/{busId}")
+//    @PreAuthorize("hasAuthority('admin:create')")
+//    public ApiResponse<List<SeatResponse>> autoGenerate(@PathVariable Integer busId) {
+//        return ApiResponse.<List<SeatResponse>>builder()
+//                .code(HttpStatus.OK.value())
+//                .message("Seats auto-generated")
+//                .data(seatService.autoGenerateSeats(busId))
+//                .build();
+//    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:update')")

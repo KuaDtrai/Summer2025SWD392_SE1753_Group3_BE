@@ -24,6 +24,7 @@ public enum ErrorCode {
     PHONE_EXISTED(204, "Phone already exists", HttpStatus.BAD_REQUEST),
     STAFF_NOT_FOUND(205, "Staff not found", HttpStatus.NOT_FOUND),
     ACCOUNT_INACTIVE(206, "Account is inactive", HttpStatus.BAD_REQUEST),
+    EMAIL_EXISTED(207, "Email already exists", HttpStatus.BAD_REQUEST),
 
     CONFLICTING_TRIP(301, "Bus or driver is already assigned to another trip during this time", HttpStatus.CONFLICT),
     INVALID_TIME_RANGE(304, "Departure time must be before arrival time", HttpStatus.BAD_REQUEST),
@@ -37,9 +38,11 @@ public enum ErrorCode {
     BUS_NOT_EXISTED(401, "Bus does not exist", HttpStatus.BAD_REQUEST),
     BUS_NOT_ACTIVE(402, "Bus is not active", HttpStatus.BAD_REQUEST),
     BUS_ALREADY_ASSIGNED_TO_TRIP(403, "Bus already assigned to a trip", HttpStatus.BAD_REQUEST),
+    CANT_EDIT_BUS(404, "Can not edit bus now!", HttpStatus.BAD_REQUEST),
 
     TRIP_NOT_EXISTED(500, "Trip does not exist", HttpStatus.BAD_REQUEST),
     CANNOT_EDIT_TRIP(501, "Can't edit a trip", HttpStatus.BAD_REQUEST),
+    HAVE_USED_TICKET(502, "Chuyến xe đã có vé được dùng!", HttpStatus.BAD_REQUEST),
 
     SEAT_NOT_EXISTED(600, "Seat does not exist", HttpStatus.BAD_REQUEST),
     SEAT_NOT_AVAILABLE(601, "Seat is not available", HttpStatus.BAD_REQUEST),
@@ -61,6 +64,7 @@ public enum ErrorCode {
     TICKET_SEGMENT_NOT_EXISTED(1300, "Ticket segment does not exist", HttpStatus.BAD_REQUEST),
 
     ROUTE_NOT_EXISTED(1400, "Route does not exist", HttpStatus.BAD_REQUEST),
+    CANT_EDIT_ROUTE(1401, "Cant edit route", HttpStatus.BAD_REQUEST),
 
     CANT_CHANGE_TICKET(1500, "Can not change ticket!", HttpStatus.BAD_REQUEST),
 
