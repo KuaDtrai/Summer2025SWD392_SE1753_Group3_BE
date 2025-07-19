@@ -1,7 +1,7 @@
 package com.project.ibtss.model;
 
-import com.project.ibtss.enums.PaymentMethod;
-import com.project.ibtss.enums.PaymentStatus;
+import com.project.ibtss.utilities.enums.PaymentMethod;
+import com.project.ibtss.utilities.enums.PaymentStatus;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;

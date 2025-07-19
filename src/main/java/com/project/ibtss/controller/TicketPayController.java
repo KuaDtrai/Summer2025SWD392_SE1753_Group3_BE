@@ -2,14 +2,11 @@ package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.TicketPayRequest;
 import com.project.ibtss.dto.response.*;
-import com.project.ibtss.enums.PaymentMethod;
-import com.project.ibtss.enums.Position;
-import com.project.ibtss.enums.Role;
+import com.project.ibtss.utilities.enums.PaymentMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

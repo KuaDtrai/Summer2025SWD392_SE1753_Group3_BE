@@ -1,6 +1,6 @@
 package com.project.ibtss.dto.request;
 
-import com.project.ibtss.enums.TripsStatus;
+import com.project.ibtss.utilities.enums.TripsStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

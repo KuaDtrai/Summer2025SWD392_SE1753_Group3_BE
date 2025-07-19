@@ -4,7 +4,7 @@ import com.project.ibtss.dto.request.AccountRequest;
 import com.project.ibtss.dto.request.UpdateAccountInfoRequest;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
 import com.project.ibtss.dto.response.*;
-import com.project.ibtss.enums.Role;
+import com.project.ibtss.utilities.enums.Role;
 import com.project.ibtss.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

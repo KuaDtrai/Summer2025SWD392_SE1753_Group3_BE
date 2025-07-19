@@ -1,10 +1,8 @@
 package com.project.ibtss.controller;
 
-import com.project.ibtss.dto.request.PaymentSeatRequest;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.PaymentResponse;
-import com.project.ibtss.enums.PaymentMethod;
-import com.project.ibtss.service.PaymentService;
+import com.project.ibtss.utilities.enums.PaymentMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

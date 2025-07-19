@@ -1,6 +1,6 @@
 package com.project.ibtss.repository;
 
-import com.project.ibtss.enums.BusStatus;
+import com.project.ibtss.utilities.enums.BusStatus;
 import com.project.ibtss.model.Buses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

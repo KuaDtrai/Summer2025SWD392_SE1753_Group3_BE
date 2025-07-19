@@ -1,7 +1,6 @@
 package com.project.ibtss.dto.request;
 
-import com.project.ibtss.dto.response.AccountResponse;
-import com.project.ibtss.enums.Position;
+import com.project.ibtss.utilities.enums.Position;
 import lombok.Getter;
 
 import java.time.LocalDate;

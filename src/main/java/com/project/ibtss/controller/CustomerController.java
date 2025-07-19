@@ -4,7 +4,7 @@ import com.project.ibtss.dto.request.CustomerRequest;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.CustomerResponse;
-import com.project.ibtss.enums.Role;
+import com.project.ibtss.utilities.enums.Role;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

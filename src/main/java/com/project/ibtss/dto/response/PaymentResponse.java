@@ -1,9 +1,8 @@
 package com.project.ibtss.dto.response;
 
-import com.project.ibtss.enums.PaymentMethod;
+import com.project.ibtss.utilities.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 

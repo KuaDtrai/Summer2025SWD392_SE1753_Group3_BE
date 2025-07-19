@@ -1,11 +1,7 @@
 package com.project.ibtss.configuration;
 
-import com.project.ibtss.enums.ErrorCode;
-import com.project.ibtss.enums.TokenStatus;
-import com.project.ibtss.exception.AppException;
 import com.project.ibtss.model.Account;
 import com.project.ibtss.repository.AccountRepository;
-import com.project.ibtss.repository.TokenRepository;
 import com.project.ibtss.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
