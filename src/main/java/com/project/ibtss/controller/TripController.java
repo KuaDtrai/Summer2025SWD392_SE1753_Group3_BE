@@ -40,6 +40,7 @@ public class TripController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('staff:create')")
     public ApiResponse<TripResponse> createTrip(@Valid @RequestBody TripCreateRequest request) {
         return ApiResponse.<TripResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -49,6 +50,7 @@ public class TripController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('staff:update')")
     public ApiResponse<TripResponse> updateTrip(@PathVariable Integer id, @RequestBody TripCreateRequest request) {
         return ApiResponse.<TripResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -58,6 +60,7 @@ public class TripController {
     }
 
     @PutMapping("/{id}/status")
+    @PreAuthorize("hasAuthority('staff:update')")
     public ApiResponse<TripResponse> updateTripStatus(@PathVariable Integer id, @RequestBody TripUpdateStatusRequest request) {
         return ApiResponse.<TripResponse>builder()
                 .code(HttpStatus.OK.value())

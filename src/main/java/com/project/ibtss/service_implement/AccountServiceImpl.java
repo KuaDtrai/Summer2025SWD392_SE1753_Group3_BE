@@ -1,6 +1,6 @@
 package com.project.ibtss.service_implement;
 
-import com.project.ibtss.controller.DriverResponse;
+import com.project.ibtss.dto.response.DriverResponse;
 import com.project.ibtss.dto.request.*;
 import com.project.ibtss.dto.response.AccountDetailResponse;
 import com.project.ibtss.dto.response.AccountManageResponse;

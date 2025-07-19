@@ -1,14 +1,10 @@
-package com.project.ibtss.controller;
+package com.project.ibtss.dto.response;
 
-import com.project.ibtss.enums.Position;
-import com.project.ibtss.enums.Role;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Builder
 @Data

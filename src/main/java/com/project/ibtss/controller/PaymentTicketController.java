@@ -9,6 +9,7 @@ import com.project.ibtss.service.PaymentTicketService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,6 +38,7 @@ public class PaymentTicketController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('customer:update')")
     ApiResponse<PaymentProcessResponse> changeTicket(@RequestBody ChangeTicketRequest request) throws Exception {
         return ApiResponse.<PaymentProcessResponse>builder()
                 .code(HttpStatus.OK.value())

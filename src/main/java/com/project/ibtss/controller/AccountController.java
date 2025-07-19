@@ -3,16 +3,9 @@ package com.project.ibtss.controller;
 import com.project.ibtss.dto.request.AccountRequest;
 import com.project.ibtss.dto.request.UpdateAccountInfoRequest;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
-import com.project.ibtss.dto.response.AccountDetailResponse;
-import com.project.ibtss.dto.response.AccountManageResponse;
-import com.project.ibtss.dto.response.AccountResponse;
-import com.project.ibtss.dto.response.ApiResponse;
-import com.project.ibtss.enums.Permission;
+import com.project.ibtss.dto.response.*;
 import com.project.ibtss.enums.Role;
-import com.project.ibtss.model.Account;
-import com.project.ibtss.repository.AccountRepository;
 import com.project.ibtss.service.AccountService;
-import com.project.ibtss.service_implement.AccountServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -88,10 +81,10 @@ public class AccountController {
     }
 
     @GetMapping("/drivers")
-    public ApiResponse<Page<DriverResponse>> getAvailableDrivers(  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime,
-                                                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrivalTime,
-                                                                   @RequestParam(defaultValue = "1") int page,
-                                                                   @RequestParam(defaultValue = "") String search){
+    public ApiResponse<Page<DriverResponse>> getAvailableDrivers(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime,
+                                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrivalTime,
+                                                                 @RequestParam(defaultValue = "1") int page,
+                                                                 @RequestParam(defaultValue = "") String search){
         final int DEFAULT_PAGE_SIZE = 10;
         Pageable pageable = PageRequest.of(page, DEFAULT_PAGE_SIZE);
         return ApiResponse.<Page<DriverResponse>>builder()

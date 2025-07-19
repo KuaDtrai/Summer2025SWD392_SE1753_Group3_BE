@@ -35,6 +35,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('staff:read')")
     public ApiResponse<FeedbackResponse> getFeedback(@Valid @PathVariable Integer id) {
         return ApiResponse.<FeedbackResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -53,6 +54,7 @@ public class FeedbackController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('staff:update')")
     public ApiResponse<String> repFeedback(@RequestBody ReplyFeedbackRequest request) throws MessagingException {
 
         feedbackService.replyFeedback(request);

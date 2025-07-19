@@ -1,6 +1,6 @@
 package com.project.ibtss.mapper;
 
-import com.project.ibtss.controller.DriverResponse;
+import com.project.ibtss.dto.response.DriverResponse;
 import com.project.ibtss.dto.response.AccountManageResponse;
 import com.project.ibtss.dto.response.AccountResponse;
 import com.project.ibtss.model.Account;
