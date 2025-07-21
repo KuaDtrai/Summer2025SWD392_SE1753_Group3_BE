@@ -1,6 +1,5 @@
 package com.project.ibtss.dto.response;
 
-import com.project.ibtss.enums.StationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

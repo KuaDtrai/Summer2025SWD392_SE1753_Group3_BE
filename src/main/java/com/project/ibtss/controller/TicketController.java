@@ -1,20 +1,11 @@
 package com.project.ibtss.controller;
 
-import com.project.ibtss.dto.request.ChangeTicketRequest;
-import com.project.ibtss.dto.request.TicketRequest;
 import com.project.ibtss.dto.response.*;
-import com.project.ibtss.enums.Position;
-import com.project.ibtss.enums.Role;
 import com.project.ibtss.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

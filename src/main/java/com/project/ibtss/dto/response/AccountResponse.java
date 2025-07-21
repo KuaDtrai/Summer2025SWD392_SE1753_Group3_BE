@@ -1,6 +1,6 @@
 package com.project.ibtss.dto.response;
 
-import com.project.ibtss.enums.Role;
+import com.project.ibtss.utilities.enums.Role;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,11 +1,8 @@
 package com.project.ibtss.model;
 
-import com.project.ibtss.enums.BusStatus;
-import com.project.ibtss.enums.BusType;
+import com.project.ibtss.utilities.enums.BusStatus;
+import com.project.ibtss.utilities.enums.BusType;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;

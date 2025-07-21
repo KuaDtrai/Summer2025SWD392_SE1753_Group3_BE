@@ -1,6 +1,6 @@
 package com.project.ibtss.dto.response;
 
-import com.project.ibtss.enums.SeatStatus;
+import com.project.ibtss.utilities.enums.SeatStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -5,7 +5,7 @@ import com.project.ibtss.dto.request.*;
 import com.project.ibtss.dto.response.AccountDetailResponse;
 import com.project.ibtss.dto.response.AccountManageResponse;
 import com.project.ibtss.dto.response.AccountResponse;
-import com.project.ibtss.enums.Role;
+import com.project.ibtss.utilities.enums.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

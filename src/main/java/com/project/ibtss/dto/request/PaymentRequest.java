@@ -1,6 +1,6 @@
 package com.project.ibtss.dto.request;
 
-import com.project.ibtss.enums.PaymentMethod;
+import com.project.ibtss.utilities.enums.PaymentMethod;
 import lombok.Getter;
 
 @Getter

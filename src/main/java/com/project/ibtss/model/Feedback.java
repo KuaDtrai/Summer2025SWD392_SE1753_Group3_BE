@@ -1,16 +1,14 @@
 package com.project.ibtss.model;
 
-import com.project.ibtss.enums.FeedbackStatus;
+import com.project.ibtss.utilities.enums.FeedbackStatus;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Entity
 @Data

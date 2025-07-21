@@ -10,10 +10,8 @@ import com.project.ibtss.repository.AccountRepository;
 import com.project.ibtss.repository.TokenRepository;
 import com.project.ibtss.service.AccountService;
 import com.project.ibtss.service.JWTService;
-import com.project.ibtss.service_implement.AccountServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

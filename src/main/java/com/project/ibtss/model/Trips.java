@@ -1,6 +1,6 @@
 package com.project.ibtss.model;
 
-import com.project.ibtss.enums.TripsStatus;
+import com.project.ibtss.utilities.enums.TripsStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

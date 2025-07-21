@@ -1,11 +1,8 @@
 package com.project.ibtss.configuration;
 
-import com.project.ibtss.enums.ErrorCode;
-import com.project.ibtss.enums.Role;
-import com.project.ibtss.exception.AppException;
+import com.project.ibtss.utilities.enums.Role;
 import com.project.ibtss.model.Account;
 import com.project.ibtss.repository.AccountRepository;
-import com.project.ibtss.service.AccountService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

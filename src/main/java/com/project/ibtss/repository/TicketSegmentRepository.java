@@ -1,6 +1,6 @@
 package com.project.ibtss.repository;
 
-import com.project.ibtss.enums.TicketStatus;
+import com.project.ibtss.utilities.enums.TicketStatus;
 import com.project.ibtss.model.TicketSegment;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,9 +1,7 @@
 package com.project.ibtss.model;
 
-import com.project.ibtss.enums.PaymentType;
+import com.project.ibtss.utilities.enums.PaymentType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

@@ -1,9 +1,8 @@
 package com.project.ibtss.dto.response;
 
-import com.project.ibtss.enums.Position;
+import com.project.ibtss.utilities.enums.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
