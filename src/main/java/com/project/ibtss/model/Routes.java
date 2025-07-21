@@ -22,11 +22,11 @@ public class Routes {
     @Column(length = 50)
     String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "departure_station_id")
     Stations departureStation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "destination_station_id")
     Stations destinationStation;
 

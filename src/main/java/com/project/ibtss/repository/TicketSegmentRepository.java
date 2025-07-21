@@ -1,5 +1,6 @@
 package com.project.ibtss.repository;
 
+import com.project.ibtss.enums.TicketStatus;
 import com.project.ibtss.model.TicketSegment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,8 +12,8 @@ public interface TicketSegmentRepository extends JpaRepository<TicketSegment, In
     Optional<TicketSegment> findBySeatId(Integer seatId);
     List<TicketSegment> findAllByTicketId(Integer ticketId);
     int countBySeat_Bus_IdAndTicket_StatusIn(Integer busId, List<String> statuses);
-    boolean existsByTrip_Route_IdAndTicket_StatusIn(Integer routeId, List<String> statuses);
-    boolean existsByTripIdAndTicket_Status(Integer tripId, String status);
-    List<TicketSegment> findAllByTripIdAndTicket_Status(Integer tripId, String status);
+    boolean existsByTrip_Route_IdAndTicket_StatusIn(Integer routeId, List<TicketStatus> statuses);
+    boolean existsByTripIdAndTicket_Status(Integer tripId, TicketStatus status);
+    List<TicketSegment> findAllByTripIdAndTicket_Status(Integer tripId, TicketStatus status);
 
 }

@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 public enum TripsStatus {
     IN_PROGRESS("IN_PROGRESS"),
     COMPLETED("COMPLETED"),
-    CANCELED("CANCELED"),
+    CANCELLED("CANCELLED"),
     DELAYED("DELAYED"),
     SCHEDULED("SCHEDULED")
     ;

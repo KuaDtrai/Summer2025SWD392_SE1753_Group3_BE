@@ -123,7 +123,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     private boolean hasTicketsOnRoute(Integer routeId) {
-        List<String> statuses = List.of(TicketStatus.USED.getName(), TicketStatus.PAID.getName(), TicketStatus.PENDING.getName(), TicketStatus.CANCELLED.getName());
+        List<TicketStatus> statuses = List.of(TicketStatus.USED, TicketStatus.PAID, TicketStatus.PENDING, TicketStatus.CANCELLED);
         return ticketSegmentRepository.existsByTrip_Route_IdAndTicket_StatusIn(routeId, statuses);
     }
 

@@ -280,15 +280,15 @@ public class TripServiceImpl implements TripService {
                 .orElseThrow(() -> new AppException(ErrorCode.TRIP_NOT_EXISTED));
 
         switch (request.getStatus()) {
-            case SCHEDULED, COMPLETED, DELAYED, IN_PROGRESS, CANCELED -> {
-                if (ticketSegmentRepository.existsByTripIdAndTicket_Status(trip.getId(), TicketStatus.USED.getName())) {
+            case SCHEDULED, COMPLETED, DELAYED, IN_PROGRESS, CANCELLED -> {
+                if (ticketSegmentRepository.existsByTripIdAndTicket_Status(trip.getId(), TicketStatus.USED)) {
                     throw new AppException(ErrorCode.HAVE_USED_TICKET);
                 }
             }
         }
 
         if(request.getStatus() == TripsStatus.COMPLETED){
-            List<TicketSegment> paidTickets = ticketSegmentRepository.findAllByTripIdAndTicket_Status(trip.getId(), TicketStatus.PAID.getName());
+            List<TicketSegment> paidTickets = ticketSegmentRepository.findAllByTripIdAndTicket_Status(trip.getId(), TicketStatus.PAID);
 
             for (TicketSegment ts : paidTickets) {
                 Tickets ticket = ts.getTicket();
@@ -296,6 +296,8 @@ public class TripServiceImpl implements TripService {
                 ticketsRepository.save(ticket);
             }
         }
+
+        trip.setStatus(request.getStatus());
 
         tripRepository.save(trip);
 

@@ -35,7 +35,6 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasAuthority('customer:update')")
     public ApiResponse<String> register(@RequestBody RegisterRequest registerRequest) {
         return ApiResponse.<String>builder()
                 .code(HttpStatus.OK.value())
