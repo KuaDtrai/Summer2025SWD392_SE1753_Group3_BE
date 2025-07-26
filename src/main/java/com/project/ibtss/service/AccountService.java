@@ -16,7 +16,7 @@ import java.util.List;
 public interface AccountService {
     AccountResponse getAccount(Integer id);
 
-    List<AccountManageResponse> getAllAccounts();
+    Page<AccountManageResponse> getAllAccounts(Pageable pageable);
 
     AccountManageResponse addAccount(AccountRequest accountRequest);
 
@@ -35,7 +35,7 @@ public interface AccountService {
 
     AccountDetailResponse accountDetail();
 
-    AccountResponse setAccountActive(Integer id);
+    AccountResponse setAccountStatus(Integer id, UpdateAccountStatus updateAccountStatus);
 
     Boolean isCorrectPassword(String password);
 

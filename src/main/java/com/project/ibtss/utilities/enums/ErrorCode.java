@@ -40,6 +40,7 @@ public enum ErrorCode {
     BUS_NOT_ACTIVE(402, "Xe buýt chưa được kích hoạt!", HttpStatus.BAD_REQUEST),
     BUS_ALREADY_ASSIGNED_TO_TRIP(403, "Xe buýt đã được phân công cho chuyến khác!", HttpStatus.BAD_REQUEST),
     CANT_EDIT_BUS(404, "Không thể chỉnh sửa xe buýt lúc này!", HttpStatus.BAD_REQUEST),
+    BUS_STILL_ASSIGNED_TO_ACTIVE_TRIP(405, "Xe đang được dùng!", HttpStatus.BAD_REQUEST),
 
     TRIP_NOT_EXISTED(500, "Chuyến xe không tồn tại!", HttpStatus.BAD_REQUEST),
     CANNOT_EDIT_TRIP(501, "Không thể chỉnh sửa chuyến xe này!", HttpStatus.BAD_REQUEST),
@@ -51,6 +52,7 @@ public enum ErrorCode {
     CUSTOMER_NOT_EXISTED(700, "Khách hàng không tồn tại!", HttpStatus.BAD_REQUEST),
 
     ROUTE_STATION_NOT_EXISTED(800, "Trạm trên tuyến không tồn tại!", HttpStatus.BAD_REQUEST),
+    ROUTE_USED_IN_ACTIVE_TRIP(801, "Có một/nhiều chuyến xe đang chạy sẽ chạy trên tuyến!", HttpStatus.BAD_REQUEST),
 
     PAYMENT_NOT_EXISTED(900, "Thanh toán không tồn tại!", HttpStatus.BAD_REQUEST),
 
@@ -61,6 +63,7 @@ public enum ErrorCode {
     TICKET_IS_USED_OR_CANCELLED(1012, "Vé đã được sử dụng hoặc đã bị hủy!", HttpStatus.BAD_REQUEST ),
 
     STATION_NOT_EXISTED(1200, "Trạm không tồn tại!", HttpStatus.BAD_REQUEST),
+    STATION_USED_IN_ACTIVE_TRIP(1201,"Có một/nhiều chuyến xe đang chạy sẽ qua trạm!", HttpStatus.BAD_REQUEST),
 
     TICKET_SEGMENT_NOT_EXISTED(1300, "Chặng vé không tồn tại!", HttpStatus.BAD_REQUEST),
 
@@ -72,7 +75,7 @@ public enum ErrorCode {
     NOT_STAFF_ROLE(1600, "Bạn phải chọn nhân viên tài xế!", HttpStatus.BAD_REQUEST),
     NOT_DRIVER_POSITON(1601, "Nhân viên này không phải tài xế!", HttpStatus.BAD_REQUEST),
     DRIVER_ALREADY_ASSIGNED_TO_TRIP(1602, "Tài xế đã được phân công cho chuyến khác", HttpStatus.BAD_REQUEST),
-
+    CANT_EDIT_DRIVER(1603, "Không thể cập nhật tài xế", HttpStatus.BAD_REQUEST),
     ;
     int code;
     String message;

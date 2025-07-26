@@ -76,9 +76,7 @@ public class TripServiceImpl implements TripService {
             throw new AppException(ErrorCode.BUS_ALREADY_ASSIGNED_TO_TRIP);
         }
 
-        boolean driverConflict = tripRepository.existsByDriver_IdAndDepartureTimeLessThanAndArrivalTimeGreaterThan(
-                driver.getId(), arrivalTime, departureTime);
-        if (driverConflict) {
+        if (!isDriverAvailableForTrip(driver.getId(), departureTime, arrivalTime, null)) {
             throw new AppException(ErrorCode.DRIVER_ALREADY_ASSIGNED_TO_TRIP);
         }
 
@@ -100,7 +98,7 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public Page<TripResponse> getAllTrips(int page) {
-        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         return tripRepository.findAll(pageable).map(tripMapper::toResponse);
     }
 
@@ -109,11 +107,13 @@ public class TripServiceImpl implements TripService {
         List<Trips> trips = tripRepository
                 .findByRoute_DepartureStation_NameAndRoute_DestinationStation_Name(request.getFrom(), request.getTo());
 
-        return trips.stream()
+        List<TripResponse> result = trips.stream()
                 .filter(trip -> trip.getDepartureTime().toLocalDate().equals(request.getDepartureTime()))
                 .filter(trip -> trip.getStatus() == TripsStatus.SCHEDULED)
                 .map(tripMapper::toResponse)
                 .collect(Collectors.toList());
+
+        return result;
     }
 
     @Override
@@ -261,7 +261,9 @@ public class TripServiceImpl implements TripService {
         if (!conflictingTrips.isEmpty()) {
             throw new AppException(ErrorCode.BUS_ALREADY_ASSIGNED_TO_TRIP);
         }
-
+        if (!isDriverAvailableForTrip(driver.getId(), departureTime, arrivalTime, trip.getId())) {
+            throw new AppException(ErrorCode.DRIVER_ALREADY_ASSIGNED_TO_TRIP);
+        }
         trip.setRoute(route);
         trip.setDepartureTime(departureTime);
         trip.setArrivalTime(arrivalTime);
@@ -302,6 +304,48 @@ public class TripServiceImpl implements TripService {
         tripRepository.save(trip);
 
         return tripMapper.toResponse(trip);
+    }
+
+    public boolean isDriverAvailableForTrip(
+            Integer driverId,
+            LocalDateTime newDepartureTime,
+            LocalDateTime newArrivalTime,
+            Integer excludeTripId // nếu là create → truyền null; nếu update → truyền id cũ
+    ) {
+        List<TripsStatus> validStatuses = List.of(
+                TripsStatus.SCHEDULED,
+                TripsStatus.IN_PROGRESS,
+                TripsStatus.DELAYED
+        );
+
+        List<Trips> existingTrips = tripRepository
+                .findByDriver_IdAndStatusIn(driverId, validStatuses);
+
+        for (Trips trip : existingTrips) {
+            // Nếu là update, bỏ qua chính bản thân chuyến đó
+            if (excludeTripId != null && trip.getId().equals(excludeTripId)) {
+                continue;
+            }
+
+            LocalDateTime existingDeparture = trip.getDepartureTime();
+            LocalDateTime existingArrival = trip.getArrivalTime();
+
+            // Tài xế cần về điểm ban đầu → thêm thời gian quay đầu = thời lượng trip đó
+            long estimatedHours = Duration.between(existingDeparture, existingArrival).toHours();
+            LocalDateTime availableAfter = existingArrival.plusHours(estimatedHours);
+
+            // Nếu chuyến mới bắt đầu trước khi tài xế về lại điểm đầu → conflict
+            if (!newDepartureTime.isAfter(availableAfter)) {
+                return false;
+            }
+
+            // Ngược lại: nếu chuyến mới kết thúc mà lại lấn vào chuyến cũ chưa bắt đầu
+            if (!existingDeparture.isAfter(newArrivalTime)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 //    @Override

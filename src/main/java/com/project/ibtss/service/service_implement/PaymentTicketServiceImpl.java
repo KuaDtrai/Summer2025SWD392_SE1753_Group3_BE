@@ -54,7 +54,8 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
             TicketPay ticketPay = ticketPayService.createTicketPay(payment, tickets);
         }
 
-        long orderCode = System.currentTimeMillis();
+        long orderCode = Long.parseLong(request.getTripId() + "" + System.currentTimeMillis());
+        System.out.println(orderCode);
 
         // gen payos link
         CheckoutResponseData payosResponse = payOSService.createPaymentLink(request, orderCode, payment.getId(), PaymentType.PAY_TICKET.getDescription());
@@ -63,8 +64,8 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
                 .paymentId(payment.getId())
                 .price(request.getTotalPrice())
                 .checkOutUrl(payosResponse.getCheckoutUrl())
-                .returnUrl("http://localhost:5173/payment-callback")
-                .cancelUrl("http://localhost:5173/payment-callback")
+                .returnUrl("http://127.0.0.1:3000/payment-callback")
+                .cancelUrl("http://127.0.0.1:3000/payment-callback")
                 .build();
     }
 
@@ -81,8 +82,8 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
                 .paymentId(payment.getId())
                 .price(request.getTotalPrice())
                 .checkOutUrl(payosResponse.getCheckoutUrl())
-                .returnUrl("http://localhost:5173/payment-callback")
-                .cancelUrl("http://localhost:5173/payment-callback")
+                .returnUrl("http://127.0.0.1:3000/payment-callback")
+                .cancelUrl("http://127.0.0.1:3000/payment-callback")
                 .build();
     }
 
@@ -254,8 +255,8 @@ public class PaymentTicketServiceImpl implements PaymentTicketService {
                     .paymentId(payment.getId())
                     .price(request.getTotalPrice())
                     .checkOutUrl(payosResponse.getCheckoutUrl())
-                    .returnUrl("http://localhost:5173/payment-callback")
-                    .cancelUrl("http://localhost:5173/payment-callback")
+                    .returnUrl("http://127.0.0.1:3000/payment-callback")
+                    .cancelUrl("http://127.0.0.1:3000/payment-callback")
                     .build();
         }
     }

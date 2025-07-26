@@ -27,8 +27,8 @@ public class PayOSServiceImpl implements PayOSService {
                 .orderCode(paymentId.longValue())
                 .amount(request.getTotalPrice().intValue())
                 .description(description)
-                .returnUrl("http://localhost:5173/payment-callback")
-                .cancelUrl("http://localhost:5173/payment-callback")
+                .returnUrl("http://127.0.0.1:3000/payment-callback")
+                .cancelUrl("http://127.0.0.1:3000/payment-callback")
                 .item(item)
                 .build();
             return payOS.createPaymentLink(paymentData);
@@ -46,8 +46,8 @@ public class PayOSServiceImpl implements PayOSService {
                 .orderCode(paymentId.longValue())
                 .amount(request.getTotalPrice().intValue())
                 .description(description)
-                .returnUrl("http://localhost:5173/payment-callback")
-                .cancelUrl("http://localhost:5173/payment-callback")
+                .returnUrl("http://127.0.0.1:3000/payment-callback")
+                .cancelUrl("http://127.0.0.1:3000/payment-callback")
                 .item(item)
                 .build();
         return payOS.createPaymentLink(paymentData);

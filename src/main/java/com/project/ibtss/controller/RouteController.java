@@ -2,6 +2,7 @@ package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.CreateRouteRequest;
 import com.project.ibtss.dto.request.RouteUpdateRequest;
+import com.project.ibtss.dto.request.UpdateRouteStatus;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.RouteResponse;
 import com.project.ibtss.service.RouteService;
@@ -62,6 +63,15 @@ public class RouteController {
                 .code(HttpStatus.OK.value())
                 .message("")
                 .data(routeService.updateRoute(id, routeRequest)).build();
+    }
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasAuthority('staff:update')")
+    public ApiResponse<RouteResponse> updateRouteStatus(@PathVariable Integer id, @RequestBody UpdateRouteStatus routeRequest) {
+        return ApiResponse.<RouteResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(routeService.updateRouteStatus(id, routeRequest)).build();
     }
 
     @PutMapping("/delete/{id}")

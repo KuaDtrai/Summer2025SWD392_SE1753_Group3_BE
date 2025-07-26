@@ -5,6 +5,7 @@ import com.project.ibtss.dto.response.BusResponse;
 import com.project.ibtss.utilities.enums.BusStatus;
 import com.project.ibtss.utilities.enums.ErrorCode;
 import com.project.ibtss.utilities.enums.TicketStatus;
+import com.project.ibtss.utilities.enums.TripsStatus;
 import com.project.ibtss.utilities.exception.AppException;
 import com.project.ibtss.utilities.mapper.BusMapper;
 import com.project.ibtss.model.Buses;
@@ -109,7 +110,25 @@ public class BusServiceImpl implements BusService {
         if(checkTickets(id)){
             throw new AppException(ErrorCode.CANT_EDIT_BUS);
         }
-        bus.setStatus(BusStatus.valueOf(status.toUpperCase()));
+        BusStatus newStatus = BusStatus.ACTIVE; //default value to avoid null
+        if(status != null){
+            newStatus = BusStatus.valueOf(status);
+        }
+
+        if(newStatus.equals(BusStatus.INACTIVE) || newStatus == BusStatus.MAINTENANCE){
+            List<TripsStatus> activeTripStatuses = List.of(
+                    TripsStatus.SCHEDULED,
+                    TripsStatus.IN_PROGRESS,
+                    TripsStatus.DELAYED
+            );
+
+            boolean isAssigned = tripRepository.existsByBus_IdAndStatusIn(bus.getId(), activeTripStatuses);
+
+            if (isAssigned) {
+                throw new AppException(ErrorCode.BUS_STILL_ASSIGNED_TO_ACTIVE_TRIP);
+            }
+        }
+        bus.setStatus(newStatus);
         bus = busRepository.save(bus);
         return  busMapper.toResponse(bus);
     }

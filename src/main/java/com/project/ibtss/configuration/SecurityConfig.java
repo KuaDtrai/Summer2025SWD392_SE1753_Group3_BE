@@ -45,7 +45,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Value("${jwt.signerKey}")
     private String SECRET_KEY;
 
-    private final String[] PUBLIC_ENDPOINTS = {"/register", "/aia/v2/api-docs", "/aia/v3/api-docs", "/aia/v3/api-docs/**",
+    private final String[] PUBLIC_ENDPOINTS = {"/trips/search", "/register", "/aia/v2/api-docs", "/aia/v3/api-docs", "/aia/v3/api-docs/**",
             "/aia/swagger-resources", "/aia/swagger-resources/**", "/configuration/ui", "/configuration/security",
             "/aia/swagger-ui/**", "/webjars/**", "/aia/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/login"
     };
@@ -68,6 +68,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
                 .authorizeHttpRequests(requests ->
                         requests.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers("/trips/search").permitAll()
                                 .anyRequest().authenticated())
 
                 //protect endpoint in case getting attack cross-site
@@ -91,7 +92,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+        corsConfiguration.setAllowedOrigins(List.of("http://127.0.0.1:3000/"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.addAllowedMethod("*");

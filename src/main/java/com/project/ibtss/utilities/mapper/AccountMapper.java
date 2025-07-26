@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
+    @Mapping(target = "position", ignore = true)
     AccountResponse toAccountResponse(Account account);
     DriverResponse toDriverResponse(Account account);
     @Mapping(target = "position", ignore = true)

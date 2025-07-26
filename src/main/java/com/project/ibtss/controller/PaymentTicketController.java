@@ -38,7 +38,7 @@ public class PaymentTicketController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('customer:update')")
+//    @PreAuthorize("hasAuthority('customer:update')")
     ApiResponse<PaymentProcessResponse> changeTicket(@RequestBody ChangeTicketRequest request) throws Exception {
         return ApiResponse.<PaymentProcessResponse>builder()
                 .code(HttpStatus.OK.value())

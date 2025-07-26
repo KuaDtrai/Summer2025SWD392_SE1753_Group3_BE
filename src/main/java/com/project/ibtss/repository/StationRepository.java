@@ -1,6 +1,7 @@
 package com.project.ibtss.repository;
 
 import com.project.ibtss.model.Stations;
+import com.project.ibtss.utilities.enums.StationStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,6 @@ public interface StationRepository extends JpaRepository<Stations,Integer> {
 
     @Query("SELECT s FROM Stations s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :search, '%'))")
     Page<Stations> searchByName(@Param("search") String search, Pageable pageable);
+
+    Page<Stations> findAllByStatus(StationStatus status, Pageable pageable);
 }

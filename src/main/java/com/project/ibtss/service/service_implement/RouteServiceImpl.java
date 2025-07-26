@@ -2,10 +2,12 @@ package com.project.ibtss.service.service_implement;
 
 import com.project.ibtss.dto.request.CreateRouteRequest;
 import com.project.ibtss.dto.request.RouteUpdateRequest;
+import com.project.ibtss.dto.request.UpdateRouteStatus;
 import com.project.ibtss.dto.response.RouteResponse;
 import com.project.ibtss.utilities.enums.ErrorCode;
 import com.project.ibtss.utilities.enums.RouteStatus;
 import com.project.ibtss.utilities.enums.TicketStatus;
+import com.project.ibtss.utilities.enums.TripsStatus;
 import com.project.ibtss.utilities.exception.AppException;
 import com.project.ibtss.utilities.mapper.RouteMapper;
 import com.project.ibtss.model.RouteStations;
@@ -106,8 +108,33 @@ public class RouteServiceImpl implements RouteService {
         route.setDistanceKm(routeRequest.getDistanceKm());
         route.setDepartureStation(departureStation);
         route.setDestinationStation(destinationStation);
-        route.setStatus(RouteStatus.valueOf(routeRequest.getStatus().toUpperCase()));
         return routeMapper.toRouteResponse(routeRepository.save(route));
+    }
+
+    @Override
+    public RouteResponse updateRouteStatus(Integer id, UpdateRouteStatus routeRequest) {
+        Routes route = routeRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_EXISTED));
+        if (routeRequest.getStatus().equals(RouteStatus.INACTIVE)) {
+            List<TripsStatus> blockedStatuses = List.of(
+                    TripsStatus.SCHEDULED,
+                    TripsStatus.IN_PROGRESS,
+                    TripsStatus.DELAYED
+            );
+
+            boolean hasActiveTrips = tripRepository.existsByRoute_IdAndStatusIn(route.getId(), blockedStatuses);
+
+            if (hasActiveTrips) {
+                throw new AppException(ErrorCode.ROUTE_USED_IN_ACTIVE_TRIP);
+            }
+        }
+        route.setStatus(routeRequest.getStatus());
+        try {
+            route = routeRepository.save(route);
+            return routeMapper.toRouteResponse(route);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.RUNTIME_EXCEPTION);
+        }
     }
 
     @Override

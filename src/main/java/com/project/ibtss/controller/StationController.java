@@ -2,12 +2,14 @@ package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.StationRequest;
 import com.project.ibtss.dto.request.UpdateStationRequest;
+import com.project.ibtss.dto.request.UpdateStatusStation;
 import com.project.ibtss.dto.response.ApiResponse;
 import com.project.ibtss.dto.response.StationResponse;
 import com.project.ibtss.model.Stations;
 import com.project.ibtss.service.StationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -27,7 +29,20 @@ public class StationController {
         return ApiResponse.<List<StationResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("")
-                .data(stationService.getActiveStation()).build();
+                .data(stationService.getActiveStation())
+                .build();
+    }
+
+    @GetMapping("/active-paginated")
+    public ApiResponse<Page<StationResponse>> getActiveStationsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ApiResponse.<Page<StationResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Fetched successfully")
+                .data(stationService.getStationsByStatus(PageRequest.of(page, size)))
+                .build();
     }
 
     @GetMapping("")
@@ -57,10 +72,14 @@ public class StationController {
         return ApiResponse.<StationResponse>builder().code(HttpStatus.OK.value()).message("").data(stationService.updateStation(id, stationRequest)).build();
     }
 
-    @PutMapping("/delete/{id}")
+    @PutMapping("/{id}/status")
     @PreAuthorize("hasAuthority('staff:delete')")
-    public ApiResponse<StationResponse> deleteStation(@PathVariable Integer id) {
-        return ApiResponse.<StationResponse>builder().code(HttpStatus.OK.value()).message("").data(stationService.deleteStationById(id)).build();
+    public ApiResponse<StationResponse> updateStatusStation(@PathVariable Integer id, @RequestBody UpdateStatusStation statusStation) {
+        return ApiResponse.<StationResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(stationService.updateStatusStation(id, statusStation))
+                .build();
     }
 
     @GetMapping("/search")

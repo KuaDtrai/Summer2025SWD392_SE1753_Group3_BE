@@ -1,5 +1,6 @@
 package com.project.ibtss.dto.response;
 
+import com.project.ibtss.utilities.enums.Position;
 import com.project.ibtss.utilities.enums.Role;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,5 +16,6 @@ public class AccountResponse {
     String fullName;
     String phone;
     Role role;
+    Position position;
     String accessToken;
 }

@@ -5,10 +5,7 @@ import com.project.ibtss.dto.request.*;
 import com.project.ibtss.dto.response.AccountDetailResponse;
 import com.project.ibtss.dto.response.AccountManageResponse;
 import com.project.ibtss.dto.response.AccountResponse;
-import com.project.ibtss.utilities.enums.ErrorCode;
-import com.project.ibtss.utilities.enums.Gender;
-import com.project.ibtss.utilities.enums.Position;
-import com.project.ibtss.utilities.enums.Role;
+import com.project.ibtss.utilities.enums.*;
 import com.project.ibtss.utilities.exception.AppException;
 import com.project.ibtss.utilities.mapper.AccountMapper;
 import com.project.ibtss.model.Account;
@@ -107,18 +104,36 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountManageResponse> getAllAccounts() {
-        List<Account> accounts = accountRepository.findAll();
-        List<AccountManageResponse> accountResponses = new ArrayList<>();
-        for (Account account : accounts) {
-            AccountManageResponse accountManageResponse = mapper.toAccountManageResponse(account);
-            if(accountManageResponse.getRole().equals(Role.STAFF)){
-                Staff staff = staffRepository.findByAccountId(accountManageResponse.getId()).orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
-                accountManageResponse.setPosition(staff.getPosition());
+    public Page<AccountManageResponse> getAllAccounts(Pageable pageable) {
+        Page<Account> accounts = accountRepository.findAll(pageable);
+        return accounts.map(account -> {
+            AccountManageResponse dto = mapper.toAccountManageResponse(account);
+
+            if (dto.getRole().equals(Role.STAFF)) {
+                Staff staff = staffRepository.findByAccountId(dto.getId())
+                        .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
+                dto.setPosition(staff.getPosition());
+
+                if (staff.getAccount().getGender() != null) {
+                    dto.setGender(staff.getAccount().getGender());
+                }
+            } else if (dto.getRole().equals(Role.CUSTOMER)) {
+                Customer customer = customerRepository.findByAccount(account);
+                if (customer != null) {
+                    if (account.getGender() != null) {
+                        dto.setGender(account.getGender());
+                    }
+                    if (customer.getDob() != null) {
+                        dto.setDateOfBirth(customer.getDob());
+                    }
+                    if (customer.getAddress() != null) {
+                        dto.setAddress(customer.getAddress());
+                    }
+                }
             }
-            accountResponses.add(accountManageResponse);
-        }
-        return accountResponses;
+
+            return dto;
+        });
     }
 
     @Override
@@ -197,9 +212,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountManageResponse updateAccount(Integer id,AccountRequest accountRequest) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new  AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = accountRepository.findById(id).orElseThrow(() -> new  AppException(ErrorCode.ACCOUNT_NOT_FOUND)); //sẽ update
 
-        Account accountForValid = accountRepository.findByPhone(accountRequest.getPhone());
+        Account accountForValid = accountRepository.findByPhone(accountRequest.getPhone()); //check trùng
 
         if (accountForValid != null && !accountForValid.getPhone().equals(account.getPhone())) {
             throw new AppException(ErrorCode.PHONE_EXISTED);
@@ -207,14 +222,13 @@ public class AccountServiceImpl implements AccountService {
 
         accountForValid = accountRepository.findByEmail(accountRequest.getEmail()).orElse(null);
 
-        if(accountForValid != null && !accountForValid.getPhone().equals(account.getEmail())){
+        if(accountForValid != null && !accountForValid.getEmail().equals(account.getEmail())){
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
 
         account = Account.builder()
                 .phone(accountRequest.getPhone())
                 .fullName(accountRequest.getFullName())
-                .passwordHash(passwordEncoder.encode(accountRequest.getPassword()))
                 .gender(Gender.valueOf(accountRequest.getGender().toUpperCase()))
                 .isActive(true)
                 .createdDate(LocalDateTime.now())
@@ -277,7 +291,13 @@ public class AccountServiceImpl implements AccountService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        LocalDate dob = LocalDate.parse(request.getDob(), formatter);
+        String dobRequest = request.getDob();
+        String dobReturn = null;
+        LocalDate dob = null;
+        if(dobRequest != null){
+            dob = LocalDate.parse(dobRequest, formatter);
+            dobReturn = dob.toString();
+        }
 
         account.setEmail(request.getEmail());
         account.setFullName(request.getFullName());
@@ -297,7 +317,7 @@ public class AccountServiceImpl implements AccountService {
                 .phone(account.getPhone())
                 .address(customer.getAddress())
                 .role(account.getRole().getRoleName())
-                .dob(dob.toString())
+                .dob(dobReturn)
                 .address(customer.getAddress())
                 .createdDate(account.getCreatedDate().toString())
                 .fullName(account.getFullName())
@@ -323,6 +343,11 @@ public class AccountServiceImpl implements AccountService {
         AccountResponse accountResponse = mapper.toAccountResponse(account);
         accountResponse.setAccessToken(jwtService.generateAccessToken(account));
 
+        if(account.getRole().equals(Role.STAFF)){
+            Staff staff = staffRepository.findByAccountId(account.getId()).orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
+            accountResponse.setPosition(staff.getPosition());
+        }
+
         return accountResponse;
     }
 
@@ -337,7 +362,7 @@ public class AccountServiceImpl implements AccountService {
             throw new AppException(ErrorCode.PHONE_EXISTED);
         }
 
-        Account user = Account.builder()
+        Account account = Account.builder()
                 .phone(registerRequest.getPhone())
                 .fullName(registerRequest.getFullName())
                 .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
@@ -347,7 +372,13 @@ public class AccountServiceImpl implements AccountService {
                 .createdDate(LocalDateTime.now())
                 .build();
 
-        accountRepository.save(user);
+        account = accountRepository.save(account);
+
+        Customer customer = Customer.builder()
+                .account(account)
+                .build();
+        customerRepository.save(customer);
+
         return "Success";
     }
 
@@ -367,6 +398,11 @@ public class AccountServiceImpl implements AccountService {
             dob = customer.getDob().toString();
         }
 
+        String gender = null;
+        if (account.getGender() != null) {
+            gender = account.getGender().getName();
+        }
+
         return AccountDetailResponse.builder()
                 .email(account.getEmail())
                 .phone(account.getPhone())
@@ -376,15 +412,33 @@ public class AccountServiceImpl implements AccountService {
                 .address(customer.getAddress())
                 .createdDate(account.getCreatedDate().toString())
                 .fullName(account.getFullName())
-                .gender(account.getGender().getName())
+                .gender(gender)
                 .build();
     }
 
     @Override
-    public AccountResponse setAccountActive(Integer id) {
+    public AccountResponse setAccountStatus(Integer id, UpdateAccountStatus updateAccountStatus) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        account.setIsActive(!account.getIsActive());
-        return mapper.toAccountResponse(accountRepository.save(account));
+        if(updateAccountStatus.getIsActive()){
+            account.setIsActive(true);
+        } else {
+            if(account.getRole() == Role.STAFF){
+                Staff staff = staffRepository.findByAccountId(account.getId()).orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
+                if(staff.getPosition().equals(Position.DRIVER)){
+                    List<TripsStatus> statuses = List.of(
+                            TripsStatus.SCHEDULED,
+                            TripsStatus.DELAYED,
+                            TripsStatus.IN_PROGRESS
+                    );
+                    if(tripRepository.existsByDriverIdAndStatusIn(account.getId(), statuses)){
+                        throw new AppException(ErrorCode.CANT_EDIT_DRIVER);
+                    }
+                }
+            }
+            account.setIsActive(false);
+        }
+        account = accountRepository.save(account);
+        return mapper.toAccountResponse(account);
     }
 
     @Override

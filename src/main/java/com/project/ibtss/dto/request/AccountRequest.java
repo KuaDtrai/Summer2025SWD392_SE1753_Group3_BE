@@ -16,9 +16,9 @@ public class AccountRequest {
     @NotBlank(message = "Số điện thoại không được để trống")
     @Pattern(regexp = "^(\\+84|0)[3|5|7|8|9][0-9]{8}$", message = "Số điện thoại không hợp lệ")
     String phone;
+    String gender;
     String role;
     String position;
-    String gender;
     String dateOfBirth;
     String address;
     String password;

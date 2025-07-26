@@ -13,4 +13,6 @@ public interface RouteStationRepository extends JpaRepository<RouteStations, Int
     List<RouteStations> findAllRouteStationByRouteId(int routeId);
 
     Optional<RouteStations> findByStationIdAndRouteId(int stationId, int routeId);
+    List<RouteStations> findAllByStation_Id(Integer stationId);
+
 }

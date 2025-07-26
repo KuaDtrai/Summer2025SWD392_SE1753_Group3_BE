@@ -2,6 +2,7 @@ package com.project.ibtss.controller;
 
 import com.project.ibtss.dto.request.AccountRequest;
 import com.project.ibtss.dto.request.UpdateAccountInfoRequest;
+import com.project.ibtss.dto.request.UpdateAccountStatus;
 import com.project.ibtss.dto.request.UpdatePasswordRequest;
 import com.project.ibtss.dto.response.*;
 import com.project.ibtss.utilities.enums.Role;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,8 +34,12 @@ public class AccountController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('admin:read')")
-    public ApiResponse<List<AccountManageResponse>> GetAllAccounts() {
-        return ApiResponse.<List<AccountManageResponse>>builder().code(HttpStatus.OK.value()).message("").data(accountService.getAllAccounts()).build();
+    public ApiResponse<Page<AccountManageResponse>> GetAllAccounts(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+        return ApiResponse.<Page<AccountManageResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.getAllAccounts(pageable))
+                .build();
     }
 
     @PostMapping("/add")
@@ -56,7 +62,11 @@ public class AccountController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:update')")
     public ApiResponse<AccountManageResponse> UpdateAccount(@PathVariable Integer id, @RequestBody AccountRequest accountRequest) {
-        return ApiResponse.<AccountManageResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.updateAccount(id, accountRequest)).build();
+        return ApiResponse.<AccountManageResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.updateAccount(id, accountRequest))
+                .build();
     }
 
     @PutMapping("/updateInfo")
@@ -74,10 +84,16 @@ public class AccountController {
         return ApiResponse.<AccountResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.updateRole(id, role)).build();
     }
 
-    @PutMapping("/active/{id}")
+    @PutMapping("/active/{id}/status")
     @PreAuthorize("hasAuthority('admin:update')")
-    public ApiResponse<AccountResponse> UpdateActiveAccount(@PathVariable Integer id) {
-        return ApiResponse.<AccountResponse>builder().code(HttpStatus.OK.value()).message("").data(accountService.setAccountActive(id)).build();
+    public ApiResponse<AccountResponse> updateStatusAccount(@PathVariable Integer id, @RequestBody UpdateAccountStatus updateAccountStatus) {
+        System.out.println("🔴 Received from FE - isActive = " + updateAccountStatus.getIsActive());
+
+        return ApiResponse.<AccountResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("")
+                .data(accountService.setAccountStatus(id, updateAccountStatus))
+                .build();
     }
 
     @GetMapping("/drivers")

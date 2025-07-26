@@ -1,6 +1,7 @@
 package com.project.ibtss.repository;
 
 import com.project.ibtss.model.Trips;
+import com.project.ibtss.utilities.enums.TripsStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,10 @@ public interface TripRepository extends JpaRepository<Trips, Integer> {
             LocalDateTime arrivalTime,
             LocalDateTime departureTime
     );
+
+    boolean existsByBus_IdAndStatusIn(Integer busId, List<TripsStatus> statuses);
+    boolean existsByRoute_IdInAndStatusIn(List<Integer> routeIds, List<TripsStatus> statuses);
+    boolean existsByRoute_IdAndStatusIn(Integer routeId, List<TripsStatus> statuses);
 
     List<Trips> findByRoute_DepartureStation_NameAndRoute_DestinationStation_Name(String from, String to);
 
@@ -32,5 +37,7 @@ public interface TripRepository extends JpaRepository<Trips, Integer> {
             LocalDateTime arrivalTime,
             LocalDateTime departureTime
     );
+    boolean existsByDriverIdAndStatusIn(Integer driverId, List<TripsStatus> statuses);
 
+    List<Trips> findByDriver_IdAndStatusIn(Integer driverId, List<TripsStatus> statuses);
 }

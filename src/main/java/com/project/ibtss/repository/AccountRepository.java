@@ -3,6 +3,8 @@ package com.project.ibtss.repository;
 import com.project.ibtss.utilities.enums.Position;
 import com.project.ibtss.utilities.enums.Role;
 import com.project.ibtss.model.Account;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,5 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Account findByFullName(String fullName);
     Account findByPhone(String phone);
     List<Account> findByRoleAndStaff_Position(Role role, Position position);
+//    Page<Account> findAllByPageable(Pageable pageable);
 }

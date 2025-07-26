@@ -2,9 +2,13 @@ package com.project.ibtss.service.service_implement;
 
 import com.project.ibtss.dto.request.StationRequest;
 import com.project.ibtss.dto.request.UpdateStationRequest;
+import com.project.ibtss.dto.request.UpdateStatusStation;
 import com.project.ibtss.dto.response.StationResponse;
+import com.project.ibtss.repository.RouteStationRepository;
+import com.project.ibtss.repository.TripRepository;
 import com.project.ibtss.utilities.enums.ErrorCode;
 import com.project.ibtss.utilities.enums.StationStatus;
+import com.project.ibtss.utilities.enums.TripsStatus;
 import com.project.ibtss.utilities.exception.AppException;
 import com.project.ibtss.utilities.mapper.StationMapper;
 import com.project.ibtss.model.Account;
@@ -29,6 +33,8 @@ public class StationServiceImpl implements StationService {
     private final AccountRepository accountRepository;
     private final StationRepository stationRepository;
     private final StationMapper mapper;
+    private final RouteStationRepository routeStationRepository;
+    private final TripRepository tripRepository;
 
     private Account getAccount() {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -77,31 +83,68 @@ public class StationServiceImpl implements StationService {
         Stations station = stationRepository.getById(id);
         station.setName(stationRequest.getName());
         station.setAddress(stationRequest.getAddress());
-        station.setStatus(StationStatus.valueOf(stationRequest.getStatus().toUpperCase()));
         return mapper.toStationResponse(stationRepository.save(station));
     }
 
     @Override
-    public StationResponse deleteStationById(Integer id) {
+    public StationResponse updateStatusStation(Integer id, UpdateStatusStation statusStation) {
 //        if (getAccount().getRole() != Role.ADMIN) {
 //            throw new AppException(ErrorCode.RUNTIME_EXCEPTION);
 //        }
         Stations station = stationRepository.getById(id);
-        if(station == null){
+        if (station == null) {
             throw new AppException(ErrorCode.STATION_NOT_EXISTED);
         }
-        try {
+
+        if (statusStation.getStatus().equals(StationStatus.INACTIVE)) {
+            List<Integer> routeIds = routeStationRepository
+                    .findAllByStation_Id(station.getId())
+                    .stream()
+                    .map(rs -> rs.getRoute().getId())
+                    .distinct()
+                    .toList();
+
+            if (!routeIds.isEmpty()) {
+                List<TripsStatus> activeStatuses = List.of(
+                        TripsStatus.SCHEDULED,
+                        TripsStatus.IN_PROGRESS,
+                        TripsStatus.DELAYED
+                );
+
+                boolean hasActiveTrips = tripRepository.existsByRoute_IdInAndStatusIn(routeIds, activeStatuses);
+
+                if (hasActiveTrips) {
+                    throw new AppException(ErrorCode.STATION_USED_IN_ACTIVE_TRIP);
+                }
+            }
             station.setStatus(StationStatus.INACTIVE);
-            return mapper.toStationResponse(stationRepository.save(station));
-        }catch (Exception e){
+
+        } else {
+            station.setStatus(StationStatus.ACTIVE);
+        }
+
+        try {
+            station = stationRepository.save(station);
+            return mapper.toStationResponse(station);
+        } catch (Exception e) {
             throw new AppException(ErrorCode.RUNTIME_EXCEPTION);
         }
     }
+
 
     @Override
     public List<Stations> searchStations(String search, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Stations> resultPage = stationRepository.searchByName(search, pageable);
         return resultPage.getContent();
+    }
+
+    @Override
+    public Page<StationResponse> getStationsByStatus(Pageable pageable) {
+        Page<Stations> stationsPage = stationRepository.findAllByStatus(
+                StationStatus.ACTIVE, pageable
+        );
+
+        return stationsPage.map(mapper::toStationResponse);
     }
 }

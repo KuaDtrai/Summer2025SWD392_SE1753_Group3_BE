@@ -2,6 +2,7 @@ package com.project.ibtss.service;
 
 import com.project.ibtss.dto.request.StationRequest;
 import com.project.ibtss.dto.request.UpdateStationRequest;
+import com.project.ibtss.dto.request.UpdateStatusStation;
 import com.project.ibtss.dto.response.StationResponse;
 import com.project.ibtss.model.Stations;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ public interface StationService {
     Page<StationResponse> getAllStation(Pageable pageable);
     StationResponse createStation(StationRequest stationRequest);
     StationResponse updateStation(Integer id, UpdateStationRequest stationRequest);
-    StationResponse deleteStationById(Integer id);
+    StationResponse updateStatusStation(Integer id, UpdateStatusStation statusStation);
     List<Stations> searchStations(String search, int page, int size);
+    Page<StationResponse> getStationsByStatus(Pageable pageable);
 }
